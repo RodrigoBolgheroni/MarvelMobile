@@ -4,3 +4,6 @@
 /.idea/
 /.maestri/
 /Marvel/.idea/
+
+# Local Firebase app configuration; keep it out of Git
+/Marvel/app/google-services.json
