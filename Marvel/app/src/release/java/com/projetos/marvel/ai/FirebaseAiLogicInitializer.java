@@ -6,7 +6,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 
-/** Release-only Firebase and Play Integrity initialization point for the app owner to connect. */
+/** Installs Play Integrity before the release app uses Firebase AI Logic. */
 public final class FirebaseAiLogicInitializer {
     private FirebaseAiLogicInitializer() {
     }

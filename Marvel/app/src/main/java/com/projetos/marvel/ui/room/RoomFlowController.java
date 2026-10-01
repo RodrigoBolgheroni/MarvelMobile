@@ -50,6 +50,7 @@ public final class RoomFlowController {
     private Button accuseButton;
     private CaseSession session;
     private int seed = -1;
+    private long caseGeneration;
     private boolean resultShown;
     private Dialog activeDialog;
     private InterviewSender interviewSender;
@@ -102,6 +103,7 @@ public final class RoomFlowController {
     }
 
     private void startNewCase() {
+        caseGeneration++;
         int nextSeed = random.nextInt(20);
         if (seed >= 0 && nextSeed == seed) nextSeed = (nextSeed + 1) % 20;
         seed = nextSeed;
@@ -342,6 +344,7 @@ public final class RoomFlowController {
 
     private void sendPending(String id, TextView status, Button retry, TextView transcript) {
         PendingInterview request = pending.get(id);
+        final long requestGeneration = caseGeneration;
         if (request == null) return;
         if (interviewSender == null) {
             status.setText(R.string.interview_service_unavailable);
@@ -356,6 +359,8 @@ public final class RoomFlowController {
                     request.message, new InterviewSender.Callback() {
                         @Override public void onSuccess(String response) {
                             activity.runOnUiThread(() -> {
+                                if (caseGeneration != requestGeneration
+                                        || pending.get(id) != request) return;
                                 historyFor(id).add(new InterviewSender.ChatTurn(false, response));
                                 pending.remove(id);
                                 renderTranscript(id, transcript);
@@ -365,6 +370,8 @@ public final class RoomFlowController {
                         }
                         @Override public void onFailure(String message) {
                             activity.runOnUiThread(() -> {
+                                if (caseGeneration != requestGeneration
+                                        || pending.get(id) != request) return;
                                 status.setText(activity.getString(
                                         R.string.interview_failed_preserved, message));
                                 retry.setEnabled(true);
@@ -373,6 +380,8 @@ public final class RoomFlowController {
                         }
                     });
         } catch (RuntimeException exception) {
+            if (caseGeneration != requestGeneration
+                    || pending.get(id) != request) return;
             String message = exception.getMessage() == null
                     ? getString(R.string.unknown_error) : exception.getMessage();
             status.setText(activity.getString(R.string.interview_failed_preserved, message));

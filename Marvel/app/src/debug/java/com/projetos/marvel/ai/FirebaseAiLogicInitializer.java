@@ -6,7 +6,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 
-/** Debug-only Firebase and App Check initialization point for the app owner to connect. */
+/** Installs the debug App Check provider before the app uses Firebase AI Logic. */
 public final class FirebaseAiLogicInitializer {
     private FirebaseAiLogicInitializer() {
     }

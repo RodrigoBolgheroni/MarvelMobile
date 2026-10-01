@@ -7,6 +7,7 @@ import android.view.WindowManager;
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.projetos.marvel.ai.FirebaseInterviewSender;
 import com.projetos.marvel.ui.room.InterviewSender;
 import com.projetos.marvel.ui.room.RoomFlowController;
 
@@ -20,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         setContentView(R.layout.activity_main);
         roomFlowController = new RoomFlowController(this, findViewById(R.id.main));
+        roomFlowController.setInterviewSender(new FirebaseInterviewSender());
         roomFlowController.bind();
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
