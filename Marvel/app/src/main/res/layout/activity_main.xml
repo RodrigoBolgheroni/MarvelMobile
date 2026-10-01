@@ -4,13 +4,13 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#08131B">
+    android:background="#0D1720">
 
     <LinearLayout
         android:id="@+id/room_header"
         android:layout_width="0dp"
         android:layout_height="54dp"
-        android:background="#101F29"
+        android:background="#243543"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingStart="16dp"
@@ -19,12 +19,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
+        <View
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="12dp"
+            android:background="#44CFBD" />
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="monospace"
             android:text="@string/room_title"
-            android:textColor="#72E8DC"
-            android:textSize="17sp"
+            android:textColor="#C4D5C8"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -33,15 +40,20 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_weight="1"
-            android:textColor="#F4FAF8"
+            android:fontFamily="monospace"
+            android:textColor="#C4D5C8"
             android:textSize="14sp" />
 
         <Button
             android:id="@+id/btn_new_case"
             android:layout_width="wrap_content"
-            android:layout_height="42dp"
+            android:layout_height="48dp"
+            android:backgroundTint="#F2B84B"
+            android:fontFamily="monospace"
+            android:minWidth="112dp"
             android:text="@string/new_case"
-            android:textAllCaps="false" />
+            android:textAllCaps="false"
+            android:textColor="#0D1720" />
     </LinearLayout>
 
     <LinearLayout
@@ -61,22 +73,40 @@
             android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"
-            android:background="@drawable/room_background"
-            android:contentDescription="@string/room_board_description" />
+            android:background="#0D1720"
+            android:clipChildren="true"
+            android:clipToPadding="true"
+            android:contentDescription="@string/room_board_description">
+
+            <com.projetos.marvel.ui.room.RoomCanvasView
+                android:id="@+id/room_canvas"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clickable="true"
+                android:contentDescription="@string/room_board_description"
+                android:focusable="true" />
+        </FrameLayout>
 
         <LinearLayout
             android:id="@+id/room_panel"
             android:layout_width="278dp"
             android:layout_height="match_parent"
-            android:background="#12232E"
+            android:background="#243543"
             android:orientation="vertical"
             android:padding="14dp">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#F2B84B" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="monospace"
                 android:text="@string/case_briefing"
-                android:textColor="#72E8DC"
+                android:textColor="#44CFBD"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 
@@ -85,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="6dp"
                 android:text="@string/room_instructions"
-                android:textColor="#D6E0E5"
+                android:textColor="#C4D5C8"
                 android:textSize="12sp" />
 
             <TextView
@@ -93,17 +123,20 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:background="#0B1720"
+                android:background="#0D1720"
+                android:fontFamily="monospace"
+                android:minHeight="44dp"
                 android:padding="8dp"
-                android:textColor="#F2BD58"
+                android:textColor="#F2B84B"
                 android:textSize="12sp" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
+                android:fontFamily="monospace"
                 android:text="@string/evidence_board"
-                android:textColor="#72E8DC"
+                android:textColor="#44CFBD"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
@@ -117,24 +150,30 @@
                 android:gravity="top"
                 android:maxLines="12"
                 android:scrollbars="vertical"
-                android:textColor="#D6E0E5"
-                android:textSize="11sp" />
+                android:textColor="#C4D5C8"
+                android:textSize="12sp" />
 
             <Button
                 android:id="@+id/btn_notebook"
                 android:layout_width="match_parent"
-                android:layout_height="44dp"
+                android:layout_height="48dp"
                 android:layout_marginTop="8dp"
+                android:backgroundTint="#44CFBD"
+                android:fontFamily="monospace"
                 android:text="@string/case_notebook"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="#0D1720" />
 
             <Button
                 android:id="@+id/btn_accuse"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_marginTop="6dp"
+                android:backgroundTint="#F2B84B"
+                android:fontFamily="monospace"
                 android:text="@string/accuse"
-                android:textAllCaps="false" />
+                android:textAllCaps="false"
+                android:textColor="#0D1720" />
         </LinearLayout>
     </LinearLayout>
 
@@ -142,12 +181,13 @@
         android:id="@+id/room_footer"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:background="#101F29"
+        android:background="#243543"
+        android:fontFamily="monospace"
         android:gravity="center_vertical"
         android:paddingStart="14dp"
         android:text="@string/room_footer"
-        android:textColor="#96ABB5"
-        android:textSize="11sp"
+        android:textColor="#C4D5C8"
+        android:textSize="12sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

@@ -3,16 +3,16 @@ package com.projetos.marvel.ui.room;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.graphics.Color;
+import android.graphics.PointF;
 import android.graphics.Typeface;
 import android.graphics.drawable.GradientDrawable;
+import android.content.res.ColorStateList;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -35,6 +35,11 @@ import java.util.Random;
 
 public final class RoomFlowController {
     private static final float INTERACTION_RADIUS = 0.12f;
+    private static final int INK = 0xFF0D1720;
+    private static final int PANEL = 0xFF243543;
+    private static final int DECOR = 0xFF52666A;
+    private static final int IVORY = 0xFFC4D5C8;
+    private static final int MINT = 0xFF44CFBD;
 
     private final Activity activity;
     private final View root;
@@ -42,8 +47,8 @@ public final class RoomFlowController {
     private final Map<String, List<InterviewSender.ChatTurn>> histories = new HashMap<>();
     private final Map<String, InterviewDossier> knownDossiers = new HashMap<>();
     private final Map<String, PendingInterview> pending = new HashMap<>();
-    private FrameLayout stage;
     private RoomCanvasView canvas;
+    private RoomWalkMap walkMap;
     private TextView caseLabel;
     private TextView statusLabel;
     private TextView clueSummary;
@@ -61,7 +66,9 @@ public final class RoomFlowController {
     }
 
     public void bind() {
-        stage = root.findViewById(R.id.room_stage_container);
+        canvas = root.findViewById(R.id.room_canvas);
+        walkMap = new RoomWalkMap(activity);
+        canvas.setWalkMap(walkMap);
         caseLabel = root.findViewById(R.id.room_case_label);
         statusLabel = root.findViewById(R.id.room_status);
         clueSummary = root.findViewById(R.id.room_clue_summary);
@@ -69,13 +76,9 @@ public final class RoomFlowController {
         Button newCase = root.findViewById(R.id.btn_new_case);
         Button notebook = root.findViewById(R.id.btn_notebook);
 
-        canvas = new RoomCanvasView(activity);
-        stage.addView(canvas, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         canvas.setListener(new RoomCanvasView.Listener() {
             @Override public void onFloorTapped(float x, float y) {
-                session.movePlayerTo(x, y);
-                render(getString(R.string.walked_to_position));
+                walkToNormalized(x, y, getString(R.string.walked_to_position));
             }
             @Override public void onCharacterTapped(CharacterView character) {
                 handleCharacterTap(character);
@@ -103,6 +106,7 @@ public final class RoomFlowController {
     }
 
     private void startNewCase() {
+        if (canvas != null) canvas.cancelMovement();
         caseGeneration++;
         int nextSeed = random.nextInt(20);
         if (seed >= 0 && nextSeed == seed) nextSeed = (nextSeed + 1) % 20;
@@ -144,8 +148,8 @@ public final class RoomFlowController {
             return;
         }
         if (!isNear(character.getX(), character.getY())) {
-            session.movePlayerTo(character.getX(), character.getY());
-            render(activity.getString(R.string.walked_to_character, character.getDisplayName()));
+            walkToApproach(character.getId(), activity.getString(
+                    R.string.walked_to_character, character.getDisplayName()));
             return;
         }
         try {
@@ -159,8 +163,8 @@ public final class RoomFlowController {
 
     private void handleClueTap(ClueView clue) {
         if (!isNear(clue.getX(), clue.getY())) {
-            session.movePlayerTo(clue.getX(), clue.getY());
-            render(activity.getString(R.string.walked_to_clue, clue.getTitle()));
+            walkToApproach(clue.getId(), activity.getString(
+                    R.string.walked_to_clue, clue.getTitle()));
             return;
         }
         try {
@@ -171,6 +175,7 @@ public final class RoomFlowController {
                     .setMessage(examined.getDescription())
                     .setPositiveButton(R.string.close, null)
                     .show();
+            styleAlertDialog(dialog);
             track(dialog);
         } catch (IllegalArgumentException | IllegalStateException exception) {
             statusLabel.setText(exception.getMessage());
@@ -182,6 +187,37 @@ public final class RoomFlowController {
         float dx = state.getPlayer().getX() - x;
         float dy = state.getPlayer().getY() - y;
         return dx * dx + dy * dy <= INTERACTION_RADIUS * INTERACTION_RADIUS;
+    }
+
+    private void walkToApproach(String targetId, String arrivalStatus) {
+        RoomWalkMap.Cell approach = walkMap.approachFor(targetId);
+        if (approach == null) {
+            statusLabel.setText(R.string.room_no_path);
+            return;
+        }
+        RoomViewState state = session.getRoomViewState();
+        List<PointF> path = walkMap.pathToCell(
+                state.getPlayer().getX(), state.getPlayer().getY(), approach);
+        animateWalk(path, arrivalStatus);
+    }
+
+    private void walkToNormalized(float x, float y, String arrivalStatus) {
+        RoomViewState state = session.getRoomViewState();
+        List<PointF> path = walkMap.pathToNormalized(
+                state.getPlayer().getX(), state.getPlayer().getY(), x, y);
+        animateWalk(path, arrivalStatus);
+    }
+
+    private void animateWalk(List<PointF> path, String arrivalStatus) {
+        if (path == null || path.isEmpty()) {
+            statusLabel.setText(R.string.room_no_path);
+            return;
+        }
+        statusLabel.setText(R.string.room_moving);
+        canvas.animatePlayerAlong(path, (x, y) -> {
+            session.movePlayerTo(x, y);
+            render(arrivalStatus);
+        });
     }
 
     private void showNotebook() {
@@ -206,6 +242,7 @@ public final class RoomFlowController {
                 .setMessage(notes.toString())
                 .setPositiveButton(R.string.close, null)
                 .show();
+        styleAlertDialog(dialog);
         track(dialog);
     }
 
@@ -238,6 +275,7 @@ public final class RoomFlowController {
             if (activeDialog == dialog) activeDialog = null;
         });
         dialog.show();
+        styleAlertDialog(dialog);
         activeDialog = dialog;
     }
 
@@ -250,6 +288,7 @@ public final class RoomFlowController {
                 .setMessage(message)
                 .setPositiveButton(R.string.close, null)
                 .show();
+        styleAlertDialog(dialog);
         track(dialog);
     }
 
@@ -258,7 +297,7 @@ public final class RoomFlowController {
         LinearLayout panel = new LinearLayout(activity);
         panel.setOrientation(LinearLayout.VERTICAL);
         panel.setPadding(dp(20), dp(16), dp(20), dp(16));
-        panel.setBackground(roundRect(0xFF12232E, 0xFF355461));
+        panel.setBackground(roundRect(PANEL, DECOR));
 
         TextView heading = text(dossier.getCharacterName(), 20, true);
         panel.addView(heading, matchWrap());
@@ -273,7 +312,7 @@ public final class RoomFlowController {
         ScrollView scroll = new ScrollView(activity);
         TextView transcript = text("", 14, false);
         transcript.setPadding(dp(10), dp(8), dp(10), dp(8));
-        transcript.setBackground(roundRect(0xFF0B1720, 0xFF29424E));
+        transcript.setBackground(roundRect(INK, DECOR));
         scroll.addView(transcript, new ScrollView.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
@@ -287,9 +326,9 @@ public final class RoomFlowController {
         EditText input = new EditText(activity);
         input.setSingleLine(true);
         input.setHint(R.string.chat_input_hint);
-        input.setTextColor(Color.WHITE);
-        input.setHintTextColor(0xFF9CB0BA);
-        input.setBackground(roundRect(0xFF0B1720, 0xFF355461));
+        input.setTextColor(IVORY);
+        input.setHintTextColor(IVORY);
+        input.setBackground(roundRect(INK, MINT));
         Button send = button(R.string.send_message);
         LinearLayout inputRow = new LinearLayout(activity);
         inputRow.setOrientation(LinearLayout.HORIZONTAL);
@@ -419,7 +458,7 @@ public final class RoomFlowController {
     private TextView text(String value, int size, boolean bold) {
         TextView view = new TextView(activity);
         view.setText(value);
-        view.setTextColor(Color.WHITE);
+        view.setTextColor(IVORY);
         view.setTextSize(size);
         view.setGravity(Gravity.CENTER_VERTICAL);
         if (bold) view.setTypeface(Typeface.DEFAULT, Typeface.BOLD);
@@ -430,13 +469,38 @@ public final class RoomFlowController {
         Button button = new Button(activity);
         button.setText(label);
         button.setAllCaps(false);
+        button.setTextColor(INK);
+        button.setBackgroundTintList(ColorStateList.valueOf(MINT));
+        button.setMinHeight(dp(48));
         return button;
+    }
+
+    private void styleAlertDialog(AlertDialog dialog) {
+        Window window = dialog.getWindow();
+        if (window != null) window.setBackgroundDrawable(roundRect(PANEL, DECOR));
+        int alertTitleId = activity.getResources().getIdentifier(
+                "alertTitle", "id", "android");
+        TextView title = alertTitleId == 0 ? null : dialog.findViewById(alertTitleId);
+        if (title != null) {
+            title.setTextColor(IVORY);
+            title.setTypeface(Typeface.MONOSPACE, Typeface.BOLD);
+        }
+        TextView message = dialog.findViewById(android.R.id.message);
+        if (message != null) message.setTextColor(IVORY);
+        for (int which : new int[]{AlertDialog.BUTTON_POSITIVE,
+                AlertDialog.BUTTON_NEGATIVE, AlertDialog.BUTTON_NEUTRAL}) {
+            Button action = dialog.getButton(which);
+            if (action == null) continue;
+            action.setTextColor(INK);
+            action.setBackgroundTintList(ColorStateList.valueOf(MINT));
+            action.setMinHeight(dp(48));
+        }
     }
 
     private GradientDrawable roundRect(int fill, int stroke) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(fill);
-        drawable.setCornerRadius(dp(10));
+        drawable.setCornerRadius(0f);
         drawable.setStroke(dp(1), stroke);
         return drawable;
     }

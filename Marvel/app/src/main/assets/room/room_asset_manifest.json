@@ -1,0 +1,292 @@
+{
+  "manifestVersion": 1,
+  "createdDate": "2026-10-01",
+  "project": "Avengers Room visual assets",
+  "logicalRoom": {
+    "width": 288,
+    "height": 144,
+    "artTileSize": 16,
+    "artGrid": [
+      18,
+      9
+    ],
+    "navigationCellSize": 8,
+    "navigationGrid": [
+      36,
+      18
+    ],
+    "origin": "top-left"
+  },
+  "palette": [
+    "#0D1720",
+    "#243543",
+    "#384B57",
+    "#52666A",
+    "#C4D5C8",
+    "#44CFBD",
+    "#F2B84B",
+    "#E4675D"
+  ],
+  "sourceProvenance": {
+    "generator": "OpenAI built-in image_gen",
+    "externalReferenceImagesUsed": false,
+    "officialMarvelOrPokemonArtworkOrLogosUsed": false,
+    "promptRecordNote": "The original prompt text is not retained verbatim in the build artefacts; promptBrief entries are non-verbatim summaries.",
+    "sources": [
+      {
+        "rawImage": "exec-f4797a44-2204-4d9a-91a7-41c5bfcb18f7.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-f4797a44-2204-4d9a-91a7-41c5bfcb18f7.png",
+        "rawDimensionsPx": [
+          1278,
+          1230
+        ],
+        "rawSha256": "67e729de045bce0b46043d69d449e0af5291fb559909d353f8911d98b5e5e0d8",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "4x4 modular containment-room tile atlas; original sci-fi panels and wall modules; no text, characters or logos. Prompt brief is non-verbatim.",
+        "processedOutput": "room_tiles_16.png"
+      },
+      {
+        "rawImage": "exec-d3a95140-efcc-4a37-8cd6-8fc6f4d58a79.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-d3a95140-efcc-4a37-8cd6-8fc6f4d58a79.png",
+        "rawDimensionsPx": [
+          1278,
+          1230
+        ],
+        "rawSha256": "af3daba275f246152be6cb9b3d152ae89a7cecbe02d791b69bc1a5ebb2833183",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "4x4 atlas of compact, generic noninteractive sci-fi fixtures on transparent background. Prompt brief is non-verbatim.",
+        "processedOutput": "room_props_16.png"
+      },
+      {
+        "rawImage": "exec-449cace3-bbf4-480e-855c-fa6c438fa9ff.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-449cace3-bbf4-480e-855c-fa6c438fa9ff.png",
+        "rawDimensionsPx": [
+          1278,
+          1230
+        ],
+        "rawSha256": "636b0bec358f53f90358a0c61994d390bc247df1f6d03b498d02d23afd8bc3b3",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "Generic original player sprite sheet with four directions and idle/walk poses; transparent; no recognizable licensed costume. Prompt brief is non-verbatim.",
+        "processedOutput": "player_sheet_64x96.png"
+      },
+      {
+        "rawImage": "exec-410c5c6f-8e65-48bb-9522-d3d73dd99c0a.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-410c5c6f-8e65-48bb-9522-d3d73dd99c0a.png",
+        "rawDimensionsPx": [
+          1024,
+          1536
+        ],
+        "rawSha256": "76ce0bd726669502808e020a12344d6d38df6515a51267f68daecba9f6d5d9c4",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "Five anonymous civilian idle sprites with distinct silhouettes; transparent; gameplay IDs map to generic original art. Prompt brief is non-verbatim.",
+        "processedOutput": "survivor_idle_atlas_80x24.png"
+      },
+      {
+        "rawImage": "exec-b355cd16-5a5f-4f22-80a6-c9939bfe65bc.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-b355cd16-5a5f-4f22-80a6-c9939bfe65bc.png",
+        "rawDimensionsPx": [
+          1278,
+          1230
+        ],
+        "rawSha256": "1a98c431ff428dabe23e41926cac1649210b20436fa71acee3223eb5fd3e7e0f",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "Three original transparent pictograms: access record, seal trace and reagent sample; no legible text. Prompt brief is non-verbatim.",
+        "processedOutput": "room_clue_atlas_48x16.png"
+      }
+    ]
+  },
+  "processing": {
+    "tool": "Python Pillow deterministic extraction/composition pipeline",
+    "steps": [
+      "equal-grid source crops",
+      "square center crops for square tiles",
+      "alpha silhouette extraction for sprites",
+      "nearest-neighbor resize without smoothing",
+      "palette quantization to approved room palette subsets",
+      "write PNG atlases and compose room map from approved row-major tilemap"
+    ],
+    "licenseAndRights": "These files document generated-art provenance, not a separate legal license. Use remains subject to the image-generation service terms and applicable competition/publication rules. No third-party image files were incorporated. Gameplay IDs reference Marvel characters; underlying names, characters and marks are not licensed by this manifest."
+  },
+  "approvedContracts": {
+    "roomMapIsPreviewFallback": true,
+    "runtimeComposition": "room_tiles_16.png + tilemap",
+    "entityRenderingUsesExactNormalizedAnchors": true,
+    "walkmapEncoding": "1=white/free; 0=black/solid",
+    "propsPlacements": "provisional; all listed cells lie outside the agreed walkable corridor"
+  },
+  "layerInventory": [
+    {
+      "layer": "background",
+      "asset": "room_map_288x144.png",
+      "note": "Static tilemap fallback; no entities, clues or props."
+    },
+    {
+      "layer": "props",
+      "asset": "room_props_16.png",
+      "note": "Noninteractive; example positions in JSON and stage preview are provisional."
+    },
+    {
+      "layer": "clues",
+      "asset": "room_clue_atlas_48x16.png",
+      "note": "Separate interactive clue atlas; runtime places anchors."
+    },
+    {
+      "layer": "characters",
+      "asset": "survivor_idle_atlas_80x24.png",
+      "note": "Five generic idle sprites mapped by JSON frame IDs."
+    },
+    {
+      "layer": "player",
+      "asset": "player_sheet_64x96.png",
+      "note": "Four-direction movement frames; pivot (8,23)."
+    },
+    {
+      "layer": "navigation",
+      "asset": "room_walkmap_36x18.png",
+      "note": "Lookup/pathfinding only; does not snap rendered anchors."
+    }
+  ],
+  "assets": [
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
+      "dimensionsPx": [
+        64,
+        64
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "opaque",
+      "alphaExtrema": [
+        255,
+        255
+      ],
+      "details": "4x4 atlas; 16px cells; top-left origin; row-major frames; background tiles",
+      "sha256": "ceb1c2e13dfacc695926ee95021f27867557224ab5878e175dabde88dad5d0b5"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png",
+      "dimensionsPx": [
+        64,
+        64
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "details": "4x4 atlas; 16px cells; top-left origin; row-major frames; noninteractive props; placements provisional",
+      "sha256": "07c092f4952aad9f38a2534a87aa794688f40a8e4f9c27f1b4c47a57293ab044"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+      "dimensionsPx": [
+        288,
+        144
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "opaque",
+      "alphaExtrema": [
+        255,
+        255
+      ],
+      "details": "static tilemap preview/fallback; no props, entities or clues",
+      "sha256": "e519f64362341d6ec8de3970bbefcf90948497d6c41c3003e8da7ed009373efa"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_36x18.png",
+      "dimensionsPx": [
+        36,
+        18
+      ],
+      "format": "PNG",
+      "mode": "L",
+      "alpha": "binary grayscale",
+      "alphaExtrema": null,
+      "details": "one pixel per 8x8 logical cell; white=walkable; black=solid; top-left origin",
+      "sha256": "86f412433eb17b43794581cfa1a8b5f4d666ca5a8c2c98f8cba61e18660a89b4"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/player_sheet_64x96.png",
+      "dimensionsPx": [
+        64,
+        96
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "details": "4x4 frames, 16x24 each; rows south/west/east/north; columns idle/step1/step2/step3; pivot 8,23; 8 fps",
+      "sha256": "e2bdb2e4a5c564dfa01454f3b304e41a460d0e87696d9a1a89ba5fd4f42a49a6"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/survivor_idle_atlas_80x24.png",
+      "dimensionsPx": [
+        80,
+        24
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "details": "5 horizontal 16x24 idle frames; IDs iron_man, captain_america, thor, black_widow, hawkeye",
+      "sha256": "8d3d30d9e511f56a1ec4cdf579df6360b0289e3279ecdf5a7635584be62d4a8a"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/room_clue_atlas_48x16.png",
+      "dimensionsPx": [
+        48,
+        16
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "details": "3 horizontal 16x16 frames; clue_access_log, clue_seal_trace, clue_reagent_sample",
+      "sha256": "6f62677ee77179ffd37d257a44051e865ab346486fb1e56f264b87a4f53db15f"
+    },
+    {
+      "path": "Marvel/app/src/main/assets/room/room_preview_stage_858x436.png",
+      "dimensionsPx": [
+        858,
+        436
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "opaque",
+      "alphaExtrema": [
+        255,
+        255
+      ],
+      "details": "review preview at nominal 3x, stage-clipped; includes provisional props; no entities or clues",
+      "sha256": "973b03bcf3db1c1b778554f0aa72966d5f0b8bca5e457d62176e12f02b5ffab5"
+    },
+    {
+      "path": "Marvel/app/src/main/assets/room/room_walkmap.json",
+      "format": "JSON",
+      "details": "Approved room schema; props placements explicitly provisional",
+      "sha256": "ff1b302c68bfced9041935b381a8588282464fc7734b991c0dcbc1614d479650"
+    },
+    {
+      "path": "Marvel/app/src/main/assets/room/room_asset_manifest.json",
+      "format": "JSON",
+      "details": "Dimensions, inventory, generated-art sources and provenance; self hash omitted"
+    }
+  ]
+}

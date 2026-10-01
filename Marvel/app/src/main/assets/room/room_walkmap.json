@@ -1,0 +1,563 @@
+{
+  "schemaVersion": 1,
+  "logicalWidth": 288,
+  "logicalHeight": 144,
+  "artTileSize": 16,
+  "artColumns": 18,
+  "artRows": 9,
+  "tileAtlas": "room_tiles_16.png",
+  "tileAtlasColumns": 4,
+  "tileAtlasRows": 4,
+  "tileAtlasCount": 16,
+  "tileAtlasFrameNames": [
+    "floor_panel",
+    "floor_plain",
+    "floor_cross_seam",
+    "floor_horizontal_seam",
+    "floor_bolts",
+    "floor_vent_grille",
+    "floor_vent_slots",
+    "floor_hazard_stripe",
+    "wall_horizontal",
+    "wall_vertical",
+    "bulkhead_joint",
+    "bulkhead_corner",
+    "wall_transition_a",
+    "wall_transition_b",
+    "door_threshold",
+    "wall_light_conduit"
+  ],
+  "tileAtlasUsedFrames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "tileAtlasAddressing": "origin top-left; 0-based row-major; atlasX=index%4; atlasY=floor(index/4)",
+  "tilemapOrder": "row-major, top-to-bottom; each row left-to-right; indices are 0-based atlas frames",
+  "tilemap": [
+    [
+      10,
+      8,
+      8,
+      8,
+      15,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      11
+    ],
+    [
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9,
+      9
+    ],
+    [
+      12,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      14,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      13
+    ],
+    [
+      1,
+      2,
+      1,
+      1,
+      3,
+      1,
+      1,
+      0,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      1,
+      5,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      2,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1,
+      4,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      3,
+      1,
+      1,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      2,
+      1,
+      1,
+      1,
+      1,
+      5,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      2,
+      1,
+      1
+    ],
+    [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ]
+  ],
+  "previewFallback": "room_map_288x144.png",
+  "runtimeComposition": "room_tiles_16.png + tilemap; previewFallback is static only",
+  "atlases": {
+    "props": "room_props_16.png",
+    "player": "player_sheet_64x96.png",
+    "survivors": "survivor_idle_atlas_80x24.png",
+    "clues": "room_clue_atlas_48x16.png"
+  },
+  "propsCoordinateGrid": "art tile cells, 18x9, 16 logical px per cell",
+  "propsPlacementStatus": "provisional example; exact prop placements were not part of the agreed contract",
+  "props": [
+    {
+      "id": "wall_console",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 0,
+      "atlasX": 0,
+      "atlasY": 0,
+      "col": 2,
+      "row": 1,
+      "layer": "props"
+    },
+    {
+      "id": "locker",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 1,
+      "atlasX": 1,
+      "atlasY": 0,
+      "col": 15,
+      "row": 1,
+      "layer": "props"
+    },
+    {
+      "id": "vent",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 2,
+      "atlasX": 2,
+      "atlasY": 0,
+      "col": 0,
+      "row": 4,
+      "layer": "props"
+    },
+    {
+      "id": "lamp_housing",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 3,
+      "atlasX": 3,
+      "atlasY": 0,
+      "col": 17,
+      "row": 4,
+      "layer": "props"
+    },
+    {
+      "id": "conduit_straight",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 4,
+      "atlasX": 0,
+      "atlasY": 1,
+      "col": 3,
+      "row": 0,
+      "layer": "props"
+    },
+    {
+      "id": "conduit_elbow",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 5,
+      "atlasX": 1,
+      "atlasY": 1,
+      "col": 14,
+      "row": 0,
+      "layer": "props"
+    },
+    {
+      "id": "shelf",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 8,
+      "atlasX": 0,
+      "atlasY": 2,
+      "col": 0,
+      "row": 6,
+      "layer": "props"
+    },
+    {
+      "id": "speaker_vent",
+      "atlas": "room_props_16.png",
+      "atlasFrame": 11,
+      "atlasX": 3,
+      "atlasY": 2,
+      "col": 17,
+      "row": 6,
+      "layer": "props"
+    }
+  ],
+  "navCellSize": 8,
+  "navColumns": 36,
+  "navRows": 18,
+  "walkableRows": [
+    "000000000000000000000000000000000000",
+    "000000000000000000000000000000000000",
+    "000000000000000000000000000000000000",
+    "000000000000000000000000000000000000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011111101111111011111101111110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011101111111111111111111101110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000011111111111111111111111111110000",
+    "000000000000000000000000000000000000"
+  ],
+  "walkableEncoding": "each string is 36 chars; '1'=white/free, '0'=black or transparent/solid",
+  "solidCells": [
+    [
+      5,
+      3
+    ],
+    [
+      18,
+      3
+    ],
+    [
+      30,
+      3
+    ],
+    [
+      10,
+      8
+    ],
+    [
+      18,
+      8
+    ],
+    [
+      25,
+      8
+    ],
+    [
+      7,
+      13
+    ],
+    [
+      28,
+      13
+    ]
+  ],
+  "navBoundsInclusive": {
+    "minCol": 4,
+    "maxCol": 31,
+    "minRow": 4,
+    "maxRow": 16
+  },
+  "connectivity": "4-neighbor; spawn connects to all eight approach cells",
+  "anchorLookup": "col=min(35,floor(36*x)); row=min(17,floor(18*y)); lookup only, never snap rendered entities to cell centers",
+  "spawn": {
+    "x": 0.5,
+    "y": 0.9,
+    "col": 18,
+    "row": 16
+  },
+  "characters": [
+    {
+      "id": "iron_man",
+      "x": 0.14,
+      "y": 0.22,
+      "col": 5,
+      "row": 3,
+      "approachCol": 5,
+      "approachRow": 4,
+      "atlasFrame": 0
+    },
+    {
+      "id": "captain_america",
+      "x": 0.5,
+      "y": 0.18,
+      "col": 18,
+      "row": 3,
+      "approachCol": 18,
+      "approachRow": 4,
+      "atlasFrame": 1
+    },
+    {
+      "id": "thor",
+      "x": 0.86,
+      "y": 0.22,
+      "col": 30,
+      "row": 3,
+      "approachCol": 30,
+      "approachRow": 4,
+      "atlasFrame": 2
+    },
+    {
+      "id": "black_widow",
+      "x": 0.22,
+      "y": 0.73,
+      "col": 7,
+      "row": 13,
+      "approachCol": 7,
+      "approachRow": 12,
+      "atlasFrame": 3
+    },
+    {
+      "id": "hawkeye",
+      "x": 0.78,
+      "y": 0.73,
+      "col": 28,
+      "row": 13,
+      "approachCol": 28,
+      "approachRow": 12,
+      "atlasFrame": 4
+    }
+  ],
+  "survivorAtlas": {
+    "file": "survivor_idle_atlas_80x24.png",
+    "frameWidth": 16,
+    "frameHeight": 24,
+    "frameOrder": [
+      "iron_man",
+      "captain_america",
+      "thor",
+      "black_widow",
+      "hawkeye"
+    ]
+  },
+  "clueAtlasOrder": [
+    "clue_access_log",
+    "clue_seal_trace",
+    "clue_reagent_sample"
+  ],
+  "clues": [
+    {
+      "id": "clue_access_log",
+      "title": "Registro de acesso",
+      "x": 0.3,
+      "y": 0.47,
+      "col": 10,
+      "row": 8,
+      "approachCol": 10,
+      "approachRow": 9,
+      "atlas": "room_clue_atlas_48x16.png",
+      "atlasFrame": 0,
+      "atlasX": 0,
+      "atlasY": 0
+    },
+    {
+      "id": "clue_seal_trace",
+      "title": "Vestígio de lacre",
+      "x": 0.5,
+      "y": 0.47,
+      "col": 18,
+      "row": 8,
+      "approachCol": 18,
+      "approachRow": 9,
+      "atlas": "room_clue_atlas_48x16.png",
+      "atlasFrame": 1,
+      "atlasX": 1,
+      "atlasY": 0
+    },
+    {
+      "id": "clue_reagent_sample",
+      "title": "Amostra de reagente",
+      "x": 0.7,
+      "y": 0.47,
+      "col": 25,
+      "row": 8,
+      "approachCol": 25,
+      "approachRow": 9,
+      "atlas": "room_clue_atlas_48x16.png",
+      "atlasFrame": 2,
+      "atlasX": 2,
+      "atlasY": 0
+    }
+  ],
+  "playerAtlas": {
+    "file": "player_sheet_64x96.png",
+    "frameWidth": 16,
+    "frameHeight": 24,
+    "pivot": {
+      "x": 8,
+      "y": 23
+    },
+    "rows": [
+      "south",
+      "west",
+      "east",
+      "north"
+    ],
+    "columns": [
+      "idle",
+      "step1",
+      "step2",
+      "step3"
+    ],
+    "fps": 8
+  },
+  "presentation": {
+    "stageWidth": 858,
+    "stageHeight": 436,
+    "nominalScale": 3,
+    "mapRect": {
+      "left": -3,
+      "top": 2,
+      "right": 861,
+      "bottom": 434
+    },
+    "clipping": "stage bounds",
+    "otherStageScale": "min(3,stageWidth/288,stageHeight/144), centered",
+    "sampling": "nearest-neighbor, no smoothing",
+    "screenFromNormalized": "screenX = floor.left + normalizedX * floor.width; screenY = floor.top + normalizedY * floor.height",
+    "touchToNormalized": "inverse mapRect, then clamp x/y to [0,1]"
+  },
+  "interaction": {
+    "destination": "nearest reachable walkable cell",
+    "distantTarget": "walk to its free approach cell; next action interacts",
+    "footPointCollision": true,
+    "affordanceNormalizedRadius": 0.12,
+    "accusationRequiresProximity": false,
+    "androidTouchTargetMinimumDp": 48
+  },
+  "palette": [
+    "#0D1720",
+    "#243543",
+    "#384B57",
+    "#52666A",
+    "#C4D5C8",
+    "#44CFBD",
+    "#F2B84B",
+    "#E4675D"
+  ]
+}

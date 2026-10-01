@@ -42,4 +42,18 @@
     <string name="chat_you">Você</string>
     <string name="chat_character">Resposta</string>
     <string name="chat_empty">Converse com o sobrevivente para investigar.</string>
+    <string name="room_player_marker">VOCÊ</string>
+    <string name="room_victim_badge">VÍTIMA</string>
+    <string name="room_action_interview">TOQUE: FALAR</string>
+    <string name="room_action_examine">TOQUE: EXAMINAR</string>
+    <string name="room_badge_iron_man">IRON</string>
+    <string name="room_badge_captain_america">CAP</string>
+    <string name="room_badge_thor">THOR</string>
+    <string name="room_badge_black_widow">WIDOW</string>
+    <string name="room_badge_hawkeye">HAWKEYE</string>
+    <string name="room_badge_access_log">LOG</string>
+    <string name="room_badge_seal_trace">SELO</string>
+    <string name="room_badge_reagent_sample">REAG</string>
+    <string name="room_moving">Caminhando pela sala…</string>
+    <string name="room_no_path">Não há caminho livre até esse ponto.</string>
 </resources>
