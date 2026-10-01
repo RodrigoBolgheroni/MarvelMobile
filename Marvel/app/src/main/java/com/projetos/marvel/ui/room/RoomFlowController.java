@@ -3,17 +3,25 @@ package com.projetos.marvel.ui.room;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.graphics.Typeface;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.GradientDrawable;
-import android.content.res.ColorStateList;
 import android.view.Gravity;
-import android.view.View;
+import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.ViewGroup;
+import android.view.View;
 import android.view.Window;
+import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -29,29 +37,30 @@ import com.projetos.marvel.caseengine.RoomViewState;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 
 public final class RoomFlowController {
-    private static final float INTERACTION_RADIUS = 0.12f;
     private static final int INK = 0xFF0D1720;
     private static final int PANEL = 0xFF243543;
     private static final int DECOR = 0xFF52666A;
     private static final int IVORY = 0xFFC4D5C8;
     private static final int MINT = 0xFF44CFBD;
 
-    private final Activity activity;
-    private final View root;
+    private Activity activity;
+    private View root;
     private final Random random = new Random();
     private final Map<String, List<InterviewSender.ChatTurn>> histories = new HashMap<>();
     private final Map<String, InterviewDossier> knownDossiers = new HashMap<>();
     private final Map<String, PendingInterview> pending = new HashMap<>();
+    private final Set<String> inFlight = new HashSet<>();
     private RoomCanvasView canvas;
     private RoomWalkMap walkMap;
     private TextView caseLabel;
     private TextView statusLabel;
-    private TextView clueSummary;
     private Button accuseButton;
     private CaseSession session;
     private int seed = -1;
@@ -59,6 +68,15 @@ public final class RoomFlowController {
     private boolean resultShown;
     private Dialog activeDialog;
     private InterviewSender interviewSender;
+    private String activeInterviewId;
+    private String retainedInterviewId;
+    private boolean retainedResultDialog;
+    private String lastRoomStatus;
+    private TextView activeTranscript;
+    private ScrollView activeTranscriptScroll;
+    private TextView activeInterviewStatus;
+    private Button activeRetry;
+    private Button activeSend;
 
     public RoomFlowController(Activity activity, View root) {
         this.activity = activity;
@@ -66,12 +84,36 @@ public final class RoomFlowController {
     }
 
     public void bind() {
+        bindViews();
+        startNewCase();
+    }
+
+    /** Rebinds the retained case/controller to the Activity recreated by an orientation change. */
+    public void attach(Activity activity, View root) {
+        this.activity = activity;
+        this.root = root;
+        bindViews();
+        if (session == null) {
+            startNewCase();
+            return;
+        }
+        render(lastRoomStatus == null ? getString(R.string.room_ready) : lastRoomStatus);
+        String resumeId = retainedInterviewId;
+        retainedInterviewId = null;
+        InterviewDossier dossier = resumeId == null ? null : knownDossiers.get(resumeId);
+        if (dossier != null) showInterview(dossier);
+        if (retainedResultDialog) {
+            retainedResultDialog = false;
+            session.getRoomViewState().getAccusationResult().ifPresent(this::showAccusationResult);
+        }
+    }
+
+    private void bindViews() {
         canvas = root.findViewById(R.id.room_canvas);
         walkMap = new RoomWalkMap(activity);
         canvas.setWalkMap(walkMap);
         caseLabel = root.findViewById(R.id.room_case_label);
         statusLabel = root.findViewById(R.id.room_status);
-        clueSummary = root.findViewById(R.id.room_clue_summary);
         accuseButton = root.findViewById(R.id.btn_accuse);
         Button newCase = root.findViewById(R.id.btn_new_case);
         Button notebook = root.findViewById(R.id.btn_notebook);
@@ -90,7 +132,6 @@ public final class RoomFlowController {
         newCase.setOnClickListener(v -> startNewCase());
         notebook.setOnClickListener(v -> showNotebook());
         accuseButton.setOnClickListener(v -> showAccusationChoices());
-        startNewCase();
     }
 
     public void setInterviewSender(InterviewSender sender) {
@@ -105,6 +146,31 @@ public final class RoomFlowController {
         return false;
     }
 
+    /** Keeps the live session and interview requests across Activity configuration changes. */
+    public void retainForConfigurationChange() {
+        if (canvas != null && session != null) {
+            PointF position = canvas.getCurrentPlayerPosition();
+            canvas.cancelMovement();
+            session.movePlayerTo(position.x, position.y);
+        }
+        retainedInterviewId = activeInterviewId;
+        retainedResultDialog = resultShown && activeDialog != null
+                && session.getRoomViewState().getAccusationResult().isPresent();
+        Dialog previousDialog = activeDialog;
+        activeDialog = null;
+        activeInterviewId = null;
+        clearActiveInterviewViews();
+        if (previousDialog != null) previousDialog.dismiss();
+    }
+
+    private void clearActiveInterviewViews() {
+        activeTranscript = null;
+        activeTranscriptScroll = null;
+        activeInterviewStatus = null;
+        activeRetry = null;
+        activeSend = null;
+    }
+
     private void startNewCase() {
         if (canvas != null) canvas.cancelMovement();
         caseGeneration++;
@@ -116,6 +182,8 @@ public final class RoomFlowController {
         histories.clear();
         knownDossiers.clear();
         pending.clear();
+        inFlight.clear();
+        retainedInterviewId = null;
         render(getString(R.string.room_ready));
     }
 
@@ -123,15 +191,8 @@ public final class RoomFlowController {
         RoomViewState state = session.getRoomViewState();
         canvas.render(state);
         caseLabel.setText(activity.getString(R.string.case_seed, seed));
+        lastRoomStatus = status;
         statusLabel.setText(status);
-        StringBuilder summary = new StringBuilder();
-        for (ClueView clue : state.getClues()) {
-            if (summary.length() > 0) summary.append("\n\n");
-            summary.append(clue.getTitle()).append("\n")
-                    .append(clue.isExamined()
-                            ? clue.getDescription() : getString(R.string.clue_not_examined));
-        }
-        clueSummary.setText(summary.toString());
         boolean finished = state.getAccusationResult().isPresent();
         accuseButton.setEnabled(!finished);
         state.getAccusationResult().ifPresent(result -> {
@@ -184,9 +245,8 @@ public final class RoomFlowController {
 
     private boolean isNear(float x, float y) {
         RoomViewState state = session.getRoomViewState();
-        float dx = state.getPlayer().getX() - x;
-        float dy = state.getPlayer().getY() - y;
-        return dx * dx + dy * dy <= INTERACTION_RADIUS * INTERACTION_RADIUS;
+        return RoomViewport.withinInteractionRange(
+                state.getPlayer().getX(), state.getPlayer().getY(), x, y);
     }
 
     private void walkToApproach(String targetId, String arrivalStatus) {
@@ -294,62 +354,59 @@ public final class RoomFlowController {
 
     private void showInterview(InterviewDossier dossier) {
         Dialog dialog = new Dialog(activity);
-        LinearLayout panel = new LinearLayout(activity);
-        panel.setOrientation(LinearLayout.VERTICAL);
-        panel.setPadding(dp(20), dp(16), dp(20), dp(16));
-        panel.setBackground(roundRect(PANEL, DECOR));
+        View panel = LayoutInflater.from(activity).inflate(R.layout.dialog_interview, null, false);
+        TextView heading = panel.findViewById(R.id.interview_name);
+        TextView personality = panel.findViewById(R.id.interview_personality);
+        TextView knownFacts = panel.findViewById(R.id.interview_known_facts);
+        TextView transcript = panel.findViewById(R.id.interview_transcript);
+        ScrollView transcriptScroll = panel.findViewById(R.id.interview_transcript_scroll);
+        TextView requestStatus = panel.findViewById(R.id.interview_status);
+        ImageView portrait = panel.findViewById(R.id.interview_portrait);
+        EditText input = panel.findViewById(R.id.interview_input);
+        Button send = panel.findViewById(R.id.interview_send);
+        Button retry = panel.findViewById(R.id.interview_retry);
+        Button close = panel.findViewById(R.id.interview_close);
 
-        TextView heading = text(dossier.getCharacterName(), 20, true);
-        panel.addView(heading, matchWrap());
-        TextView personality = text(dossier.getPersonality(), 14, false);
-        personality.setPadding(0, dp(6), 0, dp(8));
-        panel.addView(personality, matchWrap());
-
-        StringBuilder factText = new StringBuilder(getString(R.string.known_facts_title));
-        for (String fact : dossier.getKnownFacts()) factText.append("\n• ").append(fact);
-        panel.addView(text(factText.toString(), 13, false), matchWrap());
-
-        ScrollView scroll = new ScrollView(activity);
-        TextView transcript = text("", 14, false);
-        transcript.setPadding(dp(10), dp(8), dp(10), dp(8));
-        transcript.setBackground(roundRect(INK, DECOR));
-        scroll.addView(transcript, new ScrollView.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
-        LinearLayout.LayoutParams scrollParams = new LinearLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 0, 1f);
-        scrollParams.topMargin = dp(12);
-        scrollParams.bottomMargin = dp(8);
-        panel.addView(scroll, scrollParams);
-
-        TextView requestStatus = text("", 12, false);
-        panel.addView(requestStatus, matchWrap());
-        EditText input = new EditText(activity);
-        input.setSingleLine(true);
-        input.setHint(R.string.chat_input_hint);
-        input.setTextColor(IVORY);
-        input.setHintTextColor(IVORY);
-        input.setBackground(roundRect(INK, MINT));
-        Button send = button(R.string.send_message);
-        LinearLayout inputRow = new LinearLayout(activity);
-        inputRow.setOrientation(LinearLayout.HORIZONTAL);
-        inputRow.addView(input, new LinearLayout.LayoutParams(0, dp(48), 1f));
-        inputRow.addView(send, new LinearLayout.LayoutParams(dp(116), dp(48)));
-        panel.addView(inputRow, matchWrap());
-
-        Button retry = button(R.string.retry);
-        LinearLayout.LayoutParams retryParams = matchWrap();
-        retryParams.topMargin = dp(5);
-        panel.addView(retry, retryParams);
-        Button close = button(R.string.close);
-        panel.addView(close, matchWrap());
+        heading.setText(dossier.getCharacterName());
+        personality.setText(dossier.getPersonality());
+        portrait.setContentDescription(activity.getString(
+                R.string.interview_portrait_description, dossier.getCharacterName()));
+        bindPortrait(portrait, dossier.getCharacterId());
+        StringBuilder factText = new StringBuilder();
+        for (String fact : dossier.getKnownFacts()) {
+            if (factText.length() > 0) factText.append("\n");
+            factText.append("• ").append(fact);
+        }
+        knownFacts.setText(factText.length() == 0
+                ? getString(R.string.known_facts_empty) : factText.toString());
 
         String id = dossier.getCharacterId();
-        renderTranscript(id, transcript);
-        retry.setVisibility(pending.containsKey(id) ? View.VISIBLE : View.GONE);
-        if (pending.containsKey(id)) requestStatus.setText(R.string.interview_pending_retry);
+        activeInterviewId = id;
+        activeTranscript = transcript;
+        activeTranscriptScroll = transcriptScroll;
+        activeInterviewStatus = requestStatus;
+        activeRetry = retry;
+        activeSend = send;
+        renderTranscript(id, transcript, transcriptScroll);
+
+        PendingInterview request = pending.get(id);
+        retry.setVisibility(request == null ? View.GONE : View.VISIBLE);
+        if (request != null && inFlight.contains(id)) {
+            requestStatus.setText(R.string.sending_interview);
+            retry.setEnabled(false);
+            send.setEnabled(false);
+        } else if (request != null) {
+            requestStatus.setText(R.string.interview_pending_retry);
+            retry.setEnabled(true);
+        }
+
         send.setOnClickListener(v -> {
             String message = input.getText().toString().trim();
             if (message.isEmpty()) return;
+            if (inFlight.contains(id)) {
+                requestStatus.setText(R.string.sending_interview);
+                return;
+            }
             if (pending.containsKey(id)) {
                 requestStatus.setText(R.string.retry_before_sending);
                 retry.setVisibility(View.VISIBLE);
@@ -360,38 +417,83 @@ public final class RoomFlowController {
             history.add(new InterviewSender.ChatTurn(true, message));
             pending.put(id, new PendingInterview(dossier, oldHistory, message));
             input.setText("");
-            renderTranscript(id, transcript);
+            renderTranscript(id, transcript, transcriptScroll);
             retry.setVisibility(View.VISIBLE);
-            sendPending(id, requestStatus, retry, transcript);
+            sendPending(id);
         });
-        retry.setOnClickListener(v -> sendPending(id, requestStatus, retry, transcript));
+        input.setOnEditorActionListener((view, actionId, event) -> {
+            boolean sendAction = actionId == EditorInfo.IME_ACTION_SEND
+                    || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                    && event.getAction() == KeyEvent.ACTION_UP);
+            if (!sendAction) return false;
+            send.performClick();
+            return true;
+        });
+        retry.setOnClickListener(v -> sendPending(id));
         close.setOnClickListener(v -> dialog.dismiss());
         dialog.setContentView(panel);
         dialog.setOnDismissListener(ignored -> {
             if (activeDialog == dialog) activeDialog = null;
+            if (id.equals(activeInterviewId)) {
+                activeInterviewId = null;
+                clearActiveInterviewViews();
+            }
         });
         dialog.setCanceledOnTouchOutside(true);
+        activeDialog = dialog;
         dialog.show();
         Window window = dialog.getWindow();
         if (window != null) {
-            int width = Math.min(activity.getResources().getDisplayMetrics().widthPixels - dp(32), dp(760));
-            int height = (int) (activity.getResources().getDisplayMetrics().heightPixels * 0.88f);
-            window.setLayout(width, height);
+            int availableWidth = root.getWidth() > 0
+                    ? root.getWidth() : activity.getResources().getDisplayMetrics().widthPixels;
+            int availableHeight = root.getHeight() > 0
+                    ? root.getHeight() : activity.getResources().getDisplayMetrics().heightPixels;
+            int width = Math.min(availableWidth - dp(24), dp(720));
+            int height = Math.min(availableHeight - dp(16), dp(680));
+            window.setLayout(Math.max(dp(240), width), Math.max(dp(220), height));
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         }
-        activeDialog = dialog;
     }
 
-    private void sendPending(String id, TextView status, Button retry, TextView transcript) {
+    private void bindPortrait(ImageView image, String characterId) {
+        int frame;
+        switch (characterId) {
+            case "iron_man": frame = 0; break;
+            case "captain_america": frame = 1; break;
+            case "thor": frame = 2; break;
+            case "black_widow": frame = 3; break;
+            case "hawkeye": frame = 4; break;
+            default: return;
+        }
+        Bitmap atlas = BitmapFactory.decodeResource(
+                activity.getResources(), R.drawable.survivor_idle_atlas_80x24);
+        if (atlas == null || atlas.getWidth() < (frame + 1) * 16 || atlas.getHeight() < 24) return;
+        Bitmap portrait = Bitmap.createBitmap(atlas, frame * 16, 0, 16, 24);
+        if (atlas != portrait) atlas.recycle();
+        BitmapDrawable drawable = new BitmapDrawable(activity.getResources(), portrait);
+        drawable.setFilterBitmap(false);
+        image.setImageDrawable(drawable);
+    }
+
+    private void sendPending(String id) {
         PendingInterview request = pending.get(id);
         final long requestGeneration = caseGeneration;
-        if (request == null) return;
+        if (request == null || inFlight.contains(id)) return;
         if (interviewSender == null) {
-            status.setText(R.string.interview_service_unavailable);
-            retry.setVisibility(View.VISIBLE);
+            if (isActiveInterview(id)) {
+                activeInterviewStatus.setText(R.string.interview_service_unavailable);
+                activeRetry.setEnabled(true);
+                activeRetry.setVisibility(View.VISIBLE);
+            }
             return;
         }
-        status.setText(R.string.sending_interview);
-        retry.setEnabled(false);
+        inFlight.add(id);
+        if (isActiveInterview(id)) {
+            activeInterviewStatus.setText(R.string.sending_interview);
+            activeRetry.setEnabled(false);
+            activeRetry.setVisibility(View.VISIBLE);
+            activeSend.setEnabled(false);
+        }
         try {
             interviewSender.send(request.dossier,
                     Collections.unmodifiableList(new ArrayList<>(request.historyBefore)),
@@ -400,36 +502,53 @@ public final class RoomFlowController {
                             activity.runOnUiThread(() -> {
                                 if (caseGeneration != requestGeneration
                                         || pending.get(id) != request) return;
+                                inFlight.remove(id);
                                 historyFor(id).add(new InterviewSender.ChatTurn(false, response));
                                 pending.remove(id);
-                                renderTranscript(id, transcript);
-                                status.setText(R.string.interview_received);
-                                retry.setVisibility(View.GONE);
+                                if (isActiveInterview(id)) {
+                                    renderTranscript(id, activeTranscript, activeTranscriptScroll);
+                                    activeInterviewStatus.setText(R.string.interview_received);
+                                    activeRetry.setVisibility(View.GONE);
+                                    activeSend.setEnabled(true);
+                                }
                             });
                         }
                         @Override public void onFailure(String message) {
                             activity.runOnUiThread(() -> {
                                 if (caseGeneration != requestGeneration
                                         || pending.get(id) != request) return;
-                                status.setText(activity.getString(
-                                        R.string.interview_failed_preserved, message));
-                                retry.setEnabled(true);
-                                retry.setVisibility(View.VISIBLE);
+                                inFlight.remove(id);
+                                if (isActiveInterview(id)) {
+                                    activeInterviewStatus.setText(activity.getString(
+                                            R.string.interview_failed_preserved, message));
+                                    activeRetry.setEnabled(true);
+                                    activeRetry.setVisibility(View.VISIBLE);
+                                    activeSend.setEnabled(true);
+                                }
                             });
                         }
                     });
         } catch (RuntimeException exception) {
-            if (caseGeneration != requestGeneration
-                    || pending.get(id) != request) return;
-            String message = exception.getMessage() == null
-                    ? getString(R.string.unknown_error) : exception.getMessage();
-            status.setText(activity.getString(R.string.interview_failed_preserved, message));
-            retry.setEnabled(true);
-            retry.setVisibility(View.VISIBLE);
+            if (caseGeneration != requestGeneration || pending.get(id) != request) return;
+            inFlight.remove(id);
+            if (isActiveInterview(id)) {
+                String message = exception.getMessage() == null
+                        ? getString(R.string.unknown_error) : exception.getMessage();
+                activeInterviewStatus.setText(activity.getString(
+                        R.string.interview_failed_preserved, message));
+                activeRetry.setEnabled(true);
+                activeRetry.setVisibility(View.VISIBLE);
+                activeSend.setEnabled(true);
+            }
         }
     }
 
-    private void renderTranscript(String id, TextView target) {
+    private boolean isActiveInterview(String id) {
+        return id.equals(activeInterviewId) && activeTranscript != null
+                && activeInterviewStatus != null && activeRetry != null && activeSend != null;
+    }
+
+    private void renderTranscript(String id, TextView target, ScrollView scroll) {
         StringBuilder result = new StringBuilder();
         for (InterviewSender.ChatTurn turn : historyFor(id)) {
             result.append(getString(turn.isFromPlayer()
@@ -437,6 +556,7 @@ public final class RoomFlowController {
                     .append(": ").append(turn.getText()).append("\n\n");
         }
         target.setText(result.length() == 0 ? getString(R.string.chat_empty) : result.toString());
+        scroll.post(() -> scroll.fullScroll(View.FOCUS_DOWN));
     }
 
     private List<InterviewSender.ChatTurn> historyFor(String id) {

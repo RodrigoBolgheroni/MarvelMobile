@@ -47,7 +47,6 @@ public final class RoomCanvasView extends View {
     private static final int MINT = 0xFF44CFBD;
     private static final int AMBER = 0xFFF2B84B;
     private static final int CORAL = 0xFFE4675D;
-    private static final float INTERACTION_RADIUS_SQUARED = 0.12f * 0.12f;
 
     private final Paint bitmapPaint = new Paint();
     private final Paint shapePaint = new Paint();
@@ -116,6 +115,13 @@ public final class RoomCanvasView extends View {
         if (animator != null) animator.cancel();
         resetAnimatedPlayerToState();
         invalidate();
+    }
+
+    public PointF getCurrentPlayerPosition() {
+        if (state == null) return new PointF(0.5f, 0.9f);
+        float x = Float.isNaN(animatedPlayerX) ? state.getPlayer().getX() : animatedPlayerX;
+        float y = Float.isNaN(animatedPlayerY) ? state.getPlayer().getY() : animatedPlayerY;
+        return new PointF(x, y);
     }
 
     public void animatePlayerAlong(List<PointF> normalizedPath, MovementListener callback) {
@@ -428,11 +434,11 @@ public final class RoomCanvasView extends View {
                 ? state.getPlayer().getX() : animatedPlayerX;
         float playerY = Float.isNaN(animatedPlayerY)
                 ? state.getPlayer().getY() : animatedPlayerY;
-        float bestDistance = INTERACTION_RADIUS_SQUARED;
+        float bestDistance = RoomViewport.interactionRadiusSquared();
         String prompt = null;
         for (CharacterView character : state.getCharacters()) {
             if (!character.canInterview()) continue;
-            float distance = distanceSquared(playerX, playerY,
+            float distance = RoomViewport.worldDistanceSquared(playerX, playerY,
                     character.getX(), character.getY());
             if (distance <= bestDistance) {
                 bestDistance = distance;
@@ -440,7 +446,8 @@ public final class RoomCanvasView extends View {
             }
         }
         for (ClueView clue : state.getClues()) {
-            float distance = distanceSquared(playerX, playerY, clue.getX(), clue.getY());
+            float distance = RoomViewport.worldDistanceSquared(
+                    playerX, playerY, clue.getX(), clue.getY());
             if (distance <= bestDistance) {
                 bestDistance = distance;
                 prompt = getResources().getString(R.string.room_action_examine);
@@ -589,14 +596,18 @@ public final class RoomCanvasView extends View {
                 || state == null || getWidth() == 0 || getHeight() == 0) return true;
         if (movementAnimator != null) return true;
         computeMapRect();
+        if (!mapRect.contains(event.getX(), event.getY())) {
+            performClick();
+            return true;
+        }
 
         CharacterView character = nearestCharacter(event.getX(), event.getY());
-        if (character != null) {
+        ClueView clue = nearestClue(event.getX(), event.getY());
+        if (character != null && (clue == null || character.getY() >= clue.getY())) {
             listener.onCharacterTapped(character);
             performClick();
             return true;
         }
-        ClueView clue = nearestClue(event.getX(), event.getY());
         if (clue != null) {
             listener.onClueTapped(clue);
             performClick();
@@ -617,6 +628,7 @@ public final class RoomCanvasView extends View {
 
     private CharacterView nearestCharacter(float screenX, float screenY) {
         CharacterView nearest = null;
+        float bestDepth = -Float.MAX_VALUE;
         float bestDistance = Float.MAX_VALUE;
         float scale = mapRect.width() / RoomViewport.LOGICAL_WIDTH;
         float targetSize = 48f * density;
@@ -625,16 +637,17 @@ public final class RoomCanvasView extends View {
             float footY = RoomViewport.screenY(mapRect, character.getY());
             float width = Math.max(targetSize, 16f * scale);
             float height = Math.max(targetSize, 24f * scale);
-            RectF bounds = new RectF(anchorX - width / 2f,
-                    footY - 11f * scale - height / 2f,
-                    anchorX + width / 2f,
-                    footY - 11f * scale + height / 2f);
+            float centerY = footY - 11f * scale;
+            RectF bounds = new RectF(anchorX - width / 2f, centerY - height / 2f,
+                    anchorX + width / 2f, centerY + height / 2f);
             if (!bounds.contains(screenX, screenY)) continue;
             float dx = screenX - anchorX;
-            float dy = screenY - (footY - 11f * scale);
+            float dy = screenY - centerY;
             float distance = dx * dx + dy * dy;
-            if (distance < bestDistance) {
+            if (character.getY() > bestDepth
+                    || (character.getY() == bestDepth && distance < bestDistance)) {
                 nearest = character;
+                bestDepth = character.getY();
                 bestDistance = distance;
             }
         }
@@ -643,6 +656,7 @@ public final class RoomCanvasView extends View {
 
     private ClueView nearestClue(float screenX, float screenY) {
         ClueView nearest = null;
+        float bestDepth = -Float.MAX_VALUE;
         float bestDistance = Float.MAX_VALUE;
         float scale = mapRect.width() / RoomViewport.LOGICAL_WIDTH;
         float targetSize = 48f * density;
@@ -656,8 +670,10 @@ public final class RoomCanvasView extends View {
             float dx = screenX - x;
             float dy = screenY - y;
             float distance = dx * dx + dy * dy;
-            if (distance < bestDistance) {
+            if (clue.getY() > bestDepth
+                    || (clue.getY() == bestDepth && distance < bestDistance)) {
                 nearest = clue;
+                bestDepth = clue.getY();
                 bestDistance = distance;
             }
         }
@@ -669,7 +685,7 @@ public final class RoomCanvasView extends View {
                 ? state.getPlayer().getX() : animatedPlayerX;
         float playerY = Float.isNaN(animatedPlayerY)
                 ? state.getPlayer().getY() : animatedPlayerY;
-        return distanceSquared(playerX, playerY, x, y) <= INTERACTION_RADIUS_SQUARED;
+        return RoomViewport.withinInteractionRange(playerX, playerY, x, y);
     }
 
     private static float distanceSquared(float x1, float y1, float x2, float y2) {

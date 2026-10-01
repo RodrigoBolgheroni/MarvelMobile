@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/interview_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#243543"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <View android:layout_width="match_parent" android:layout_height="3dp" android:background="#F2B84B" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="8dp"
+        android:paddingBottom="6dp">
+
+        <ImageView
+            android:id="@+id/interview_portrait"
+            android:layout_width="48dp"
+            android:layout_height="72dp"
+            android:background="#0D1720"
+            android:contentDescription="@string/interview_portrait_description"
+            android:scaleType="fitCenter" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/interview_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:textColor="#C4D5C8"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="@string/interview_personality_tag"
+                android:textColor="#44CFBD"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/interview_personality"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="3dp"
+                android:textColor="#C4D5C8"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/interview_close"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:backgroundTint="#44CFBD"
+            android:minWidth="48dp"
+            android:text="@string/close"
+            android:textAllCaps="false"
+            android:textColor="#0D1720"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="monospace"
+        android:text="@string/known_facts_title"
+        android:textColor="#44CFBD"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:background="#0D1720"
+        android:scrollbars="vertical"
+        android:overScrollMode="ifContentScrolls">
+
+        <TextView
+            android:id="@+id/interview_known_facts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:textColor="#C4D5C8"
+            android:textSize="12sp" />
+    </ScrollView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:fontFamily="monospace"
+        android:text="@string/interview_transcript_title"
+        android:textColor="#44CFBD"
+        android:textSize="12sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:id="@+id/interview_transcript_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="4dp"
+        android:layout_weight="1"
+        android:background="#0D1720"
+        android:fillViewport="true"
+        android:overScrollMode="ifContentScrolls">
+
+        <TextView
+            android:id="@+id/interview_transcript"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:textColor="#C4D5C8"
+            android:textSize="15sp" />
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/interview_status"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="28dp"
+        android:paddingTop="4dp"
+        android:textColor="#F2B84B"
+        android:textSize="12sp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/interview_input"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="#0D1720"
+            android:hint="@string/chat_input_hint"
+            android:imeOptions="actionSend"
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="2"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:textColor="#C4D5C8"
+            android:textColorHint="#52666A"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/interview_send"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_marginStart="6dp"
+            android:backgroundTint="#44CFBD"
+            android:minWidth="72dp"
+            android:text="@string/send_message"
+            android:textAllCaps="false"
+            android:textColor="#0D1720"
+            android:textSize="12sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/interview_retry"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#F2B84B"
+        android:text="@string/retry"
+        android:textAllCaps="false"
+        android:textColor="#0D1720"
+        android:visibility="gone" />
+</LinearLayout>

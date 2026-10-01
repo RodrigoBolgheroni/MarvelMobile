@@ -41,7 +41,7 @@
     <string name="unknown_error">erro desconhecido</string>
     <string name="chat_you">Você</string>
     <string name="chat_character">Resposta</string>
-    <string name="chat_empty">Converse com o sobrevivente para investigar.</string>
+    <string name="chat_empty">Nenhuma mensagem nesta entrevista.</string>
     <string name="room_player_marker">VOCÊ</string>
     <string name="room_victim_badge">VÍTIMA</string>
     <string name="room_action_interview">TOQUE: FALAR</string>
@@ -56,4 +56,13 @@
     <string name="room_badge_reagent_sample">REAG</string>
     <string name="room_moving">Caminhando pela sala…</string>
     <string name="room_no_path">Não há caminho livre até esse ponto.</string>
+    <string name="accuse_short">Acusar</string>
+    <string name="room_title_short">SALA DE CASO</string>
+    <string name="case_notebook_short">Caderno</string>
+    <string name="empty_hotbar_marker">·</string>
+    <string name="empty_hotbar_slot">Espaço vazio</string>
+    <string name="known_facts_empty">Nenhum fato conhecido nesta entrevista.</string>
+    <string name="interview_personality_tag">PERFIL</string>
+    <string name="interview_transcript_title">TRANSCRIÇÃO</string>
+    <string name="interview_portrait_description">Retrato de %1$s</string>
 </resources>

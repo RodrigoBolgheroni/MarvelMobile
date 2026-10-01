@@ -14,7 +14,6 @@ import java.util.SplittableRandom;
 
 /** Sessão isolada que guarda o caso e controla o que a sala pode observar. */
 public final class CaseSession {
-    private static final float MAX_INTERACTION_DISTANCE = 0.12f;
     private static final String UNEXAMINED_DESCRIPTION = "Ainda não examinada.";
 
     private static final CharacterDefinition[] ROSTER = {
@@ -193,9 +192,7 @@ public final class CaseSession {
     }
 
     private static boolean isNear(float fromX, float fromY, float toX, float toY) {
-        float dx = fromX - toX;
-        float dy = fromY - toY;
-        return dx * dx + dy * dy <= MAX_INTERACTION_DISTANCE * MAX_INTERACTION_DISTANCE;
+        return RoomInteractionRange.isWithinRange(fromX, fromY, toX, toY);
     }
 
     private static final class CaseFile {

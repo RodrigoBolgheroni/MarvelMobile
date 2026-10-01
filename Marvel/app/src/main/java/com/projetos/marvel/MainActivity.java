@@ -1,11 +1,15 @@
 package com.projetos.marvel;
 
-import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.view.View;
 import android.view.WindowManager;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.projetos.marvel.ai.FirebaseInterviewSender;
 import com.projetos.marvel.ui.room.InterviewSender;
@@ -17,12 +21,29 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_main);
-        roomFlowController = new RoomFlowController(this, findViewById(R.id.main));
-        roomFlowController.setInterviewSender(new FirebaseInterviewSender());
-        roomFlowController.bind();
+
+        View root = findViewById(R.id.main);
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            Insets safeInsets = windowInsets.getInsets(
+                    WindowInsetsCompat.Type.systemBars() | WindowInsetsCompat.Type.displayCutout());
+            view.setPadding(safeInsets.left, safeInsets.top, safeInsets.right, safeInsets.bottom);
+            return windowInsets;
+        });
+        ViewCompat.requestApplyInsets(root);
+
+        Object retained = getLastCustomNonConfigurationInstance();
+        if (retained instanceof RoomFlowController) {
+            roomFlowController = (RoomFlowController) retained;
+            roomFlowController.setInterviewSender(new FirebaseInterviewSender());
+            roomFlowController.attach(this, root);
+        } else {
+            roomFlowController = new RoomFlowController(this, root);
+            roomFlowController.setInterviewSender(new FirebaseInterviewSender());
+            roomFlowController.bind();
+        }
 
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override public void handleOnBackPressed() {
@@ -33,6 +54,15 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        if (isChangingConfigurations() && roomFlowController != null) {
+            roomFlowController.retainForConfigurationChange();
+            return roomFlowController;
+        }
+        return super.onRetainCustomNonConfigurationInstance();
     }
 
     /** Injection point for the real interview service when credentials are configured. */
