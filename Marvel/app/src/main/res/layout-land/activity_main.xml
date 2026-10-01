@@ -6,51 +6,6 @@
     android:layout_height="match_parent"
     android:background="#0D1720">
 
-    <LinearLayout
-        android:id="@+id/room_header"
-        android:layout_width="0dp"
-        android:layout_height="52dp"
-        android:background="#243543"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="monospace"
-            android:text="@string/room_title_short"
-            android:textColor="#C4D5C8"
-            android:textSize="13sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/room_case_label"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_weight="1"
-            android:fontFamily="monospace"
-            android:gravity="center"
-            android:textColor="#C4D5C8"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/btn_new_case"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:backgroundTint="#44CFBD"
-            android:minWidth="76dp"
-            android:text="@string/new_case"
-            android:textAllCaps="false"
-            android:textColor="#0D1720"
-            android:textSize="13sp" />
-    </LinearLayout>
-
     <FrameLayout
         android:id="@+id/room_stage_container"
         android:layout_width="0dp"
@@ -59,11 +14,9 @@
         android:clipChildren="true"
         android:clipToPadding="true"
         app:layout_constraintBottom_toTopOf="@id/room_hotbar"
-        app:layout_constraintEnd_toStartOf="@id/room_info_panel"
-        app:layout_constraintHorizontal_chainStyle="spread"
-        app:layout_constraintHorizontal_weight="0.68"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/room_header">
+        app:layout_constraintTop_toTopOf="parent">
 
         <com.projetos.marvel.ui.room.RoomCanvasView
             android:id="@+id/room_canvas"
@@ -73,48 +26,6 @@
             android:contentDescription="@string/room_board_description"
             android:focusable="true" />
     </FrameLayout>
-
-    <LinearLayout
-        android:id="@+id/room_info_panel"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="#243543"
-        android:orientation="vertical"
-        android:padding="10dp"
-        app:layout_constraintBottom_toTopOf="@id/room_hotbar"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/room_stage_container"
-        app:layout_constraintTop_toBottomOf="@id/room_header"
-        app:layout_constraintHorizontal_weight="0.32">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="3dp"
-            android:background="#F2B84B" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="@string/room_instructions"
-            android:textColor="#C4D5C8"
-            android:textSize="12sp" />
-
-        <TextView
-            android:id="@+id/room_status"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_marginTop="8dp"
-            android:layout_weight="1"
-            android:background="#0D1720"
-            android:fontFamily="monospace"
-            android:gravity="top"
-            android:minHeight="44dp"
-            android:padding="8dp"
-            android:text="@string/room_ready"
-            android:textColor="#F2B84B"
-            android:textSize="12sp" />
-    </LinearLayout>
 
     <LinearLayout
         android:id="@+id/room_hotbar"
@@ -138,7 +49,7 @@
             android:contentDescription="@string/case_notebook_description"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:padding="2dp"
+            android:padding="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_hotbar_notebook" />
 
@@ -176,7 +87,7 @@
             android:contentDescription="@string/hotbar_loupe_description"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:padding="2dp"
+            android:padding="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_hotbar_accusation" />
     </LinearLayout>

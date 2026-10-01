@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.ImageView;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.core.view.WindowCompat;
 
@@ -65,8 +66,6 @@ public final class RoomFlowController {
     private final Set<String> inFlight = new HashSet<>();
     private RoomCanvasView canvas;
     private RoomWalkMap walkMap;
-    private TextView caseLabel;
-    private TextView statusLabel;
     private ImageButton notebookButton;
     private ImageButton accusationButton;
     private HorizontalScrollView clueScroll;
@@ -81,7 +80,6 @@ public final class RoomFlowController {
     private String activeInterviewId;
     private String retainedInterviewId;
     private boolean retainedResultDialog;
-    private String lastRoomStatus;
     private String selectedHotbarItem;
     private String selectedSuspectId;
     private int hotbarClueScrollX;
@@ -111,7 +109,7 @@ public final class RoomFlowController {
             startNewCase();
             return;
         }
-        render(lastRoomStatus == null ? getString(R.string.room_ready) : lastRoomStatus);
+        render();
         String resumeId = retainedInterviewId;
         retainedInterviewId = null;
         InterviewDossier dossier = resumeId == null ? null : knownDossiers.get(resumeId);
@@ -130,8 +128,6 @@ public final class RoomFlowController {
         canvas = root.findViewById(R.id.room_canvas);
         walkMap = new RoomWalkMap(activity);
         canvas.setWalkMap(walkMap);
-        caseLabel = root.findViewById(R.id.room_case_label);
-        statusLabel = root.findViewById(R.id.room_status);
         notebookButton = root.findViewById(R.id.btn_notebook);
         accusationButton = root.findViewById(R.id.btn_accusation_slot);
         configureHotbarIcon(notebookButton);
@@ -145,11 +141,9 @@ public final class RoomFlowController {
             clueScroll.getViewTreeObserver().addOnScrollChangedListener(
                     () -> hotbarClueScrollX = clueScroll.getScrollX());
         }
-        Button newCase = root.findViewById(R.id.btn_new_case);
-
         canvas.setListener(new RoomCanvasView.Listener() {
             @Override public void onFloorTapped(float x, float y) {
-                walkToNormalized(x, y, getString(R.string.walked_to_position));
+                walkToNormalized(x, y);
             }
             @Override public void onCharacterTapped(CharacterView character) {
                 handleCharacterTap(character);
@@ -158,7 +152,6 @@ public final class RoomFlowController {
                 handleClueTap(clue);
             }
         });
-        newCase.setOnClickListener(v -> startNewCase());
         notebookButton.setOnClickListener(v -> {
             selectHotbarItem(HOTBAR_NOTEBOOK);
             showNotebook();
@@ -232,15 +225,12 @@ public final class RoomFlowController {
         pending.clear();
         inFlight.clear();
         retainedInterviewId = null;
-        render(getString(R.string.room_ready));
+        render();
     }
 
-    private void render(String status) {
+    private void render() {
         RoomViewState state = session.getRoomViewState();
         canvas.render(state);
-        caseLabel.setText(activity.getString(R.string.case_seed, seed));
-        lastRoomStatus = status;
-        statusLabel.setText(status);
         boolean finished = state.getAccusationResult().isPresent();
         accusationButton.setEnabled(!finished);
         renderHotbar(state);
@@ -254,12 +244,11 @@ public final class RoomFlowController {
 
     private void handleCharacterTap(CharacterView character) {
         if (!character.canInterview()) {
-            statusLabel.setText(R.string.victim_cannot_interview);
+            showRoomFeedback(R.string.victim_cannot_interview);
             return;
         }
         if (!isNear(character.getX(), character.getY())) {
-            walkToApproach(character.getId(), activity.getString(
-                    R.string.walked_to_character, character.getDisplayName()));
+            walkToApproach(character.getId());
             return;
         }
         try {
@@ -267,23 +256,22 @@ public final class RoomFlowController {
             knownDossiers.put(character.getId(), dossier);
             showInterview(dossier);
         } catch (IllegalArgumentException | IllegalStateException exception) {
-            statusLabel.setText(exception.getMessage());
+            showRoomFeedback(exception.getMessage());
         }
     }
 
     private void handleClueTap(ClueView clue) {
         if (!isNear(clue.getX(), clue.getY())) {
-            walkToApproach(clue.getId(), activity.getString(
-                    R.string.walked_to_clue, clue.getTitle()));
+            walkToApproach(clue.getId());
             return;
         }
         try {
             ClueView examined = session.examine(clue.getId());
             selectHotbarItem(clueHotbarKey(examined));
-            render(activity.getString(R.string.clue_examined, examined.getTitle()));
+            render();
             showClueDetails(examined);
         } catch (IllegalArgumentException | IllegalStateException exception) {
-            statusLabel.setText(exception.getMessage());
+            showRoomFeedback(exception.getMessage());
         }
     }
 
@@ -347,35 +335,44 @@ public final class RoomFlowController {
                 state.getPlayer().getX(), state.getPlayer().getY(), x, y);
     }
 
-    private void walkToApproach(String targetId, String arrivalStatus) {
+    private void walkToApproach(String targetId) {
         RoomWalkMap.Cell approach = walkMap.approachFor(targetId);
         if (approach == null) {
-            statusLabel.setText(R.string.room_no_path);
+            showRoomFeedback(R.string.room_no_path);
             return;
         }
         RoomViewState state = session.getRoomViewState();
         List<PointF> path = walkMap.pathToCell(
                 state.getPlayer().getX(), state.getPlayer().getY(), approach);
-        animateWalk(path, arrivalStatus);
+        animateWalk(path);
     }
 
-    private void walkToNormalized(float x, float y, String arrivalStatus) {
+    private void walkToNormalized(float x, float y) {
         RoomViewState state = session.getRoomViewState();
         List<PointF> path = walkMap.pathToNormalized(
                 state.getPlayer().getX(), state.getPlayer().getY(), x, y);
-        animateWalk(path, arrivalStatus);
+        animateWalk(path);
     }
 
-    private void animateWalk(List<PointF> path, String arrivalStatus) {
+    private void animateWalk(List<PointF> path) {
         if (path == null || path.isEmpty()) {
-            statusLabel.setText(R.string.room_no_path);
+            showRoomFeedback(R.string.room_no_path);
             return;
         }
-        statusLabel.setText(R.string.room_moving);
         canvas.animatePlayerAlong(path, (x, y) -> {
             session.movePlayerTo(x, y);
-            render(arrivalStatus);
+            render();
         });
+    }
+
+    private void showRoomFeedback(int messageResId) {
+        Toast.makeText(activity, messageResId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showRoomFeedback(String message) {
+        if (message != null && !message.trim().isEmpty()) {
+            Toast.makeText(activity, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void showNotebook() {
@@ -421,21 +418,22 @@ public final class RoomFlowController {
                 .setSingleChoiceItems(names, initialSelection, (d, which) -> {
                     selected[0] = which;
                     selectedSuspectId = suspects.get(which).getId();
+                    ((AlertDialog) d).getButton(AlertDialog.BUTTON_POSITIVE).setEnabled(true);
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setPositiveButton(R.string.accuse, null)
                 .create();
-        dialog.setOnShowListener(ignored -> dialog.getButton(AlertDialog.BUTTON_POSITIVE)
-                .setOnClickListener(v -> {
-                    if (selected[0] < 0) {
-                        statusLabel.setText(R.string.choose_suspect_first);
-                        return;
-                    }
-                    selectedSuspectId = suspects.get(selected[0]).getId();
-                    AccusationResult result = session.accuse(selectedSuspectId);
-                    dialog.dismiss();
-                    render(result.getSummary());
-                }));
+        dialog.setOnShowListener(ignored -> {
+            Button confirm = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+            confirm.setEnabled(selected[0] >= 0);
+            confirm.setOnClickListener(v -> {
+                if (selected[0] < 0) return;
+                selectedSuspectId = suspects.get(selected[0]).getId();
+                session.accuse(selectedSuspectId);
+                dialog.dismiss();
+                render();
+            });
+        });
         dialog.setOnDismissListener(ignored -> {
             if (activeDialog == dialog) activeDialog = null;
             if (activeAccusationChoices == dialog) activeAccusationChoices = null;
