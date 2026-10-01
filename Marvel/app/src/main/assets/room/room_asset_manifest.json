@@ -29,8 +29,8 @@
   ],
   "sourceProvenance": {
     "generator": "OpenAI built-in image_gen",
-    "externalReferenceImagesUsed": false,
-    "officialMarvelOrPokemonArtworkOrLogosUsed": false,
+    "externalReferenceImagesUsed": true,
+    "officialMarvelOrPokemonArtworkOrLogosUsed": null,
     "promptRecordNote": "The original prompt text is not retained verbatim in the build artefacts; promptBrief entries are non-verbatim summaries.",
     "sources": [
       {
@@ -83,7 +83,8 @@
         "generatedBy": "OpenAI built-in image_gen",
         "promptTextRetainedVerbatim": false,
         "promptBrief": "Five anonymous civilian idle sprites with distinct silhouettes; transparent; gameplay IDs map to generic original art. Prompt brief is non-verbatim.",
-        "processedOutput": "survivor_idle_atlas_80x24.png"
+        "processedOutput": "survivor_idle_atlas_80x24.png",
+        "status": "superseded by user-provided sprite references"
       },
       {
         "rawImage": "exec-b355cd16-5a5f-4f22-80a6-c9939bfe65bc.png",
@@ -125,8 +126,110 @@
         "promptBrief": "Original pixel-art magnifying glass with amber handle and mint accent; no logos or text. Prompt brief is non-verbatim.",
         "externalReferencesUsed": false,
         "processedOutput": "ic_hotbar_accusation.png"
+      },
+      {
+        "sourceType": "user-provided attachment",
+        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/01-capitao-america.png",
+        "sourceDimensionsPx": [
+          97,
+          117
+        ],
+        "sourceFormat": "PNG",
+        "sourceMode": "RGB",
+        "sourceSha256": "13513f16082ca3b084e291418def2d25effd14fa7fbae7f9eb3949628f104287",
+        "usedForCharacter": "captain_america",
+        "processedOutput": "Marvel/artwork/hero-sprites/processed/captain_america_idle_16x24.png",
+        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
+        "cropBoundsPx": [
+          5,
+          14,
+          91,
+          112
+        ]
+      },
+      {
+        "sourceType": "user-provided attachment",
+        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/02-homem-de-ferro.png",
+        "sourceDimensionsPx": [
+          90,
+          123
+        ],
+        "sourceFormat": "PNG",
+        "sourceMode": "RGB",
+        "sourceSha256": "b5016fc643ed7132ddea244881c4bc88cc05df0bdb8864f144712ec091ff6072",
+        "usedForCharacter": "iron_man",
+        "processedOutput": "Marvel/artwork/hero-sprites/processed/iron_man_idle_16x24.png",
+        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
+        "cropBoundsPx": [
+          1,
+          14,
+          87,
+          112
+        ]
+      },
+      {
+        "sourceType": "user-provided attachment",
+        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/03-thor.png",
+        "sourceDimensionsPx": [
+          92,
+          117
+        ],
+        "sourceFormat": "PNG",
+        "sourceMode": "RGB",
+        "sourceSha256": "598ebe6123f3baad17820243c80390220fbedde759ebbb76c993d6ca56e292d5",
+        "usedForCharacter": "thor",
+        "processedOutput": "Marvel/artwork/hero-sprites/processed/thor_idle_16x24.png",
+        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
+        "cropBoundsPx": [
+          3,
+          5,
+          89,
+          109
+        ]
+      },
+      {
+        "sourceType": "user-provided attachment",
+        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/04-gaviao-arqueiro.png",
+        "sourceDimensionsPx": [
+          95,
+          110
+        ],
+        "sourceFormat": "PNG",
+        "sourceMode": "RGB",
+        "sourceSha256": "16a49ec76bcda54c7145d1d8d4470580ad038d598c79ecc807544610ac597812",
+        "usedForCharacter": "hawkeye",
+        "processedOutput": "Marvel/artwork/hero-sprites/processed/hawkeye_idle_16x24.png",
+        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
+        "cropBoundsPx": [
+          6,
+          11,
+          93,
+          110
+        ]
+      },
+      {
+        "sourceType": "user-provided attachment",
+        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/05-viuva-negra.png",
+        "sourceDimensionsPx": [
+          97,
+          111
+        ],
+        "sourceFormat": "PNG",
+        "sourceMode": "RGB",
+        "sourceSha256": "17c4e65531059165ee925f58027e48b43f7cfe230deb0fcbf9ba5763b315b37e",
+        "usedForCharacter": "black_widow",
+        "processedOutput": "Marvel/artwork/hero-sprites/processed/black_widow_idle_16x24.png",
+        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
+        "cropBoundsPx": [
+          6,
+          8,
+          92,
+          107
+        ]
       }
-    ]
+    ],
+    "userProvidedCharacterSpritesUsed": true,
+    "licenseAndRights": "Hero sprite source images were supplied by the user. Their underlying license/provenance was not independently verified; confirm rights before distributing the APK or video. Other generated assets retain their individual provenance records."
   },
   "processing": {
     "tool": "Python Pillow deterministic extraction/composition pipeline",
@@ -137,7 +240,8 @@
       "nearest-neighbor resize without smoothing",
       "palette quantization to approved room palette subsets",
       "write PNG atlases and compose room map from approved row-major tilemap",
-      "hotbar icon processing: threshold alpha, crop visible silhouette, nearest-neighbor fit within 14x14px, quantize to the approved palette and center on a transparent 16x16px canvas"
+      "hotbar icon processing: threshold alpha, crop visible silhouette, nearest-neighbor fit within 14x14px, quantize to the approved palette and center on a transparent 16x16px canvas",
+      "user sprite integration: remove only edge-connected near-white background, crop silhouette, fit to 16x24 with nearest-neighbor, bottom-align, assemble runtime atlas"
     ],
     "licenseAndRights": "These files document generated-art provenance, not a separate legal license. Use remains subject to the image-generation service terms and applicable competition/publication rules. No third-party image files were incorporated. Gameplay IDs reference Marvel characters; underlying names, characters and marks are not licensed by this manifest."
   },
@@ -167,7 +271,7 @@
     {
       "layer": "characters",
       "asset": "survivor_idle_atlas_80x24.png",
-      "note": "Five generic idle sprites mapped by JSON frame IDs."
+      "note": "Five user-provided hero sprites, runtime order iron_man, captain_america, thor, black_widow, hawkeye."
     },
     {
       "layer": "player",
@@ -276,13 +380,29 @@
       ],
       "format": "PNG",
       "mode": "RGBA",
-      "alpha": "transparent",
+      "alpha": "transparent outside sprites",
       "alphaExtrema": [
         0,
         255
       ],
-      "details": "5 horizontal 16x24 idle frames; IDs iron_man, captain_america, thor, black_widow, hawkeye",
-      "sha256": "8d3d30d9e511f56a1ec4cdf579df6360b0289e3279ecdf5a7635584be62d4a8a"
+      "details": "5 horizontal 16x24 idle frames; runtime order iron_man, captain_america, thor, black_widow, hawkeye",
+      "sha256": "ea256dc32275474ed39e24c611f44407c050a5e259fe79af1e5950dad07b6489",
+      "frameSizePx": [
+        16,
+        24
+      ],
+      "frameOrder": [
+        "iron_man",
+        "captain_america",
+        "thor",
+        "black_widow",
+        "hawkeye"
+      ],
+      "anchorPx": [
+        8,
+        23
+      ],
+      "sourceType": "user-provided character sprites"
     },
     {
       "path": "Marvel/app/src/main/res/drawable-nodpi/room_clue_atlas_48x16.png",
@@ -382,6 +502,84 @@
         "promptBrief": "Original pixel-art magnifying glass with amber handle and mint accent; prompt brief is non-verbatim."
       },
       "sha256": "f683408431cf2b7651834460b56ee11cba5a5e97155d7f060290f446170b199b"
+    },
+    {
+      "path": "Marvel/artwork/hero-sprites/processed/captain_america_idle_16x24.png",
+      "characterId": "captain_america",
+      "dimensionsPx": [
+        16,
+        24
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent outside sprite",
+      "sha256": "8e65e075a9a987fdfda1ed24f77e60854975e0673ee92c94263a4b9e68d0944c"
+    },
+    {
+      "path": "Marvel/artwork/hero-sprites/processed/iron_man_idle_16x24.png",
+      "characterId": "iron_man",
+      "dimensionsPx": [
+        16,
+        24
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent outside sprite",
+      "sha256": "b5c3a2111459c7bbf9b3b052f74966ba471fdfab3aae7274640dfcecc79927b6"
+    },
+    {
+      "path": "Marvel/artwork/hero-sprites/processed/thor_idle_16x24.png",
+      "characterId": "thor",
+      "dimensionsPx": [
+        16,
+        24
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent outside sprite",
+      "sha256": "2c6f34aba275f390135f1b31a497d4aaebbbc42beb59bfa7656a170141dcce9f"
+    },
+    {
+      "path": "Marvel/artwork/hero-sprites/processed/hawkeye_idle_16x24.png",
+      "characterId": "hawkeye",
+      "dimensionsPx": [
+        16,
+        24
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent outside sprite",
+      "sha256": "d92a7c13531214f22eb4fafcec0574095ea5183e163c1ae17255c075a64db699"
+    },
+    {
+      "path": "Marvel/artwork/hero-sprites/processed/black_widow_idle_16x24.png",
+      "characterId": "black_widow",
+      "dimensionsPx": [
+        16,
+        24
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "transparent outside sprite",
+      "sha256": "e7fc12e078b558afa30887c5d22ceaf064e1b6c577f032da0572891dc7bc0e31"
+    }
+  ],
+  "reviewArtifacts": [
+    {
+      "path": "Marvel/artwork/hero-sprites/user-supplied-sprites-preview.png",
+      "dimensionsPx": [
+        872,
+        272
+      ],
+      "format": "PNG",
+      "details": "User-order preview, enlarged by nearest-neighbor; excluded from APK.",
+      "frameOrder": [
+        "captain_america",
+        "iron_man",
+        "thor",
+        "hawkeye",
+        "black_widow"
+      ]
     }
   ]
 }
