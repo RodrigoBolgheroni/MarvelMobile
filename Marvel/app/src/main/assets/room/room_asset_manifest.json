@@ -97,6 +97,34 @@
         "promptTextRetainedVerbatim": false,
         "promptBrief": "Three original transparent pictograms: access record, seal trace and reagent sample; no legible text. Prompt brief is non-verbatim.",
         "processedOutput": "room_clue_atlas_48x16.png"
+      },
+      {
+        "rawImage": "exec-36296b45-5aa1-463a-ac2e-952a8f49590b.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f784-678d-78b2-9648-9e06cb274f86\\exec-36296b45-5aa1-463a-ac2e-952a8f49590b.png",
+        "rawDimensionsPx": [
+          1254,
+          1254
+        ],
+        "rawSha256": "6c5981ab3767517d2eb2fbdd1f5efbc740df155aeda21a7e92471e41a8ea6e40",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "Original compact pixel-art notebook with pale pages and teal binding; no text or marks. Prompt brief is non-verbatim.",
+        "externalReferencesUsed": false,
+        "processedOutput": "ic_hotbar_notebook.png"
+      },
+      {
+        "rawImage": "exec-c186cf5a-0edd-4e1a-bf92-2696e8392172.png",
+        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f784-678d-78b2-9648-9e06cb274f86\\exec-c186cf5a-0edd-4e1a-bf92-2696e8392172.png",
+        "rawDimensionsPx": [
+          1254,
+          1254
+        ],
+        "rawSha256": "723ac288f9ef51a659f21f41f509abae23c0d85baaf5c530a086ef79d7e369cc",
+        "generatedBy": "OpenAI built-in image_gen",
+        "promptTextRetainedVerbatim": false,
+        "promptBrief": "Original pixel-art magnifying glass with amber handle and mint accent; no logos or text. Prompt brief is non-verbatim.",
+        "externalReferencesUsed": false,
+        "processedOutput": "ic_hotbar_accusation.png"
       }
     ]
   },
@@ -108,7 +136,8 @@
       "alpha silhouette extraction for sprites",
       "nearest-neighbor resize without smoothing",
       "palette quantization to approved room palette subsets",
-      "write PNG atlases and compose room map from approved row-major tilemap"
+      "write PNG atlases and compose room map from approved row-major tilemap",
+      "hotbar icon processing: threshold alpha, crop visible silhouette, nearest-neighbor fit within 14x14px, quantize to the approved palette and center on a transparent 16x16px canvas"
     ],
     "licenseAndRights": "These files document generated-art provenance, not a separate legal license. Use remains subject to the image-generation service terms and applicable competition/publication rules. No third-party image files were incorporated. Gameplay IDs reference Marvel characters; underlying names, characters and marks are not licensed by this manifest."
   },
@@ -149,6 +178,16 @@
       "layer": "navigation",
       "asset": "room_walkmap_36x18.png",
       "note": "Lookup/pathfinding only; does not snap rendered anchors."
+    },
+    {
+      "layer": "hotbar_notebook",
+      "asset": "ic_hotbar_notebook.png",
+      "note": "One original 16x16 pixel-art frame; displayed in the notebook ImageButton; selection frame comes from hotbar_notebook_selector.xml."
+    },
+    {
+      "layer": "hotbar_accusation",
+      "asset": "ic_hotbar_accusation.png",
+      "note": "One original 16x16 pixel-art frame; displayed in the accusation ImageButton; selection frame comes from hotbar_accusation_selector.xml."
     }
   ],
   "assets": [
@@ -287,6 +326,62 @@
       "path": "Marvel/app/src/main/assets/room/room_asset_manifest.json",
       "format": "JSON",
       "details": "Dimensions, inventory, generated-art sources and provenance; self hash omitted"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/ic_hotbar_notebook.png",
+      "dimensionsPx": [
+        16,
+        16
+      ],
+      "frames": 1,
+      "frameSizePx": [
+        16,
+        16
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "binary transparent outside sprite",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "details": "one 16x16 frame; original notebook icon for the investigation hotbar; RGBA with binary transparency; rendered using nearest-neighbor scaling",
+      "origin": {
+        "generator": "OpenAI built-in image_gen",
+        "rawImage": "exec-36296b45-5aa1-463a-ac2e-952a8f49590b.png",
+        "rawSha256": "6c5981ab3767517d2eb2fbdd1f5efbc740df155aeda21a7e92471e41a8ea6e40",
+        "externalReferencesUsed": false,
+        "promptBrief": "Original compact pixel-art notebook with pale pages and teal binding; prompt brief is non-verbatim."
+      },
+      "sha256": "5b507d01c846843c3bb45ff00be39ff63a760d32206cbd1d07a576dead16659c"
+    },
+    {
+      "path": "Marvel/app/src/main/res/drawable-nodpi/ic_hotbar_accusation.png",
+      "dimensionsPx": [
+        16,
+        16
+      ],
+      "frames": 1,
+      "frameSizePx": [
+        16,
+        16
+      ],
+      "format": "PNG",
+      "mode": "RGBA",
+      "alpha": "binary transparent outside sprite",
+      "alphaExtrema": [
+        0,
+        255
+      ],
+      "details": "one 16x16 frame; original magnifying-glass accusation icon for the investigation hotbar; RGBA with binary transparency; rendered using nearest-neighbor scaling",
+      "origin": {
+        "generator": "OpenAI built-in image_gen",
+        "rawImage": "exec-c186cf5a-0edd-4e1a-bf92-2696e8392172.png",
+        "rawSha256": "723ac288f9ef51a659f21f41f509abae23c0d85baaf5c530a086ef79d7e369cc",
+        "externalReferencesUsed": false,
+        "promptBrief": "Original pixel-art magnifying glass with amber handle and mint accent; prompt brief is non-verbatim."
+      },
+      "sha256": "f683408431cf2b7651834460b56ee11cba5a5e97155d7f060290f446170b199b"
     }
   ]
 }
