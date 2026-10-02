@@ -9,6 +9,9 @@ import com.projetos.marvel.caseengine.RoomInteractionRange;
 final class RoomViewport {
     static final float LOGICAL_WIDTH = RoomInteractionRange.LOGICAL_WIDTH;
     static final float LOGICAL_HEIGHT = RoomInteractionRange.LOGICAL_HEIGHT;
+    static final float ROOM_WIDTH = 288f;
+    static final float ROOM_HEIGHT = LOGICAL_HEIGHT;
+    static final int ROOM_COUNT = 3;
 
     private RoomViewport() { }
 
@@ -17,18 +20,36 @@ final class RoomViewport {
         return mapRect(stageWidth, stageHeight, false);
     }
 
-    /** Returns the complete canvas; rendering applies separate axis scales to fill it. */
+    /** Fits one room inside the canvas while preserving the native pixel-art aspect ratio. */
     static RectF mapRect(float stageWidth, float stageHeight, boolean rotateForPortrait) {
         if (stageWidth <= 0f || stageHeight <= 0f) return new RectF();
-        return new RectF(0f, 0f, stageWidth, stageHeight);
+        float scale = Math.min(stageWidth / displayWidth(rotateForPortrait),
+                stageHeight / displayHeight(rotateForPortrait));
+        float width = displayWidth(rotateForPortrait) * scale;
+        float height = displayHeight(rotateForPortrait) * scale;
+        float left = (stageWidth - width) / 2f;
+        float top = (stageHeight - height) / 2f;
+        return new RectF(left, top, left + width, top + height);
     }
 
     static float displayWidth(boolean rotateForPortrait) {
-        return rotateForPortrait ? LOGICAL_HEIGHT : LOGICAL_WIDTH;
+        return rotateForPortrait ? ROOM_HEIGHT : ROOM_WIDTH;
     }
 
     static float displayHeight(boolean rotateForPortrait) {
-        return rotateForPortrait ? LOGICAL_WIDTH : LOGICAL_HEIGHT;
+        return rotateForPortrait ? ROOM_WIDTH : ROOM_HEIGHT;
+    }
+
+    static int roomIndex(float normalizedX) {
+        return Math.min(ROOM_COUNT - 1,
+                Math.max(0, (int) Math.floor(clamp(normalizedX) * ROOM_COUNT)));
+    }
+
+    static float cameraLeft(float normalizedX) {
+        float playerX = clamp(normalizedX) * LOGICAL_WIDTH;
+        float left = Math.max(0f, Math.min(LOGICAL_WIDTH - ROOM_WIDTH,
+                playerX - ROOM_WIDTH / 2f));
+        return Math.round(left);
     }
 
     static float scale(RectF rect, boolean rotateForPortrait) {
@@ -46,18 +67,21 @@ final class RoomViewport {
     }
 
     /** World-normalized anchor mapped into display-plane logical pixels. */
-    static PointF displayPoint(float normalizedX, float normalizedY, boolean rotateForPortrait) {
+    static PointF displayPoint(float normalizedX, float normalizedY,
+                               boolean rotateForPortrait, float cameraLeft) {
+        float localX = normalizedX * LOGICAL_WIDTH - cameraLeft;
+        float localY = normalizedY * LOGICAL_HEIGHT;
         if (rotateForPortrait) {
-            return new PointF(LOGICAL_HEIGHT * (1f - normalizedY),
-                    LOGICAL_WIDTH * normalizedX);
+            return new PointF(ROOM_HEIGHT - localY, localX);
         }
-        return new PointF(LOGICAL_WIDTH * normalizedX, LOGICAL_HEIGHT * normalizedY);
+        return new PointF(localX, localY);
     }
 
     /** Converts a world-normalized anchor into physical screen pixels. */
     static PointF screenPoint(RectF rect, float normalizedX, float normalizedY,
-                              boolean rotateForPortrait) {
-        PointF displayPoint = displayPoint(normalizedX, normalizedY, rotateForPortrait);
+                              boolean rotateForPortrait, float cameraLeft) {
+        PointF displayPoint = displayPoint(normalizedX, normalizedY,
+                rotateForPortrait, cameraLeft);
         return new PointF(
                 rect.left + displayPoint.x * scaleX(rect, rotateForPortrait),
                 rect.top + displayPoint.y * scaleY(rect, rotateForPortrait));
@@ -65,14 +89,16 @@ final class RoomViewport {
 
     /** Inverse screen mapping used before floor taps enter the unchanged logical walkmap. */
     static PointF normalizedPoint(RectF rect, float screenX, float screenY,
-                                  boolean rotateForPortrait) {
+                                  boolean rotateForPortrait, float cameraLeft) {
         if (rect.width() <= 0f || rect.height() <= 0f) return new PointF();
         float displayX = clamp((screenX - rect.left) / rect.width());
         float displayY = clamp((screenY - rect.top) / rect.height());
         if (rotateForPortrait) {
-            return new PointF(displayY, 1f - displayX);
+            return new PointF((cameraLeft + displayY * ROOM_WIDTH)
+                    / LOGICAL_WIDTH, 1f - displayX);
         }
-        return new PointF(displayX, displayY);
+        return new PointF((cameraLeft + displayX * ROOM_WIDTH)
+                / LOGICAL_WIDTH, displayY);
     }
 
     /** Logical coordinate that determines front-to-back order in the displayed orientation. */

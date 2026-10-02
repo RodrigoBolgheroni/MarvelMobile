@@ -23,22 +23,24 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-/** 4-connected navigation over the approved 36x18, 8px-per-cell floor grid. */
+/** 4-connected navigation over the 108x18, 8px-per-cell three-room floor grid. */
 final class RoomWalkMap {
-    static final int COLUMNS = 36;
+    static final int COLUMNS = 108;
     static final int ROWS = 18;
     static final float CELL_SIZE = 8f;
 
-    private static final int DEFAULT_MIN_COLUMN = 4;
-    private static final int DEFAULT_MAX_COLUMN = 31;
-    private static final int DEFAULT_MIN_ROW = 4;
-    private static final int DEFAULT_MAX_ROW = 16;
+    private static final int DEFAULT_MIN_COLUMN = 2;
+    private static final int DEFAULT_MAX_COLUMN = COLUMNS - 3;
+    private static final int DEFAULT_MIN_ROW = 2;
+    private static final int DEFAULT_MAX_ROW = 15;
     private static final int[] DC = {0, -1, 1, 0};
     private static final int[] DR = {-1, 0, 0, 1};
 
     private final Bitmap walkMask;
     private final int[][] tilemap;
     private final int tileAtlasColumns;
+    private final int artColumns;
+    private final int artRows;
     private final String[] walkableRows;
     private final int minColumn;
     private final int maxColumn;
@@ -55,6 +57,8 @@ final class RoomWalkMap {
         TileMetadata tileMetadata = loadTileMetadata(metadata);
         tilemap = tileMetadata.tilemap;
         tileAtlasColumns = tileMetadata.atlasColumns;
+        artColumns = tileMetadata.artColumns;
+        artRows = tileMetadata.artRows;
         NavigationMetadata navigation = loadNavigationMetadata(metadata);
         walkMask = navigation == null ? loadMask(context) : null;
         EntityMetadata entities = loadEntityMetadata(metadata);
@@ -115,6 +119,10 @@ final class RoomWalkMap {
     boolean hasTilemap() { return tilemap != null; }
 
     int tileAtlasColumns() { return tileAtlasColumns; }
+
+    int tileColumns() { return artColumns; }
+
+    int tileRows() { return artRows; }
 
     int tileAt(int column, int row) {
         if (tilemap == null || row < 0 || row >= tilemap.length
@@ -254,7 +262,7 @@ final class RoomWalkMap {
     }
 
     private static Bitmap loadMask(Context context) {
-        int id = context.getResources().getIdentifier("room_walkmap_36x18", "drawable",
+        int id = context.getResources().getIdentifier("room_walkmap_108x18", "drawable",
                 context.getPackageName());
         if (id == 0) return null;
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), id);
@@ -281,30 +289,32 @@ final class RoomWalkMap {
         try {
             if (root == null) return TileMetadata.unavailable();
             int columns = root.getInt("tileAtlasColumns");
+            int artColumns = root.getInt("artColumns");
+            int artRows = root.getInt("artRows");
             if (root.getInt("schemaVersion") != 1
-                    || root.getInt("logicalWidth") != 288
-                    || root.getInt("logicalHeight") != 144
+                    || root.getInt("logicalWidth") != RoomViewport.LOGICAL_WIDTH
+                    || root.getInt("logicalHeight") != RoomViewport.LOGICAL_HEIGHT
                     || root.getInt("artTileSize") != 16
-                    || root.getInt("artColumns") != 18
-                    || root.getInt("artRows") != 9
+                    || artColumns != (int) (RoomViewport.LOGICAL_WIDTH / 16f)
+                    || artRows != (int) (RoomViewport.LOGICAL_HEIGHT / 16f)
                     || columns != 4
                     || root.getInt("tileAtlasRows") != 4
                     || root.getInt("tileAtlasCount") != 16) {
                 return TileMetadata.unavailable();
             }
             JSONArray rows = root.getJSONArray("tilemap");
-            if (rows.length() != 9) return TileMetadata.unavailable();
-            int[][] values = new int[9][18];
-            for (int row = 0; row < 9; row++) {
+            if (rows.length() != artRows) return TileMetadata.unavailable();
+            int[][] values = new int[artRows][artColumns];
+            for (int row = 0; row < artRows; row++) {
                 JSONArray tiles = rows.getJSONArray(row);
-                if (tiles.length() != 18) return TileMetadata.unavailable();
-                for (int column = 0; column < 18; column++) {
+                if (tiles.length() != artColumns) return TileMetadata.unavailable();
+                for (int column = 0; column < artColumns; column++) {
                     int frame = tiles.getInt(column);
                     if (frame < 0 || frame >= 16) return TileMetadata.unavailable();
                     values[row][column] = frame;
                 }
             }
-            return new TileMetadata(values, columns);
+            return new TileMetadata(values, columns, artColumns, artRows);
         } catch (Exception ignored) {
             return TileMetadata.unavailable();
         }
@@ -316,7 +326,7 @@ final class RoomWalkMap {
             if (root.getInt("navCellSize") != 8
                     || root.getInt("navColumns") != COLUMNS
                     || root.getInt("navRows") != ROWS
-                    || !"4-neighbor; spawn connects to all eight approach cells"
+                    || !"4-neighbor; spawn connects to all eight character and clue approach cells across three rooms"
                     .equals(root.getString("connectivity"))) {
                 return null;
             }
@@ -430,6 +440,8 @@ final class RoomWalkMap {
                 int width = item.optInt("width", 16);
                 int height = item.optInt("height", 16);
                 String layer = item.getString("layer");
+                int artColumns = root.optInt("artColumns", 18);
+                int artRows = root.optInt("artRows", 9);
                 boolean atlasProp = "room_props_16.png".equals(atlas)
                         && frame >= 0 && atlasX >= 0 && atlasX < 4
                         && atlasY >= 0 && atlasY < 4
@@ -438,8 +450,8 @@ final class RoomWalkMap {
                         && width > 0 && height > 0
                         && width <= RoomViewport.LOGICAL_WIDTH
                         && height <= RoomViewport.LOGICAL_HEIGHT;
-                if ((!atlasProp && !standaloneProp) || column < 0 || column >= 18
-                        || row < 0 || row >= 9
+                if ((!atlasProp && !standaloneProp) || column < 0 || column >= artColumns
+                        || row < 0 || row >= artRows
                         || column * 16 + width > RoomViewport.LOGICAL_WIDTH
                         || row * 16 + height > RoomViewport.LOGICAL_HEIGHT) {
                     return Collections.emptyList();
@@ -512,13 +524,17 @@ final class RoomWalkMap {
     private static final class TileMetadata {
         final int[][] tilemap;
         final int atlasColumns;
+        final int artColumns;
+        final int artRows;
 
-        TileMetadata(int[][] tilemap, int atlasColumns) {
+        TileMetadata(int[][] tilemap, int atlasColumns, int artColumns, int artRows) {
             this.tilemap = tilemap;
             this.atlasColumns = atlasColumns;
+            this.artColumns = artColumns;
+            this.artRows = artRows;
         }
 
-        static TileMetadata unavailable() { return new TileMetadata(null, 4); }
+        static TileMetadata unavailable() { return new TileMetadata(null, 4, 0, 0); }
     }
 
     private static final class NavigationMetadata {

@@ -89,7 +89,7 @@ public final class RoomCanvasView extends View {
         textPaint.setTypeface(Typeface.create("monospace", Typeface.BOLD));
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(12f * scaledDensity);
-        roomMap = loadDrawableBitmap("room_map_288x144");
+        roomMap = loadDrawableBitmap("room_map_864x144");
         roomTiles = loadDrawableBitmap("room_tiles_16");
         roomProps = loadDrawableBitmap("room_props_16");
         briefingTable = loadDrawableBitmap("room_tactical_briefing_table");
@@ -184,6 +184,7 @@ public final class RoomCanvasView extends View {
         canvas.drawColor(INK);
         if (getWidth() <= 0 || getHeight() <= 0) return;
         computeMapRect();
+        float cameraLeft = cameraLeft();
 
         int clipSave = canvas.save();
         canvas.clipRect(0f, 0f, getWidth(), getHeight());
@@ -198,8 +199,13 @@ public final class RoomCanvasView extends View {
             canvas.rotate(90f);
         }
 
-        boolean modularBase = drawRoomBase(canvas);
-        if (modularBase) drawProps(canvas);
+        boolean modularBase = drawRoomBase(canvas, cameraLeft);
+        if (modularBase) {
+            canvas.save();
+            canvas.translate(-cameraLeft, 0f);
+            drawProps(canvas);
+            canvas.restore();
+        }
         canvas.restoreToCount(baseSave);
 
         if (state != null) {
@@ -207,24 +213,24 @@ public final class RoomCanvasView extends View {
             canvas.translate(mapRect.left, mapRect.top);
             canvas.scale(RoomViewport.scaleX(mapRect, portraitRotation),
                     RoomViewport.scaleY(mapRect, portraitRotation));
-            drawDynamicEntities(canvas, portraitRotation);
+            drawDynamicEntities(canvas, portraitRotation, cameraLeft);
             drawNearbyAction(canvas, portraitRotation);
             canvas.restoreToCount(entitySave);
         }
         canvas.restoreToCount(clipSave);
     }
 
-    private void drawDynamicEntities(Canvas canvas, boolean rotateForPortrait) {
+    private void drawDynamicEntities(Canvas canvas, boolean rotateForPortrait, float cameraLeft) {
         List<RenderEntity> entities = new ArrayList<>();
         for (ClueView clue : state.getClues()) {
             PointF point = RoomViewport.displayPoint(
-                    clue.getX(), clue.getY(), rotateForPortrait);
+                    clue.getX(), clue.getY(), rotateForPortrait, cameraLeft);
             entities.add(RenderEntity.forClue(clue,
                     point.y));
         }
         for (CharacterView character : state.getCharacters()) {
             PointF point = RoomViewport.displayPoint(
-                    character.getX(), character.getY(), rotateForPortrait);
+                    character.getX(), character.getY(), rotateForPortrait, cameraLeft);
             entities.add(RenderEntity.forCharacter(character,
                     point.y));
         }
@@ -233,28 +239,32 @@ public final class RoomCanvasView extends View {
         float playerX = Float.isNaN(animatedPlayerX)
                 ? state.getPlayer().getX() : animatedPlayerX;
         entities.add(RenderEntity.forPlayer(RoomViewport.displayPoint(
-                playerX, playerY, rotateForPortrait).y));
+                playerX, playerY, rotateForPortrait, cameraLeft).y));
         Collections.sort(entities, (first, second) -> Float.compare(first.footY, second.footY));
 
         for (RenderEntity entity : entities) {
-            if (entity.clue != null) drawClue(canvas, entity.clue, rotateForPortrait);
+            if (entity.clue != null) drawClue(canvas, entity.clue, rotateForPortrait, cameraLeft);
             else if (entity.character != null) {
-                drawCharacter(canvas, entity.character, rotateForPortrait);
-            } else drawPlayer(canvas, rotateForPortrait);
+                drawCharacter(canvas, entity.character, rotateForPortrait, cameraLeft);
+            } else drawPlayer(canvas, rotateForPortrait, cameraLeft);
         }
     }
 
-    private boolean drawRoomBase(Canvas canvas) {
+    private boolean drawRoomBase(Canvas canvas, float cameraLeft) {
         RectF logicalBounds = new RectF(0f, 0f,
-                RoomViewport.LOGICAL_WIDTH, RoomViewport.LOGICAL_HEIGHT);
-        // The composed room bitmap carries the visible room boundaries and furniture.
-        // Keep the tilemap as a fallback so the two-room layout cannot silently turn
-        // back into one continuous wall when the bitmap is available.
+                RoomViewport.ROOM_WIDTH, RoomViewport.ROOM_HEIGHT);
         if (roomMap != null) {
-            canvas.drawBitmap(roomMap, null, logicalBounds, bitmapPaint);
+            Rect source = new Rect(Math.round(cameraLeft), 0,
+                    Math.round(cameraLeft + RoomViewport.ROOM_WIDTH),
+                    (int) RoomViewport.ROOM_HEIGHT);
+            canvas.drawBitmap(roomMap, source, logicalBounds, bitmapPaint);
             return false;
         }
-        if (drawModularTilemap(canvas)) return true;
+        int save = canvas.save();
+        canvas.translate(-cameraLeft, 0f);
+        boolean drawn = drawModularTilemap(canvas);
+        canvas.restoreToCount(save);
+        if (drawn) return true;
         drawFallbackRoom(canvas);
         return false;
     }
@@ -268,8 +278,8 @@ public final class RoomCanvasView extends View {
         int availableFrames = Math.min(atlasColumns, atlasPixelColumns) * atlasRows;
         if (roomTiles.getWidth() % 16 != 0 || roomTiles.getHeight() % 16 != 0
                 || atlasPixelColumns != atlasColumns || atlasRows != 4) return false;
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 18; column++) {
+        for (int row = 0; row < walkMap.tileRows(); row++) {
+            for (int column = 0; column < walkMap.tileColumns(); column++) {
                 int frame = walkMap.tileAt(column, row);
                 if (frame < 0 || frame >= availableFrames) return false;
             }
@@ -277,8 +287,8 @@ public final class RoomCanvasView extends View {
 
         Rect source = new Rect();
         RectF destination = new RectF();
-        for (int row = 0; row < 9; row++) {
-            for (int column = 0; column < 18; column++) {
+        for (int row = 0; row < walkMap.tileRows(); row++) {
+            for (int column = 0; column < walkMap.tileColumns(); column++) {
                 int frame = walkMap.tileAt(column, row);
                 int sourceColumn = frame % atlasColumns;
                 int sourceRow = frame / atlasColumns;
@@ -315,9 +325,10 @@ public final class RoomCanvasView extends View {
         canvas.drawRect(132f, 24f, 156f, 27f, shapePaint);
     }
 
-    private void drawClue(Canvas canvas, ClueView clue, boolean rotateForPortrait) {
+    private void drawClue(Canvas canvas, ClueView clue, boolean rotateForPortrait,
+                          float cameraLeft) {
         PointF point = RoomViewport.displayPoint(
-                clue.getX(), clue.getY(), rotateForPortrait);
+                clue.getX(), clue.getY(), rotateForPortrait, cameraLeft);
         float x = point.x;
         float y = point.y;
         int index = walkMap == null ? clueIndex(clue.getId())
@@ -353,9 +364,9 @@ public final class RoomCanvasView extends View {
     }
 
     private void drawCharacter(Canvas canvas, CharacterView character,
-                               boolean rotateForPortrait) {
+                               boolean rotateForPortrait, float cameraLeft) {
         PointF point = RoomViewport.displayPoint(
-                character.getX(), character.getY(), rotateForPortrait);
+                character.getX(), character.getY(), rotateForPortrait, cameraLeft);
         float x = point.x;
         float y = point.y;
         int index = walkMap == null ? characterIndex(character.getId())
@@ -447,13 +458,13 @@ public final class RoomCanvasView extends View {
         canvas.drawRect(x + 1f, footY - 21f, x + 3f, footY - 20f, shapePaint);
     }
 
-    private void drawPlayer(Canvas canvas, boolean rotateForPortrait) {
+    private void drawPlayer(Canvas canvas, boolean rotateForPortrait, float cameraLeft) {
         if (state == null) return;
         float x = Float.isNaN(animatedPlayerX)
                 ? state.getPlayer().getX() : animatedPlayerX;
         float y = Float.isNaN(animatedPlayerY)
                 ? state.getPlayer().getY() : animatedPlayerY;
-        PointF point = RoomViewport.displayPoint(x, y, rotateForPortrait);
+        PointF point = RoomViewport.displayPoint(x, y, rotateForPortrait, cameraLeft);
         float worldX = point.x;
         float worldY = point.y;
         int frame = movementAnimator == null ? 0 : movementFrame;
@@ -462,7 +473,8 @@ public final class RoomCanvasView extends View {
             int displayFacingRow = facingRowForDisplay(rotateForPortrait);
             Rect src = new Rect(frame * 16, displayFacingRow * 24,
                     frame * 16 + 16, displayFacingRow * 24 + 24);
-            RectF dst = new RectF(worldX - 8f, worldY - 23f, worldX + 8f, worldY + 1f);
+            RectF dst = new RectF(worldX - 8f, worldY - 23f,
+                    worldX + 8f, worldY + 1f);
             canvas.drawBitmap(playerSheet, src, dst, bitmapPaint);
         } else {
             drawPixelCharacter(canvas, worldX, worldY, false);
@@ -686,7 +698,7 @@ public final class RoomCanvasView extends View {
         }
 
         PointF worldPoint = RoomViewport.normalizedPoint(
-                mapRect, event.getX(), event.getY(), portraitRotation);
+                mapRect, event.getX(), event.getY(), portraitRotation, cameraLeft());
         listener.onFloorTapped(worldPoint.x, worldPoint.y);
         performClick();
         return true;
@@ -703,9 +715,10 @@ public final class RoomCanvasView extends View {
         float bestDistance = Float.MAX_VALUE;
         float scale = RoomViewport.scale(mapRect, portraitRotation);
         float targetSize = 48f * density;
+        float cameraLeft = cameraLeft();
         for (CharacterView character : state.getCharacters()) {
             PointF anchor = RoomViewport.screenPoint(
-                    mapRect, character.getX(), character.getY(), portraitRotation);
+                    mapRect, character.getX(), character.getY(), portraitRotation, cameraLeft);
             float anchorX = anchor.x;
             float footY = anchor.y;
             float width = Math.max(targetSize, 16f * scale);
@@ -735,9 +748,10 @@ public final class RoomCanvasView extends View {
         float bestDistance = Float.MAX_VALUE;
         float scale = RoomViewport.scale(mapRect, portraitRotation);
         float targetSize = 48f * density;
+        float cameraLeft = cameraLeft();
         for (ClueView clue : state.getClues()) {
             PointF anchor = RoomViewport.screenPoint(
-                    mapRect, clue.getX(), clue.getY(), portraitRotation);
+                    mapRect, clue.getX(), clue.getY(), portraitRotation, cameraLeft);
             float x = anchor.x;
             float y = anchor.y;
             float size = Math.max(targetSize, 16f * scale);
@@ -765,6 +779,13 @@ public final class RoomCanvasView extends View {
         float playerY = Float.isNaN(animatedPlayerY)
                 ? state.getPlayer().getY() : animatedPlayerY;
         return RoomViewport.withinInteractionRange(playerX, playerY, x, y);
+    }
+
+    private float cameraLeft() {
+        float playerX = Float.isNaN(animatedPlayerX)
+                ? state == null ? 0.5f : state.getPlayer().getX()
+                : animatedPlayerX;
+        return RoomViewport.cameraLeft(playerX);
     }
 
     private static float distanceSquared(float x1, float y1, float x2, float y2) {
