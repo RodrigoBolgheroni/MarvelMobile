@@ -249,7 +249,7 @@ public final class CaseSession {
 
             List<ClueData> clues = new ArrayList<>();
             String[] clueIds = {"clue_access_log", "clue_seal_trace", "clue_reagent_sample"};
-            float[][] cluePositions = {{0.30f, 0.47f}, {0.50f, 0.47f}, {0.70f, 0.47f}};
+            float[][] cluePositions = {{0.30f, 0.47f}, {0.50f, 0.389f}, {0.70f, 0.47f}};
             int[] culpritSignature = signatures.get(culpritId);
             String[][] chosenLabels = new String[3][];
             for (int index = 0; index < 3; index++) {

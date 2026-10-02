@@ -1,585 +1,1437 @@
 {
-  "manifestVersion": 1,
-  "createdDate": "2026-10-01",
-  "project": "Avengers Room visual assets",
-  "logicalRoom": {
-    "width": 288,
-    "height": 144,
-    "artTileSize": 16,
-    "artGrid": [
-      18,
-      9
-    ],
-    "navigationCellSize": 8,
-    "navigationGrid": [
-      36,
-      18
-    ],
-    "origin": "top-left"
+  "schemaVersion": 2,
+  "version": "room-environment-command-tower-v2",
+  "origin": {
+    "art": "Original OpenAI ImageGen outputs; prompts in prompts.md; no reference pixels or previous room artwork used.",
+    "dynamicPreviewSprites": "Preview-only read of current project survivor/clue/player atlases; runtime atlases remain separate and are not copied.",
+    "appIntegration": "Final v2 runtime atlases and logical preview; prompts preserved; raw generation images and stage QA preview are not bundled."
   },
-  "palette": [
-    "#0D1720",
-    "#243543",
-    "#384B57",
-    "#52666A",
-    "#C4D5C8",
-    "#44CFBD",
-    "#F2B84B",
-    "#E4675D"
+  "world": {
+    "logicalWidth": 288,
+    "logicalHeight": 144,
+    "artTileSize": 16,
+    "artColumns": 18,
+    "artRows": 9,
+    "navCellSize": 8,
+    "navColumns": 36,
+    "navRows": 18,
+    "palette": [
+      "#0D1720",
+      "#243543",
+      "#384B57",
+      "#52666A",
+      "#C4D5C8",
+      "#44CFBD",
+      "#F2B84B",
+      "#E4675D"
+    ]
+  },
+  "layerFormat": {
+    "tilemapBase": {
+      "file": "runtime/room_tiles_16.png",
+      "atlasColumns": 4,
+      "atlasRows": 4,
+      "frameSize": [
+        16,
+        16
+      ],
+      "tilemapFile": "runtime/room_tilemap_18x9.json",
+      "tilemapOrder": "row-major, top-to-bottom; art tile coordinates are zero-based",
+      "androidResource": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
+      "androidTilemapSource": "Marvel/app/src/main/assets/room/room_walkmap.json#tilemap"
+    },
+    "props": {
+      "file": "runtime/room_props_16.png",
+      "atlasColumns": 4,
+      "atlasRows": 4,
+      "frameSize": [
+        16,
+        16
+      ],
+      "placements": [
+        {
+          "id": "wall_console_left",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 6,
+          "atlasX": 2,
+          "atlasY": 1,
+          "col": 4,
+          "row": 1,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "wall_monitor_left",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 7,
+          "atlasX": 3,
+          "atlasY": 1,
+          "col": 6,
+          "row": 1,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "wall_monitor_right",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 7,
+          "atlasX": 3,
+          "atlasY": 1,
+          "col": 11,
+          "row": 1,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "comms_panel",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 14,
+          "atlasX": 2,
+          "atlasY": 3,
+          "col": 13,
+          "row": 1,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "left_equipment_locker",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 8,
+          "atlasX": 0,
+          "atlasY": 2,
+          "col": 1,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "right_equipment_locker",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 8,
+          "atlasX": 0,
+          "atlasY": 2,
+          "col": 16,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "left_glass_cabinet",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 9,
+          "atlasX": 1,
+          "atlasY": 2,
+          "col": 1,
+          "row": 5,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "right_glass_cabinet",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 9,
+          "atlasX": 1,
+          "atlasY": 2,
+          "col": 16,
+          "row": 5,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_chair_left",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 2,
+          "atlasX": 2,
+          "atlasY": 0,
+          "col": 7,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_table_left",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 0,
+          "atlasX": 0,
+          "atlasY": 0,
+          "col": 8,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_table_right",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 1,
+          "atlasX": 1,
+          "atlasY": 0,
+          "col": 9,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_chair_right",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 3,
+          "atlasX": 3,
+          "atlasY": 0,
+          "col": 10,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "left_bench_segment",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 4,
+          "atlasX": 0,
+          "atlasY": 1,
+          "col": 2,
+          "row": 4,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "left_bench_end",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 5,
+          "atlasX": 1,
+          "atlasY": 1,
+          "col": 3,
+          "row": 4,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "right_bench_segment",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 4,
+          "atlasX": 0,
+          "atlasY": 1,
+          "col": 14,
+          "row": 4,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "right_bench_end",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 5,
+          "atlasX": 1,
+          "atlasY": 1,
+          "col": 15,
+          "row": 4,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "door_light_left",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 13,
+          "atlasX": 1,
+          "atlasY": 3,
+          "col": 7,
+          "row": 7,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "door_light_right",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 13,
+          "atlasX": 1,
+          "atlasY": 3,
+          "col": 10,
+          "row": 7,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        }
+      ],
+      "androidResource": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png"
+    },
+    "dynamicEntities": {
+      "layer": "dynamic",
+      "actors": "existing survivor/player atlases",
+      "clues": "existing clue atlas"
+    },
+    "renderOrder": [
+      "tilemap-base",
+      "props",
+      "dynamic actors and clues"
+    ],
+    "occlusionLayer": false,
+    "oversizedProps": false
+  },
+  "tileAtlasFrameNames": [
+    "wall_panel_plain",
+    "wall_panel_console_inset",
+    "wall_window_skyline",
+    "wall_corner",
+    "wall_vertical_bulkhead",
+    "wall_horizontal_bulkhead",
+    "wall_closed_bulkhead",
+    "wall_sconce",
+    "floor_panel_plain",
+    "floor_cross_seam",
+    "floor_circular_motif",
+    "floor_diamond_motif",
+    "floor_grate",
+    "floor_long_seam",
+    "floor_grid",
+    "south_wall_floor_transition"
   ],
-  "sourceProvenance": {
-    "generator": "OpenAI built-in image_gen",
-    "externalReferenceImagesUsed": true,
-    "officialMarvelOrPokemonArtworkOrLogosUsed": null,
-    "promptRecordNote": "The original prompt text is not retained verbatim in the build artefacts; promptBrief entries are non-verbatim summaries.",
-    "sources": [
+  "tilemap": [
+    [
+      3,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      5,
+      3
+    ],
+    [
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    ],
+    [
+      4,
+      8,
+      8,
+      8,
+      8,
+      14,
+      8,
+      13,
+      10,
+      11,
+      8,
+      8,
+      9,
+      8,
+      8,
+      8,
+      8,
+      4
+    ],
+    [
+      4,
+      8,
+      8,
+      8,
+      9,
+      13,
+      8,
+      8,
+      8,
+      8,
+      8,
+      9,
+      8,
+      8,
+      8,
+      8,
+      13,
+      4
+    ],
+    [
+      4,
+      8,
+      8,
+      13,
+      8,
+      8,
+      8,
+      8,
+      10,
+      11,
+      14,
+      8,
+      8,
+      8,
+      13,
+      8,
+      8,
+      4
+    ],
+    [
+      4,
+      13,
+      9,
+      8,
+      14,
+      8,
+      8,
+      8,
+      8,
+      9,
+      8,
+      8,
+      13,
+      8,
+      8,
+      8,
+      9,
+      4
+    ],
+    [
+      4,
+      9,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      9,
+      8,
+      13,
+      8,
+      8,
+      8,
+      8,
+      14,
+      8,
+      4
+    ],
+    [
+      4,
+      8,
+      8,
+      8,
+      8,
+      8,
+      8,
+      9,
+      13,
+      14,
+      8,
+      8,
+      8,
+      8,
+      9,
+      8,
+      8,
+      4
+    ],
+    [
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      9,
+      9,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15,
+      15
+    ]
+  ],
+  "bottomDoorGap": {
+    "artTiles": [
+      [
+        8,
+        8
+      ],
+      [
+        9,
+        8
+      ]
+    ],
+    "navRow16Cols": [
+      16,
+      19
+    ],
+    "spawnNavCell": [
+      18,
+      16
+    ],
+    "visualWallBand": "south_wall_floor_transition has floor in top 8 px and wall band in bottom 8 px; band aligns with blocked nav row 17",
+    "walkmapChanged": true,
+    "northOpeningArtCellClosed": [
+      8,
+      2
+    ],
+    "southDoorVisualOnly": true,
+    "navRow16Unchanged": true,
+    "navRow17Blocked": true
+  },
+  "propAtlasFrameNames": [
+    "briefing_table_left",
+    "briefing_table_right_holo",
+    "briefing_chair",
+    "briefing_chair_alt",
+    "bench_segment",
+    "bench_end",
+    "wall_console",
+    "wall_skyline_monitor",
+    "equipment_locker",
+    "glass_equipment_cabinet",
+    "compact_stool",
+    "holo_projector",
+    "side_cabinet",
+    "wall_sconce",
+    "comms_panel",
+    "open_equipment_rack"
+  ],
+  "walkmapSnapshot": {
+    "source": "Marvel/app/src/main/assets/room/room_walkmap.json",
+    "sourceSha256BeforeIntegration": "172c8d8770bcbc7173255379064bafe5fcdee5396b0d9e3675e78ad08977d6db",
+    "sha256AfterIntegration": "ba915410a60d1dc69013702597ddad84a4aee6f8eff71ac069a13ecb82dc5e19",
+    "changed": true,
+    "walkableRows": [
+      "000000000000000000000000000000000000",
+      "000000000000000000000000000000000000",
+      "000000000000000000000000000000000000",
+      "000000000000000000000000000000000000",
+      "000011111111111111111111111111110000",
+      "000011111111111111111111111111110000",
+      "000011111111110000000011111111110000",
+      "000011111111110000000011111111110000",
+      "000000001101111111111111101100000000",
+      "000000001111111111111111111100000000",
+      "000011111111111111111111111111110000",
+      "000011111111111111111111111111110000",
+      "000011111111111111111111111111110000",
+      "000011101111111111111111111101110000",
+      "000011111111111111111111111111110000",
+      "000011111111111111111111111111110000",
+      "000011111111111111111111111111110000",
+      "000000000000000000000000000000000000"
+    ],
+    "solidCells": [
+      [
+        5,
+        3
+      ],
+      [
+        18,
+        3
+      ],
+      [
+        30,
+        3
+      ],
+      [
+        14,
+        6
+      ],
+      [
+        15,
+        6
+      ],
+      [
+        16,
+        6
+      ],
+      [
+        17,
+        6
+      ],
+      [
+        18,
+        6
+      ],
+      [
+        19,
+        6
+      ],
+      [
+        20,
+        6
+      ],
+      [
+        21,
+        6
+      ],
+      [
+        14,
+        7
+      ],
+      [
+        15,
+        7
+      ],
+      [
+        16,
+        7
+      ],
+      [
+        17,
+        7
+      ],
+      [
+        18,
+        7
+      ],
+      [
+        19,
+        7
+      ],
+      [
+        20,
+        7
+      ],
+      [
+        21,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        25,
+        8
+      ],
+      [
+        28,
+        8
+      ],
+      [
+        29,
+        8
+      ],
+      [
+        30,
+        8
+      ],
+      [
+        31,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        5,
+        9
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        7,
+        9
+      ],
+      [
+        28,
+        9
+      ],
+      [
+        29,
+        9
+      ],
+      [
+        30,
+        9
+      ],
+      [
+        31,
+        9
+      ],
+      [
+        7,
+        13
+      ],
+      [
+        28,
+        13
+      ]
+    ],
+    "spawn": {
+      "x": 0.5,
+      "y": 0.9,
+      "col": 18,
+      "row": 16
+    },
+    "characters": [
       {
-        "rawImage": "exec-f4797a44-2204-4d9a-91a7-41c5bfcb18f7.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-f4797a44-2204-4d9a-91a7-41c5bfcb18f7.png",
-        "rawDimensionsPx": [
-          1278,
-          1230
-        ],
-        "rawSha256": "67e729de045bce0b46043d69d449e0af5291fb559909d353f8911d98b5e5e0d8",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "4x4 modular containment-room tile atlas; original sci-fi panels and wall modules; no text, characters or logos. Prompt brief is non-verbatim.",
-        "processedOutput": "room_tiles_16.png"
+        "id": "iron_man",
+        "x": 0.14,
+        "y": 0.22,
+        "col": 5,
+        "row": 3,
+        "approachCol": 5,
+        "approachRow": 4,
+        "atlasFrame": 0
       },
       {
-        "rawImage": "exec-d3a95140-efcc-4a37-8cd6-8fc6f4d58a79.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-d3a95140-efcc-4a37-8cd6-8fc6f4d58a79.png",
-        "rawDimensionsPx": [
-          1278,
-          1230
-        ],
-        "rawSha256": "af3daba275f246152be6cb9b3d152ae89a7cecbe02d791b69bc1a5ebb2833183",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "4x4 atlas of compact, generic noninteractive sci-fi fixtures on transparent background. Prompt brief is non-verbatim.",
-        "processedOutput": "room_props_16.png"
+        "id": "captain_america",
+        "x": 0.5,
+        "y": 0.18,
+        "col": 18,
+        "row": 3,
+        "approachCol": 18,
+        "approachRow": 4,
+        "atlasFrame": 1
       },
       {
-        "rawImage": "exec-449cace3-bbf4-480e-855c-fa6c438fa9ff.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-449cace3-bbf4-480e-855c-fa6c438fa9ff.png",
-        "rawDimensionsPx": [
-          1278,
-          1230
-        ],
-        "rawSha256": "636b0bec358f53f90358a0c61994d390bc247df1f6d03b498d02d23afd8bc3b3",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "Generic original player sprite sheet with four directions and idle/walk poses; transparent; no recognizable licensed costume. Prompt brief is non-verbatim.",
-        "processedOutput": "player_sheet_64x96.png"
+        "id": "thor",
+        "x": 0.86,
+        "y": 0.22,
+        "col": 30,
+        "row": 3,
+        "approachCol": 30,
+        "approachRow": 4,
+        "atlasFrame": 2
       },
       {
-        "rawImage": "exec-410c5c6f-8e65-48bb-9522-d3d73dd99c0a.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-410c5c6f-8e65-48bb-9522-d3d73dd99c0a.png",
-        "rawDimensionsPx": [
-          1024,
-          1536
-        ],
-        "rawSha256": "76ce0bd726669502808e020a12344d6d38df6515a51267f68daecba9f6d5d9c4",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "Five anonymous civilian idle sprites with distinct silhouettes; transparent; gameplay IDs map to generic original art. Prompt brief is non-verbatim.",
-        "processedOutput": "survivor_idle_atlas_80x24.png",
-        "status": "superseded by user-provided sprite references"
+        "id": "black_widow",
+        "x": 0.22,
+        "y": 0.73,
+        "col": 7,
+        "row": 13,
+        "approachCol": 7,
+        "approachRow": 12,
+        "atlasFrame": 3
       },
       {
-        "rawImage": "exec-b355cd16-5a5f-4f22-80a6-c9939bfe65bc.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f308-6f36-74b0-ba13-4da9a0892456\\exec-b355cd16-5a5f-4f22-80a6-c9939bfe65bc.png",
-        "rawDimensionsPx": [
-          1278,
-          1230
-        ],
-        "rawSha256": "1a98c431ff428dabe23e41926cac1649210b20436fa71acee3223eb5fd3e7e0f",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "Three original transparent pictograms: access record, seal trace and reagent sample; no legible text. Prompt brief is non-verbatim.",
-        "processedOutput": "room_clue_atlas_48x16.png"
-      },
-      {
-        "rawImage": "exec-36296b45-5aa1-463a-ac2e-952a8f49590b.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f784-678d-78b2-9648-9e06cb274f86\\exec-36296b45-5aa1-463a-ac2e-952a8f49590b.png",
-        "rawDimensionsPx": [
-          1254,
-          1254
-        ],
-        "rawSha256": "6c5981ab3767517d2eb2fbdd1f5efbc740df155aeda21a7e92471e41a8ea6e40",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "Original compact pixel-art notebook with pale pages and teal binding; no text or marks. Prompt brief is non-verbatim.",
-        "externalReferencesUsed": false,
-        "processedOutput": "ic_hotbar_notebook.png"
-      },
-      {
-        "rawImage": "exec-c186cf5a-0edd-4e1a-bf92-2696e8392172.png",
-        "rawImagePath": "C:\\Users\\rodrigob-ieg\\.codex\\generated_images\\01a0f784-678d-78b2-9648-9e06cb274f86\\exec-c186cf5a-0edd-4e1a-bf92-2696e8392172.png",
-        "rawDimensionsPx": [
-          1254,
-          1254
-        ],
-        "rawSha256": "723ac288f9ef51a659f21f41f509abae23c0d85baaf5c530a086ef79d7e369cc",
-        "generatedBy": "OpenAI built-in image_gen",
-        "promptTextRetainedVerbatim": false,
-        "promptBrief": "Original pixel-art magnifying glass with amber handle and mint accent; no logos or text. Prompt brief is non-verbatim.",
-        "externalReferencesUsed": false,
-        "processedOutput": "ic_hotbar_accusation.png"
-      },
-      {
-        "sourceType": "user-provided attachment",
-        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/01-capitao-america.png",
-        "sourceDimensionsPx": [
-          97,
-          117
-        ],
-        "sourceFormat": "PNG",
-        "sourceMode": "RGB",
-        "sourceSha256": "13513f16082ca3b084e291418def2d25effd14fa7fbae7f9eb3949628f104287",
-        "usedForCharacter": "captain_america",
-        "processedOutput": "Marvel/artwork/hero-sprites/processed/captain_america_idle_16x24.png",
-        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
-        "cropBoundsPx": [
-          5,
-          14,
-          91,
-          112
-        ]
-      },
-      {
-        "sourceType": "user-provided attachment",
-        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/02-homem-de-ferro.png",
-        "sourceDimensionsPx": [
-          90,
-          123
-        ],
-        "sourceFormat": "PNG",
-        "sourceMode": "RGB",
-        "sourceSha256": "b5016fc643ed7132ddea244881c4bc88cc05df0bdb8864f144712ec091ff6072",
-        "usedForCharacter": "iron_man",
-        "processedOutput": "Marvel/artwork/hero-sprites/processed/iron_man_idle_16x24.png",
-        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
-        "cropBoundsPx": [
-          1,
-          14,
-          87,
-          112
-        ]
-      },
-      {
-        "sourceType": "user-provided attachment",
-        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/03-thor.png",
-        "sourceDimensionsPx": [
-          92,
-          117
-        ],
-        "sourceFormat": "PNG",
-        "sourceMode": "RGB",
-        "sourceSha256": "598ebe6123f3baad17820243c80390220fbedde759ebbb76c993d6ca56e292d5",
-        "usedForCharacter": "thor",
-        "processedOutput": "Marvel/artwork/hero-sprites/processed/thor_idle_16x24.png",
-        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
-        "cropBoundsPx": [
-          3,
-          5,
-          89,
-          109
-        ]
-      },
-      {
-        "sourceType": "user-provided attachment",
-        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/04-gaviao-arqueiro.png",
-        "sourceDimensionsPx": [
-          95,
-          110
-        ],
-        "sourceFormat": "PNG",
-        "sourceMode": "RGB",
-        "sourceSha256": "16a49ec76bcda54c7145d1d8d4470580ad038d598c79ecc807544610ac597812",
-        "usedForCharacter": "hawkeye",
-        "processedOutput": "Marvel/artwork/hero-sprites/processed/hawkeye_idle_16x24.png",
-        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
-        "cropBoundsPx": [
-          6,
-          11,
-          93,
-          110
-        ]
-      },
-      {
-        "sourceType": "user-provided attachment",
-        "sourcePath": "Marvel/artwork/hero-sprites/user-supplied/05-viuva-negra.png",
-        "sourceDimensionsPx": [
-          97,
-          111
-        ],
-        "sourceFormat": "PNG",
-        "sourceMode": "RGB",
-        "sourceSha256": "17c4e65531059165ee925f58027e48b43f7cfe230deb0fcbf9ba5763b315b37e",
-        "usedForCharacter": "black_widow",
-        "processedOutput": "Marvel/artwork/hero-sprites/processed/black_widow_idle_16x24.png",
-        "backgroundRemoval": "edge-connected near-white only; enclosed white costume pixels preserved",
-        "cropBoundsPx": [
-          6,
-          8,
-          92,
-          107
-        ]
+        "id": "hawkeye",
+        "x": 0.78,
+        "y": 0.73,
+        "col": 28,
+        "row": 13,
+        "approachCol": 28,
+        "approachRow": 12,
+        "atlasFrame": 4
       }
     ],
-    "userProvidedCharacterSpritesUsed": true,
-    "licenseAndRights": "Hero sprite source images were supplied by the user. Their underlying license/provenance was not independently verified; confirm rights before distributing the APK or video. Other generated assets retain their individual provenance records."
+    "clues": [
+      {
+        "id": "clue_access_log",
+        "title": "Registro de acesso",
+        "x": 0.3,
+        "y": 0.47,
+        "col": 10,
+        "row": 8,
+        "approachCol": 10,
+        "approachRow": 9,
+        "atlas": "room_clue_atlas_48x16.png",
+        "atlasFrame": 0,
+        "atlasX": 0,
+        "atlasY": 0
+      },
+      {
+        "id": "clue_seal_trace",
+        "title": "Vestígio de lacre",
+        "x": 0.5,
+        "y": 0.389,
+        "col": 18,
+        "row": 7,
+        "approachCol": 18,
+        "approachRow": 8,
+        "atlas": "room_clue_atlas_48x16.png",
+        "atlasFrame": 1,
+        "atlasX": 1,
+        "atlasY": 0
+      },
+      {
+        "id": "clue_reagent_sample",
+        "title": "Amostra de reagente",
+        "x": 0.7,
+        "y": 0.47,
+        "col": 25,
+        "row": 8,
+        "approachCol": 25,
+        "approachRow": 9,
+        "atlas": "room_clue_atlas_48x16.png",
+        "atlasFrame": 2,
+        "atlasX": 2,
+        "atlasY": 0
+      }
+    ]
   },
-  "processing": {
-    "tool": "Python Pillow deterministic extraction/composition pipeline",
-    "steps": [
-      "equal-grid source crops",
-      "square center crops for square tiles",
-      "alpha silhouette extraction for sprites",
-      "nearest-neighbor resize without smoothing",
-      "palette quantization to approved room palette subsets",
-      "write PNG atlases and compose room map from approved row-major tilemap",
-      "hotbar icon processing: threshold alpha, crop visible silhouette, nearest-neighbor fit within 14x14px, quantize to the approved palette and center on a transparent 16x16px canvas",
-      "user sprite integration: remove only edge-connected near-white background, crop silhouette, fit to 16x24 with nearest-neighbor, bottom-align, assemble runtime atlas"
+  "collisionProposal": {
+    "status": "integrated",
+    "newSolidCells": [
+      [
+        14,
+        6
+      ],
+      [
+        15,
+        6
+      ],
+      [
+        16,
+        6
+      ],
+      [
+        17,
+        6
+      ],
+      [
+        18,
+        6
+      ],
+      [
+        19,
+        6
+      ],
+      [
+        20,
+        6
+      ],
+      [
+        21,
+        6
+      ],
+      [
+        14,
+        7
+      ],
+      [
+        15,
+        7
+      ],
+      [
+        16,
+        7
+      ],
+      [
+        17,
+        7
+      ],
+      [
+        18,
+        7
+      ],
+      [
+        19,
+        7
+      ],
+      [
+        20,
+        7
+      ],
+      [
+        21,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        28,
+        8
+      ],
+      [
+        29,
+        8
+      ],
+      [
+        30,
+        8
+      ],
+      [
+        31,
+        8
+      ],
+      [
+        4,
+        9
+      ],
+      [
+        5,
+        9
+      ],
+      [
+        6,
+        9
+      ],
+      [
+        7,
+        9
+      ],
+      [
+        28,
+        9
+      ],
+      [
+        29,
+        9
+      ],
+      [
+        30,
+        9
+      ],
+      [
+        31,
+        9
+      ]
     ],
-    "licenseAndRights": "These files document generated-art provenance, not a separate legal license. Use remains subject to the image-generation service terms and applicable competition/publication rules. No third-party image files were incorporated. Gameplay IDs reference Marvel characters; underlying names, characters and marks are not licensed by this manifest."
-  },
-  "approvedContracts": {
-    "roomMapIsPreviewFallback": true,
-    "runtimeComposition": "room_tiles_16.png + tilemap",
-    "entityRenderingUsesExactNormalizedAnchors": true,
-    "walkmapEncoding": "1=white/free; 0=black/solid",
-    "propsPlacements": "provisional; all listed cells lie outside the agreed walkable corridor"
-  },
-  "layerInventory": [
-    {
-      "layer": "background",
-      "asset": "room_map_288x144.png",
-      "note": "Static tilemap fallback; no entities, clues or props."
-    },
-    {
-      "layer": "props",
-      "asset": "room_props_16.png",
-      "note": "Noninteractive; example positions in JSON and stage preview are provisional."
-    },
-    {
-      "layer": "clues",
-      "asset": "room_clue_atlas_48x16.png",
-      "note": "Separate interactive clue atlas; runtime places anchors."
-    },
-    {
-      "layer": "characters",
-      "asset": "survivor_idle_atlas_80x24.png",
-      "note": "Five user-provided hero sprites, runtime order iron_man, captain_america, thor, black_widow, hawkeye."
-    },
-    {
-      "layer": "player",
-      "asset": "player_sheet_64x96.png",
-      "note": "Four-direction movement frames; pivot (8,23)."
-    },
-    {
-      "layer": "navigation",
-      "asset": "room_walkmap_36x18.png",
-      "note": "Lookup/pathfinding only; does not snap rendered anchors."
-    },
-    {
-      "layer": "hotbar_notebook",
-      "asset": "ic_hotbar_notebook.png",
-      "note": "One original 16x16 pixel-art frame; displayed in the notebook ImageButton; selection frame comes from hotbar_notebook_selector.xml."
-    },
-    {
-      "layer": "hotbar_accusation",
-      "asset": "ic_hotbar_accusation.png",
-      "note": "One original 16x16 pixel-art frame; displayed in the accusation ImageButton; selection frame comes from hotbar_accusation_selector.xml."
+    "walkableRowsChangesIfApproved": "applied; set furniture solids to 0, open only central approach (18,8), keep row 16 and row 17 unchanged",
+    "connectivityCheck": {
+      "checkedFromSpawn": [
+        18,
+        16
+      ],
+      "allEightApproachesReachableWithFinalSolids": true,
+      "approaches": [
+        [
+          5,
+          4
+        ],
+        [
+          18,
+          4
+        ],
+        [
+          30,
+          4
+        ],
+        [
+          7,
+          12
+        ],
+        [
+          28,
+          12
+        ],
+        [
+          10,
+          9
+        ],
+        [
+          18,
+          8
+        ],
+        [
+          25,
+          9
+        ]
+      ],
+      "reachableNavCellCount": 328,
+      "algorithm": "4-neighbor BFS using RoomWalkMap bounds, walkableRows AND solidCells"
     }
-  ],
-  "assets": [
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
-      "dimensionsPx": [
-        64,
-        64
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "opaque",
-      "alphaExtrema": [
-        255,
-        255
-      ],
-      "details": "4x4 atlas; 16px cells; top-left origin; row-major frames; background tiles",
-      "sha256": "ceb1c2e13dfacc695926ee95021f27867557224ab5878e175dabde88dad5d0b5"
+  },
+  "preview": {
+    "logicalStatic": "preview/room_map_288x144.png",
+    "stage": "preview/room_preview_stage_864x432.png",
+    "stageSize": [
+      864,
+      432
+    ],
+    "scale": 3,
+    "sampling": "nearest-neighbor",
+    "dynamicEntitySpritesIncluded": true,
+    "runtimeFallbackOnly": "The flattened previews are not runtime tilemap assets.",
+    "androidFallback": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+    "stageIncludedInPatch": false
+  },
+  "sha256": {
+    "raw/tile_atlas_source.png": "58cd6b302e1fba4896cc23be6caba468e3b1d8d595204c1587afc4e23df40cd2",
+    "raw/props_atlas_source.png": "e50b513b17115a2bec6e8cc8ea90b22ed6c5d5d9ec2ce111a0e6a09f1554f103",
+    "prompts.md": "d7a25d44cee93a24cadcafd09d9eeb8b3da8d2ec3fa79eb9de91a2d3e89a5e21",
+    "runtime/room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
+    "runtime/room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
+    "runtime/room_tilemap_18x9.json": "77e2a351fdc08b3873e5610107f75637e53bd053fc52e8410ca87cbfb578bde1",
+    "preview/room_map_288x144.png": "a9198d17a7ef53113e0f9350e37d0e112e4242f17d3177ee679e323b2c3ce20f",
+    "preview/room_preview_stage_864x432.png": "679beaffa10a044139304bd8df3d9dd756fcf701f03999c798e6eeafb03ece7d"
+  },
+  "integration": {
+    "status": "integrated in isolated patch; no shared-tree edits",
+    "baseHead": "4e464cd54c522739bfde689d0534bd1cec785acf",
+    "rendererContract": "single 18x9 tilemap-base, props layer, then existing dynamic entities; nearest-neighbor; no Java/XML renderer change",
+    "androidFiles": {
+      "tileAtlas": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
+      "propsAtlas": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png",
+      "fallback": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+      "walkmapPng": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_36x18.png",
+      "walkmapJson": "Marvel/app/src/main/assets/room/room_walkmap.json",
+      "prompts": "Marvel/app/src/main/assets/room/prompts.md",
+      "manifest": "Marvel/app/src/main/assets/room/room_asset_manifest.json"
     },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png",
-      "dimensionsPx": [
-        64,
-        64
+    "doors": {
+      "northOpeningArtCell": [
+        8,
+        2
       ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent",
-      "alphaExtrema": [
+      "northWallArtRows": [
         0,
-        255
+        1
       ],
-      "details": "4x4 atlas; 16px cells; top-left origin; row-major frames; noninteractive props; placements provisional",
-      "sha256": "07c092f4952aad9f38a2534a87aa794688f40a8e4f9c27f1b4c47a57293ab044"
+      "northTileFrame": 10,
+      "northTileFrameName": "floor_circular_motif",
+      "southOpeningArtTiles": [
+        [
+          8,
+          8
+        ],
+        [
+          9,
+          8
+        ]
+      ],
+      "southOpeningNavCols": [
+        16,
+        19
+      ],
+      "southVisualWallBand": "tile frame 15 draws floor in art-tile top 8px and wall in bottom 8px",
+      "navRow16": "walkable",
+      "navRow17": "blocked",
+      "spawnNavCell": [
+        18,
+        16
+      ],
+      "singleVisualEntrance": "south, centered on spawn"
     },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
-      "dimensionsPx": [
+    "navigation": {
+      "newFurnitureSolidCellCount": 32,
+      "removedOldSolidCell": [
+        18,
+        8
+      ],
+      "centralClueAnchor": [
+        18,
+        7
+      ],
+      "centralClueNormalized": [
+        0.5,
+        0.389
+      ],
+      "centralClueApproach": [
+        18,
+        8
+      ],
+      "centralApproachWalkableBit": true,
+      "preservedSideClueAnchors": [
+        [
+          10,
+          8
+        ],
+        [
+          25,
+          8
+        ]
+      ],
+      "preservedSideClueApproaches": [
+        [
+          10,
+          9
+        ],
+        [
+          25,
+          9
+        ]
+      ],
+      "allEightApproachesReachableFromSpawn": true,
+      "reachableNavCellCount": 328,
+      "walkableRowsChanged": true,
+      "boundsChanged": false
+    },
+    "assetPolicy": {
+      "copiedFinalOutputsOnly": true,
+      "rawInputsBundled": false,
+      "referenceImagesBundled": false,
+      "stagePreviewBundled": false,
+      "stagePreviewReason": "QA composite only; runtime fallback is the 288x144 logical map"
+    },
+    "sourceValidation": {
+      "atlasSize": [
+        64,
+        64
+      ],
+      "atlasGrid": [
+        4,
+        4
+      ],
+      "atlasFrameSize": [
+        16,
+        16
+      ],
+      "propsAll16x16": true,
+      "fallbackSize": [
         288,
         144
       ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "opaque",
-      "alphaExtrema": [
-        255,
-        255
+      "stagePreviewSizeNearestScale": [
+        864,
+        432,
+        3
       ],
-      "details": "static tilemap preview/fallback; no props, entities or clues",
-      "sha256": "e519f64362341d6ec8de3970bbefcf90948497d6c41c3003e8da7ed009373efa"
+      "sourceFallbackMatchesAtlasTilemapProps": true
     },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_36x18.png",
-      "dimensionsPx": [
-        36,
-        18
+    "walkmapSnapshot": {
+      "source": "Marvel/app/src/main/assets/room/room_walkmap.json",
+      "sourceSha256BeforeIntegration": "172c8d8770bcbc7173255379064bafe5fcdee5396b0d9e3675e78ad08977d6db",
+      "sha256AfterIntegration": "ba915410a60d1dc69013702597ddad84a4aee6f8eff71ac069a13ecb82dc5e19",
+      "changed": true,
+      "walkableRows": [
+        "000000000000000000000000000000000000",
+        "000000000000000000000000000000000000",
+        "000000000000000000000000000000000000",
+        "000000000000000000000000000000000000",
+        "000011111111111111111111111111110000",
+        "000011111111111111111111111111110000",
+        "000011111111110000000011111111110000",
+        "000011111111110000000011111111110000",
+        "000000001101111111111111101100000000",
+        "000000001111111111111111111100000000",
+        "000011111111111111111111111111110000",
+        "000011111111111111111111111111110000",
+        "000011111111111111111111111111110000",
+        "000011101111111111111111111101110000",
+        "000011111111111111111111111111110000",
+        "000011111111111111111111111111110000",
+        "000011111111111111111111111111110000",
+        "000000000000000000000000000000000000"
       ],
-      "format": "PNG",
-      "mode": "L",
-      "alpha": "binary grayscale",
-      "alphaExtrema": null,
-      "details": "one pixel per 8x8 logical cell; white=walkable; black=solid; top-left origin",
-      "sha256": "86f412433eb17b43794581cfa1a8b5f4d666ca5a8c2c98f8cba61e18660a89b4"
-    },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/player_sheet_64x96.png",
-      "dimensionsPx": [
-        64,
-        96
+      "solidCells": [
+        [
+          5,
+          3
+        ],
+        [
+          18,
+          3
+        ],
+        [
+          30,
+          3
+        ],
+        [
+          14,
+          6
+        ],
+        [
+          15,
+          6
+        ],
+        [
+          16,
+          6
+        ],
+        [
+          17,
+          6
+        ],
+        [
+          18,
+          6
+        ],
+        [
+          19,
+          6
+        ],
+        [
+          20,
+          6
+        ],
+        [
+          21,
+          6
+        ],
+        [
+          14,
+          7
+        ],
+        [
+          15,
+          7
+        ],
+        [
+          16,
+          7
+        ],
+        [
+          17,
+          7
+        ],
+        [
+          18,
+          7
+        ],
+        [
+          19,
+          7
+        ],
+        [
+          20,
+          7
+        ],
+        [
+          21,
+          7
+        ],
+        [
+          4,
+          8
+        ],
+        [
+          5,
+          8
+        ],
+        [
+          6,
+          8
+        ],
+        [
+          7,
+          8
+        ],
+        [
+          10,
+          8
+        ],
+        [
+          25,
+          8
+        ],
+        [
+          28,
+          8
+        ],
+        [
+          29,
+          8
+        ],
+        [
+          30,
+          8
+        ],
+        [
+          31,
+          8
+        ],
+        [
+          4,
+          9
+        ],
+        [
+          5,
+          9
+        ],
+        [
+          6,
+          9
+        ],
+        [
+          7,
+          9
+        ],
+        [
+          28,
+          9
+        ],
+        [
+          29,
+          9
+        ],
+        [
+          30,
+          9
+        ],
+        [
+          31,
+          9
+        ],
+        [
+          7,
+          13
+        ],
+        [
+          28,
+          13
+        ]
       ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent",
-      "alphaExtrema": [
-        0,
-        255
-      ],
-      "details": "4x4 frames, 16x24 each; rows south/west/east/north; columns idle/step1/step2/step3; pivot 8,23; 8 fps",
-      "sha256": "e2bdb2e4a5c564dfa01454f3b304e41a460d0e87696d9a1a89ba5fd4f42a49a6"
-    },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/survivor_idle_atlas_80x24.png",
-      "dimensionsPx": [
-        80,
-        24
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent outside sprites",
-      "alphaExtrema": [
-        0,
-        255
-      ],
-      "details": "5 horizontal 16x24 idle frames; runtime order iron_man, captain_america, thor, black_widow, hawkeye",
-      "sha256": "ea256dc32275474ed39e24c611f44407c050a5e259fe79af1e5950dad07b6489",
-      "frameSizePx": [
-        16,
-        24
-      ],
-      "frameOrder": [
-        "iron_man",
-        "captain_america",
-        "thor",
-        "black_widow",
-        "hawkeye"
-      ],
-      "anchorPx": [
-        8,
-        23
-      ],
-      "sourceType": "user-provided character sprites"
-    },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/room_clue_atlas_48x16.png",
-      "dimensionsPx": [
-        48,
-        16
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent",
-      "alphaExtrema": [
-        0,
-        255
-      ],
-      "details": "3 horizontal 16x16 frames; clue_access_log, clue_seal_trace, clue_reagent_sample",
-      "sha256": "6f62677ee77179ffd37d257a44051e865ab346486fb1e56f264b87a4f53db15f"
-    },
-    {
-      "path": "Marvel/app/src/main/assets/room/room_preview_stage_858x436.png",
-      "dimensionsPx": [
-        858,
-        436
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "opaque",
-      "alphaExtrema": [
-        255,
-        255
-      ],
-      "details": "review preview at nominal 3x, stage-clipped; includes provisional props; no entities or clues",
-      "sha256": "973b03bcf3db1c1b778554f0aa72966d5f0b8bca5e457d62176e12f02b5ffab5"
-    },
-    {
-      "path": "Marvel/app/src/main/assets/room/room_walkmap.json",
-      "format": "JSON",
-      "details": "Approved room schema; props placements explicitly provisional",
-      "sha256": "ff1b302c68bfced9041935b381a8588282464fc7734b991c0dcbc1614d479650"
-    },
-    {
-      "path": "Marvel/app/src/main/assets/room/room_asset_manifest.json",
-      "format": "JSON",
-      "details": "Dimensions, inventory, generated-art sources and provenance; self hash omitted"
-    },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/ic_hotbar_notebook.png",
-      "dimensionsPx": [
-        16,
-        16
-      ],
-      "frames": 1,
-      "frameSizePx": [
-        16,
-        16
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "binary transparent outside sprite",
-      "alphaExtrema": [
-        0,
-        255
-      ],
-      "details": "one 16x16 frame; original notebook icon for the investigation hotbar; RGBA with binary transparency; rendered using nearest-neighbor scaling",
-      "origin": {
-        "generator": "OpenAI built-in image_gen",
-        "rawImage": "exec-36296b45-5aa1-463a-ac2e-952a8f49590b.png",
-        "rawSha256": "6c5981ab3767517d2eb2fbdd1f5efbc740df155aeda21a7e92471e41a8ea6e40",
-        "externalReferencesUsed": false,
-        "promptBrief": "Original compact pixel-art notebook with pale pages and teal binding; prompt brief is non-verbatim."
+      "spawn": {
+        "x": 0.5,
+        "y": 0.9,
+        "col": 18,
+        "row": 16
       },
-      "sha256": "5b507d01c846843c3bb45ff00be39ff63a760d32206cbd1d07a576dead16659c"
-    },
-    {
-      "path": "Marvel/app/src/main/res/drawable-nodpi/ic_hotbar_accusation.png",
-      "dimensionsPx": [
-        16,
-        16
+      "characters": [
+        {
+          "id": "iron_man",
+          "x": 0.14,
+          "y": 0.22,
+          "col": 5,
+          "row": 3,
+          "approachCol": 5,
+          "approachRow": 4,
+          "atlasFrame": 0
+        },
+        {
+          "id": "captain_america",
+          "x": 0.5,
+          "y": 0.18,
+          "col": 18,
+          "row": 3,
+          "approachCol": 18,
+          "approachRow": 4,
+          "atlasFrame": 1
+        },
+        {
+          "id": "thor",
+          "x": 0.86,
+          "y": 0.22,
+          "col": 30,
+          "row": 3,
+          "approachCol": 30,
+          "approachRow": 4,
+          "atlasFrame": 2
+        },
+        {
+          "id": "black_widow",
+          "x": 0.22,
+          "y": 0.73,
+          "col": 7,
+          "row": 13,
+          "approachCol": 7,
+          "approachRow": 12,
+          "atlasFrame": 3
+        },
+        {
+          "id": "hawkeye",
+          "x": 0.78,
+          "y": 0.73,
+          "col": 28,
+          "row": 13,
+          "approachCol": 28,
+          "approachRow": 12,
+          "atlasFrame": 4
+        }
       ],
-      "frames": 1,
-      "frameSizePx": [
-        16,
-        16
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "binary transparent outside sprite",
-      "alphaExtrema": [
-        0,
-        255
-      ],
-      "details": "one 16x16 frame; original magnifying-glass accusation icon for the investigation hotbar; RGBA with binary transparency; rendered using nearest-neighbor scaling",
-      "origin": {
-        "generator": "OpenAI built-in image_gen",
-        "rawImage": "exec-c186cf5a-0edd-4e1a-bf92-2696e8392172.png",
-        "rawSha256": "723ac288f9ef51a659f21f41f509abae23c0d85baaf5c530a086ef79d7e369cc",
-        "externalReferencesUsed": false,
-        "promptBrief": "Original pixel-art magnifying glass with amber handle and mint accent; prompt brief is non-verbatim."
-      },
-      "sha256": "f683408431cf2b7651834460b56ee11cba5a5e97155d7f060290f446170b199b"
-    },
-    {
-      "path": "Marvel/artwork/hero-sprites/processed/captain_america_idle_16x24.png",
-      "characterId": "captain_america",
-      "dimensionsPx": [
-        16,
-        24
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent outside sprite",
-      "sha256": "8e65e075a9a987fdfda1ed24f77e60854975e0673ee92c94263a4b9e68d0944c"
-    },
-    {
-      "path": "Marvel/artwork/hero-sprites/processed/iron_man_idle_16x24.png",
-      "characterId": "iron_man",
-      "dimensionsPx": [
-        16,
-        24
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent outside sprite",
-      "sha256": "b5c3a2111459c7bbf9b3b052f74966ba471fdfab3aae7274640dfcecc79927b6"
-    },
-    {
-      "path": "Marvel/artwork/hero-sprites/processed/thor_idle_16x24.png",
-      "characterId": "thor",
-      "dimensionsPx": [
-        16,
-        24
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent outside sprite",
-      "sha256": "2c6f34aba275f390135f1b31a497d4aaebbbc42beb59bfa7656a170141dcce9f"
-    },
-    {
-      "path": "Marvel/artwork/hero-sprites/processed/hawkeye_idle_16x24.png",
-      "characterId": "hawkeye",
-      "dimensionsPx": [
-        16,
-        24
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent outside sprite",
-      "sha256": "d92a7c13531214f22eb4fafcec0574095ea5183e163c1ae17255c075a64db699"
-    },
-    {
-      "path": "Marvel/artwork/hero-sprites/processed/black_widow_idle_16x24.png",
-      "characterId": "black_widow",
-      "dimensionsPx": [
-        16,
-        24
-      ],
-      "format": "PNG",
-      "mode": "RGBA",
-      "alpha": "transparent outside sprite",
-      "sha256": "e7fc12e078b558afa30887c5d22ceaf064e1b6c577f032da0572891dc7bc0e31"
-    }
-  ],
-  "reviewArtifacts": [
-    {
-      "path": "Marvel/artwork/hero-sprites/user-supplied-sprites-preview.png",
-      "dimensionsPx": [
-        872,
-        272
-      ],
-      "format": "PNG",
-      "details": "User-order preview, enlarged by nearest-neighbor; excluded from APK.",
-      "frameOrder": [
-        "captain_america",
-        "iron_man",
-        "thor",
-        "hawkeye",
-        "black_widow"
+      "clues": [
+        {
+          "id": "clue_access_log",
+          "title": "Registro de acesso",
+          "x": 0.3,
+          "y": 0.47,
+          "col": 10,
+          "row": 8,
+          "approachCol": 10,
+          "approachRow": 9,
+          "atlas": "room_clue_atlas_48x16.png",
+          "atlasFrame": 0,
+          "atlasX": 0,
+          "atlasY": 0
+        },
+        {
+          "id": "clue_seal_trace",
+          "title": "Vestígio de lacre",
+          "x": 0.5,
+          "y": 0.389,
+          "col": 18,
+          "row": 7,
+          "approachCol": 18,
+          "approachRow": 8,
+          "atlas": "room_clue_atlas_48x16.png",
+          "atlasFrame": 1,
+          "atlasX": 1,
+          "atlasY": 0
+        },
+        {
+          "id": "clue_reagent_sample",
+          "title": "Amostra de reagente",
+          "x": 0.7,
+          "y": 0.47,
+          "col": 25,
+          "row": 8,
+          "approachCol": 25,
+          "approachRow": 9,
+          "atlas": "room_clue_atlas_48x16.png",
+          "atlasFrame": 2,
+          "atlasX": 2,
+          "atlasY": 0
+        }
       ]
     }
-  ]
+  },
+  "integrationSha256": {
+    "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
+    "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
+    "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png": "a9198d17a7ef53113e0f9350e37d0e112e4242f17d3177ee679e323b2c3ce20f",
+    "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_36x18.png": "f953be649d1b612dff4ed64a08efb72c762bf013d6986ba61c1a25aa5dafb053",
+    "Marvel/app/src/main/assets/room/room_walkmap.json": "ba915410a60d1dc69013702597ddad84a4aee6f8eff71ac069a13ecb82dc5e19",
+    "Marvel/app/src/main/assets/room/prompts.md": "d7a25d44cee93a24cadcafd09d9eeb8b3da8d2ec3fa79eb9de91a2d3e89a5e21"
+  },
+  "manifestSha256Note": "The manifest is not self-hashed; its SHA-256 is reported by the integration handoff."
 }
