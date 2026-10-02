@@ -190,8 +190,8 @@ public final class RoomCanvasView extends View {
 
         int baseSave = canvas.save();
         canvas.translate(mapRect.left, mapRect.top);
-        float scale = RoomViewport.scale(mapRect, portraitRotation);
-        canvas.scale(scale, scale);
+        canvas.scale(RoomViewport.scaleX(mapRect, portraitRotation),
+                RoomViewport.scaleY(mapRect, portraitRotation));
         if (portraitRotation) {
             // Clockwise map transform: logical (x, y) is displayed at (height - y, x).
             canvas.translate(RoomViewport.LOGICAL_HEIGHT, 0f);
@@ -205,7 +205,8 @@ public final class RoomCanvasView extends View {
         if (state != null) {
             int entitySave = canvas.save();
             canvas.translate(mapRect.left, mapRect.top);
-            canvas.scale(scale, scale);
+            canvas.scale(RoomViewport.scaleX(mapRect, portraitRotation),
+                    RoomViewport.scaleY(mapRect, portraitRotation));
             drawDynamicEntities(canvas, portraitRotation);
             drawNearbyAction(canvas, portraitRotation);
             canvas.restoreToCount(entitySave);
@@ -246,11 +247,14 @@ public final class RoomCanvasView extends View {
     private boolean drawRoomBase(Canvas canvas) {
         RectF logicalBounds = new RectF(0f, 0f,
                 RoomViewport.LOGICAL_WIDTH, RoomViewport.LOGICAL_HEIGHT);
-        if (drawModularTilemap(canvas)) return true;
+        // The composed room bitmap carries the visible room boundaries and furniture.
+        // Keep the tilemap as a fallback so the two-room layout cannot silently turn
+        // back into one continuous wall when the bitmap is available.
         if (roomMap != null) {
             canvas.drawBitmap(roomMap, null, logicalBounds, bitmapPaint);
             return false;
         }
+        if (drawModularTilemap(canvas)) return true;
         drawFallbackRoom(canvas);
         return false;
     }

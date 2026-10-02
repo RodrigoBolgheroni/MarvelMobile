@@ -18,5 +18,6 @@ A mesa tática holográfica é `res/drawable-nodpi/room_tactical_briefing_table.
 - Base: `room_walkmap.json#tilemap`, atlas `room_tiles_16.png`, 18 colunas x 9 linhas.
 - Navegação: `walkableRows` e `solidCells`, 36x18 células de 8 px. Paredes, móveis e pistas bloqueiam o caminho; todos os oito pontos de aproximação precisam continuar acessíveis desde o spawn.
 - Props: `room_walkmap.json#props`; posições em tiles lógicos. O renderer aceita props de atlas 16x16 e a mesa standalone 64x40.
-- `room_map_288x144.png` é o fallback composto da base e props; o app prefere os layers para manter movimento e colisões.
-- Prévia de validação: `room_preview_stage_864x432.png`, ampliada 3x por nearest-neighbor.
+- `room_map_288x144.png` é a base composta em runtime, com dois cômodos, divisória e móveis visíveis; atores e pistas continuam sendo desenhados por cima.
+- O mapa de colisões continua em `room_walkmap.json` e precisa acompanhar as paredes e os móveis da base composta. O tilemap modular e o atlas de props ficam como fallback.
+- Prévia de validação: `room_preview_stage_864x432.png`, ampliada 3x por nearest-neighbor a partir da mesma base composta.

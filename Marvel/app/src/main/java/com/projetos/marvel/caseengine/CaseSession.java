@@ -17,15 +17,15 @@ public final class CaseSession {
     private static final String UNEXAMINED_DESCRIPTION = "Ainda não examinada.";
 
     private static final CharacterDefinition[] ROSTER = {
-        new CharacterDefinition("iron_man", "Homem de Ferro", 0.14f, 0.22f,
+        new CharacterDefinition("iron_man", "Homem de Ferro", 0.06944445f, 0.4722222f,
             "Confiante e sarcástico; costuma explicar situações como se fossem um cálculo."),
-        new CharacterDefinition("captain_america", "Capitão América", 0.50f, 0.18f,
+        new CharacterDefinition("captain_america", "Capitão América", 0.4027778f, 0.3611111f,
             "Disciplinado e ponderado, guiado por um forte senso de dever."),
-        new CharacterDefinition("thor", "Thor", 0.86f, 0.22f,
+        new CharacterDefinition("thor", "Thor", 0.18055555f, 0.8055556f,
             "Direto e cordial; demonstra orgulho e interpreta as palavras literalmente."),
-        new CharacterDefinition("black_widow", "Viúva Negra", 0.22f, 0.73f,
+        new CharacterDefinition("black_widow", "Viúva Negra", 0.625f, 0.30555555f,
             "Reservada e precisa, atenta a detalhes que outros deixam passar."),
-        new CharacterDefinition("hawkeye", "Gavião Arqueiro", 0.78f, 0.73f,
+        new CharacterDefinition("hawkeye", "Gavião Arqueiro", 0.7916667f, 0.8055556f,
             "Observador e pragmático; usa humor seco para aliviar a tensão.")
     };
 

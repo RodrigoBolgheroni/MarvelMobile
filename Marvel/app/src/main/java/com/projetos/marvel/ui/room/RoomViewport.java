@@ -12,25 +12,15 @@ final class RoomViewport {
 
     private RoomViewport() { }
 
-    /** Uniform contain transform: preserve all room edges and use nearest-neighbor sampling. */
+    /** Full-stage transform keeps the room edge-to-edge in either orientation. */
     static RectF mapRect(float stageWidth, float stageHeight) {
         return mapRect(stageWidth, stageHeight, false);
     }
 
-    /**
-     * Computes the centered viewport for either the normal landscape room or its portrait turn.
-     * Portrait rendering uses a 144 by 288 display plane while world coordinates stay 288 by 144.
-     */
+    /** Returns the complete canvas; rendering applies separate axis scales to fill it. */
     static RectF mapRect(float stageWidth, float stageHeight, boolean rotateForPortrait) {
         if (stageWidth <= 0f || stageHeight <= 0f) return new RectF();
-        float displayWidth = displayWidth(rotateForPortrait);
-        float displayHeight = displayHeight(rotateForPortrait);
-        float scale = Math.min(stageWidth / displayWidth, stageHeight / displayHeight);
-        float width = displayWidth * scale;
-        float height = displayHeight * scale;
-        float left = (stageWidth - width) / 2f;
-        float top = (stageHeight - height) / 2f;
-        return new RectF(left, top, left + width, top + height);
+        return new RectF(0f, 0f, stageWidth, stageHeight);
     }
 
     static float displayWidth(boolean rotateForPortrait) {
@@ -42,8 +32,17 @@ final class RoomViewport {
     }
 
     static float scale(RectF rect, boolean rotateForPortrait) {
+        return Math.min(scaleX(rect, rotateForPortrait), scaleY(rect, rotateForPortrait));
+    }
+
+    static float scaleX(RectF rect, boolean rotateForPortrait) {
         float width = displayWidth(rotateForPortrait);
         return width <= 0f ? 0f : rect.width() / width;
+    }
+
+    static float scaleY(RectF rect, boolean rotateForPortrait) {
+        float height = displayHeight(rotateForPortrait);
+        return height <= 0f ? 0f : rect.height() / height;
     }
 
     /** World-normalized anchor mapped into display-plane logical pixels. */
@@ -59,9 +58,9 @@ final class RoomViewport {
     static PointF screenPoint(RectF rect, float normalizedX, float normalizedY,
                               boolean rotateForPortrait) {
         PointF displayPoint = displayPoint(normalizedX, normalizedY, rotateForPortrait);
-        float scale = scale(rect, rotateForPortrait);
-        return new PointF(rect.left + displayPoint.x * scale,
-                rect.top + displayPoint.y * scale);
+        return new PointF(
+                rect.left + displayPoint.x * scaleX(rect, rotateForPortrait),
+                rect.top + displayPoint.y * scaleY(rect, rotateForPortrait));
     }
 
     /** Inverse screen mapping used before floor taps enter the unchanged logical walkmap. */

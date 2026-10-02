@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "version": "room-environment-two-connected-chambers-v3",
+  "version": "room-environment-two-connected-chambers-v4",
   "origin": {
     "art": "Original modular tile and prop art plus an original two-room concept generated from the supplied visual references; prompts are stored beside generated outputs.",
     "dynamicPreviewSprites": "Preview-only read of current project survivor/clue/player atlases; runtime atlases remain separate and are not copied.",
-    "appIntegration": "Two-room tilemap integrated in the Android renderer with wall/furniture/clue collision cells and a standalone 64x40 holographic briefing-table sprite."
+    "appIntegration": "Precomposed two-room scene integrated in the Android renderer; dynamic characters and clues render separately while the 36x18 collision map blocks walls, furniture, and clues."
   },
   "world": {
     "logicalWidth": 288,
@@ -29,6 +29,7 @@
   "layerFormat": {
     "tilemapBase": {
       "file": "runtime/room_tiles_16.png",
+      "role": "fallback when the precomposed two-room base is unavailable",
       "atlasColumns": 4,
       "atlasRows": 4,
       "frameSize": [
@@ -3335,35 +3336,35 @@
     "scale": 3,
     "sampling": "nearest-neighbor",
     "dynamicEntitySpritesIncluded": false,
-    "runtimeFallbackOnly": "The flattened preview is fallback only; runtime navigation uses structured layers and collision metadata.",
+    "runtimeFallbackOnly": "The stage preview is a 3x nearest-neighbor view of the same composite base used at runtime; dynamic actors and clues remain separate.",
     "concept": "Marvel/app/src/main/assets/room/generated/command_room_two_rooms_concept_864x432.png"
   },
   "sha256": {
-    "prompts.md": "ebe31ed56276f493e90ed77b97ab1ddb1666bd90a70b6bbf063b193f867ca857",
-    "room_walkmap.json": "35aac42d465ea67bc2287697b667702ad3cc47671546508ded55aa4a32a7fb04",
+    "prompts.md": "3a261a773ab7db1e5e0d7f69d1bebaccf4e2e9175c0ccf8048bef6583dbdf416",
+    "room_walkmap.json": "524489fdd24e4c47a3ce9703567cf205038f70daa26a0e72be4733ae38a2d446",
     "runtime/room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
     "runtime/room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
-    "runtime/room_map_288x144.png": "8abb2985fa043a644267264d77bb070d3f1e9f4d51cd4499f832898aa48f1db5",
+    "runtime/room_map_288x144.png": "4c0cf2c7a033609dab3218cafbba6d9cdce8292ac016fc701e5ab9408a94d335",
     "runtime/room_walkmap_36x18.png": "2ae59293b37b4858f0e342ed7aba79c95d47eca60fd76c0f93becf97f62ae130",
     "runtime/room_tactical_briefing_table.png": "8df4684bec16118e434f8cc20526ecf77690c1d4f0401c39b9ba955cab1ec3ca",
     "generated/command_room_two_rooms_source.png": "beaecc03eaa28d12a59a44240af6025445002c5fc5d8827ac4aaee903fa062d9",
     "generated/tactical_briefing_table_source.png": "d865be79a5d37b119fc72499f3c7d0458f2660ee43dd352df9add9d246bae411",
-    "preview/room_preview_stage_864x432.png": "874a7946310cc7ed4b8e2d9cbd92b86325ff8d8e0d37f2dfa3b2cab6bc32ea3c"
+    "preview/room_preview_stage_864x432.png": "65ef1bb414b10c6da6f07be861084f39dbae562bd9091c95ed8d4383fa473c72"
   },
   "integration": {
     "status": "integrated in working tree",
     "baseRevision": "b1abd6e",
-    "rendererContract": "18x9 modular base, 16px props atlas, optional 64x40 standalone briefing table, dynamic actors/clues; nearest-neighbor",
-    "collisionContract": "36x18 navigation grid at 8px; walls, furniture, and clue objects marked solid; one 2-tile-high opening joins both rooms."
+    "rendererContract": "precomposed 288x144 two-room base with baked-in furniture, dynamic actors/clues; modular tilemap is fallback; nearest-neighbor",
+    "collisionContract": "36x18 navigation grid at 8px; walls, furniture, and clue objects marked solid; the center divider is blocked across columns 17-19 except for the central 2-tile-high opening."
   },
   "integrationSha256": {
     "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
     "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
-    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_map_288x144.png": "8abb2985fa043a644267264d77bb070d3f1e9f4d51cd4499f832898aa48f1db5",
+    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_map_288x144.png": "4c0cf2c7a033609dab3218cafbba6d9cdce8292ac016fc701e5ab9408a94d335",
     "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_walkmap_36x18.png": "2ae59293b37b4858f0e342ed7aba79c95d47eca60fd76c0f93becf97f62ae130",
     "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_tactical_briefing_table.png": "8df4684bec16118e434f8cc20526ecf77690c1d4f0401c39b9ba955cab1ec3ca",
-    "Marvel\\app\\src\\main\\assets\\room\\room_walkmap.json": "35aac42d465ea67bc2287697b667702ad3cc47671546508ded55aa4a32a7fb04",
-    "Marvel\\app\\src\\main\\assets\\room\\prompts.md": "ebe31ed56276f493e90ed77b97ab1ddb1666bd90a70b6bbf063b193f867ca857"
+    "Marvel\\app\\src\\main\\assets\\room\\room_walkmap.json": "524489fdd24e4c47a3ce9703567cf205038f70daa26a0e72be4733ae38a2d446",
+    "Marvel\\app\\src\\main\\assets\\room\\prompts.md": "3a261a773ab7db1e5e0d7f69d1bebaccf4e2e9175c0ccf8048bef6583dbdf416"
   },
   "manifestSha256Note": "Manifest is not self-hashed; listed hashes cover runtime assets, source prompts, and generated inputs.",
   "oversizedProps": true,
