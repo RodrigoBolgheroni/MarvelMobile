@@ -1,29 +1,36 @@
 {
-  "name": "command-room-visual-concept",
-  "artStyle": "original top-down pixel art, dark steel with cyan and amber accents",
+  "name": "two-room-command-base",
+  "artStyle": "original top-down pixel art, steel blue with cyan and amber accents",
   "references": [
     "REFERENCIAS/07-referencia-assets-modulares-base-heroica.png",
     "REFERENCIAS/08-referencia-composicao-sala-base-heroica.png",
     "REFERENCIAS/09-referencia-mobiliario-base-heroica.png"
   ],
-  "scene": {
-    "source": "command_room_concept_source.png",
-    "sourceDimensions": [1774, 887],
-    "preview": "command_room_concept_preview_288x144.png",
-    "previewDimensions": [288, 144],
-    "scaledPreview": "command_room_concept_preview_864x432.png",
-    "status": "visual concept only; furniture is baked into the preview, so do not use it as the layered runtime map"
+  "acceptedScene": {
+    "source": "command_room_two_rooms_source.png",
+    "preview288": "command_room_two_rooms_concept_288x144.png",
+    "preview864": "command_room_two_rooms_concept_864x432.png",
+    "rooms": [
+      "briefing",
+      "laboratory-armory"
+    ],
+    "status": "concept art only; baked furniture, not the runtime source"
+  },
+  "runtimeScene": {
+    "map": "../room_walkmap.json",
+    "staticFallback": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+    "collision": "36x18 grid, walls/furniture/clues solid"
   },
   "sprite": {
     "name": "tactical_briefing_table",
     "source": "tactical_briefing_table_source.png",
-    "trimmed": "tactical_briefing_table_trimmed.png",
-    "export": "tactical_briefing_table_80x48.png",
-    "exportDimensions": [80, 48],
-    "alpha": true,
-    "intendedLogicalSize": [80, 48],
-    "anchor": "bottom-center",
-    "status": "standalone prop asset; runtime integration not performed"
-  },
-  "generation": "OpenAI image_gen; prompts saved alongside the outputs"
+    "transparentExport": "tactical_briefing_table_64x40.png",
+    "androidResource": "Marvel/app/src/main/res/drawable-nodpi/room_tactical_briefing_table.png",
+    "dimensions": [
+      64,
+      40
+    ],
+    "anchor": "top-left placement; destination is manifest footprint",
+    "integrated": true
+  }
 }

@@ -1,10 +1,10 @@
 {
   "schemaVersion": 2,
-  "version": "room-environment-command-tower-v2",
+  "version": "room-environment-two-connected-chambers-v3",
   "origin": {
-    "art": "Original OpenAI ImageGen outputs; prompts in prompts.md; no reference pixels or previous room artwork used.",
+    "art": "Original modular tile and prop art plus an original two-room concept generated from the supplied visual references; prompts are stored beside generated outputs.",
     "dynamicPreviewSprites": "Preview-only read of current project survivor/clue/player atlases; runtime atlases remain separate and are not copied.",
-    "appIntegration": "Final v2 runtime atlases and logical preview; prompts preserved; raw generation images and stage QA preview are not bundled."
+    "appIntegration": "Two-room tilemap integrated in the Android renderer with wall/furniture/clue collision cells and a standalone 64x40 holographic briefing-table sprite."
   },
   "world": {
     "logicalWidth": 288,
@@ -35,7 +35,7 @@
         16,
         16
       ],
-      "tilemapFile": "runtime/room_tilemap_18x9.json",
+      "tilemapFile": "room/room_walkmap.json#tilemap",
       "tilemapOrder": "row-major, top-to-bottom; art tile coordinates are zero-based",
       "androidResource": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
       "androidTilemapSource": "Marvel/app/src/main/assets/room/room_walkmap.json#tilemap"
@@ -50,11 +50,35 @@
       ],
       "placements": [
         {
-          "id": "wall_console_left",
+          "id": "tactical_briefing_table",
+          "atlas": "room_tactical_briefing_table.png",
+          "atlasFrame": 0,
+          "atlasX": 0,
+          "atlasY": 0,
+          "col": 2,
+          "row": 2,
+          "width": 64,
+          "height": 40,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_chair_north_left",
           "atlas": "room_props_16.png",
-          "atlasFrame": 6,
+          "atlasFrame": 2,
           "atlasX": 2,
-          "atlasY": 1,
+          "atlasY": 0,
+          "col": 3,
+          "row": 1,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_chair_north_right",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 3,
+          "atlasX": 3,
+          "atlasY": 0,
           "col": 4,
           "row": 1,
           "width": 16,
@@ -62,31 +86,139 @@
           "layer": "props"
         },
         {
-          "id": "wall_monitor_left",
+          "id": "briefing_chair_south_left",
           "atlas": "room_props_16.png",
-          "atlasFrame": 7,
+          "atlasFrame": 2,
+          "atlasX": 2,
+          "atlasY": 0,
+          "col": 3,
+          "row": 5,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_chair_south_right",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 3,
           "atlasX": 3,
+          "atlasY": 0,
+          "col": 4,
+          "row": 5,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_bench_segment",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 4,
+          "atlasX": 0,
           "atlasY": 1,
+          "col": 1,
+          "row": 6,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_bench_end",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 5,
+          "atlasX": 1,
+          "atlasY": 1,
+          "col": 2,
+          "row": 6,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_equipment_locker",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 8,
+          "atlasX": 0,
+          "atlasY": 2,
+          "col": 1,
+          "row": 2,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "briefing_side_cabinet",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 12,
+          "atlasX": 0,
+          "atlasY": 3,
           "col": 6,
-          "row": 1,
+          "row": 6,
           "width": 16,
           "height": 16,
           "layer": "props"
         },
         {
-          "id": "wall_monitor_right",
+          "id": "door_light_north",
           "atlas": "room_props_16.png",
-          "atlasFrame": 7,
-          "atlasX": 3,
+          "atlasFrame": 13,
+          "atlasX": 1,
+          "atlasY": 3,
+          "col": 8,
+          "row": 3,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "door_light_south",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 13,
+          "atlasX": 1,
+          "atlasY": 3,
+          "col": 8,
+          "row": 6,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "lab_equipment_locker",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 8,
+          "atlasX": 0,
+          "atlasY": 2,
+          "col": 10,
+          "row": 2,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "lab_glass_cabinet",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 9,
+          "atlasX": 1,
+          "atlasY": 2,
+          "col": 15,
+          "row": 2,
+          "width": 16,
+          "height": 16,
+          "layer": "props"
+        },
+        {
+          "id": "lab_console",
+          "atlas": "room_props_16.png",
+          "atlasFrame": 6,
+          "atlasX": 2,
           "atlasY": 1,
-          "col": 11,
+          "col": 10,
           "row": 1,
           "width": 16,
           "height": 16,
           "layer": "props"
         },
         {
-          "id": "comms_panel",
+          "id": "lab_comms_station",
           "atlas": "room_props_16.png",
           "atlasFrame": 14,
           "atlasX": 2,
@@ -98,131 +230,35 @@
           "layer": "props"
         },
         {
-          "id": "left_equipment_locker",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 8,
-          "atlasX": 0,
-          "atlasY": 2,
-          "col": 1,
-          "row": 3,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "right_equipment_locker",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 8,
-          "atlasX": 0,
-          "atlasY": 2,
-          "col": 16,
-          "row": 3,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "left_glass_cabinet",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 9,
-          "atlasX": 1,
-          "atlasY": 2,
-          "col": 1,
-          "row": 5,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "right_glass_cabinet",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 9,
-          "atlasX": 1,
-          "atlasY": 2,
-          "col": 16,
-          "row": 5,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "briefing_chair_left",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 2,
-          "atlasX": 2,
-          "atlasY": 0,
-          "col": 7,
-          "row": 3,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "briefing_table_left",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 0,
-          "atlasX": 0,
-          "atlasY": 0,
-          "col": 8,
-          "row": 3,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "briefing_table_right",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 1,
-          "atlasX": 1,
-          "atlasY": 0,
-          "col": 9,
-          "row": 3,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "briefing_chair_right",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 3,
-          "atlasX": 3,
-          "atlasY": 0,
-          "col": 10,
-          "row": 3,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "left_bench_segment",
+          "id": "lab_workbench_segment",
           "atlas": "room_props_16.png",
           "atlasFrame": 4,
           "atlasX": 0,
           "atlasY": 1,
-          "col": 2,
-          "row": 4,
+          "col": 10,
+          "row": 6,
           "width": 16,
           "height": 16,
           "layer": "props"
         },
         {
-          "id": "left_bench_end",
+          "id": "lab_workbench_end",
           "atlas": "room_props_16.png",
           "atlasFrame": 5,
           "atlasX": 1,
           "atlasY": 1,
-          "col": 3,
-          "row": 4,
+          "col": 11,
+          "row": 6,
           "width": 16,
           "height": 16,
           "layer": "props"
         },
         {
-          "id": "right_bench_segment",
+          "id": "lab_holo_stool",
           "atlas": "room_props_16.png",
-          "atlasFrame": 4,
-          "atlasX": 0,
-          "atlasY": 1,
+          "atlasFrame": 10,
+          "atlasX": 2,
+          "atlasY": 2,
           "col": 14,
           "row": 4,
           "width": 16,
@@ -230,43 +266,28 @@
           "layer": "props"
         },
         {
-          "id": "right_bench_end",
+          "id": "lab_equipment_rack",
           "atlas": "room_props_16.png",
-          "atlasFrame": 5,
-          "atlasX": 1,
-          "atlasY": 1,
+          "atlasFrame": 15,
+          "atlasX": 3,
+          "atlasY": 3,
           "col": 15,
-          "row": 4,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "door_light_left",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 13,
-          "atlasX": 1,
-          "atlasY": 3,
-          "col": 7,
-          "row": 7,
-          "width": 16,
-          "height": 16,
-          "layer": "props"
-        },
-        {
-          "id": "door_light_right",
-          "atlas": "room_props_16.png",
-          "atlasFrame": 13,
-          "atlasX": 1,
-          "atlasY": 3,
-          "col": 10,
-          "row": 7,
+          "row": 5,
           "width": 16,
           "height": 16,
           "layer": "props"
         }
       ],
-      "androidResource": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png"
+      "androidResource": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png",
+      "files": [
+        "room_props_16.png",
+        "room_tactical_briefing_table.png"
+      ],
+      "standaloneAndroidResource": "Marvel/app/src/main/res/drawable-nodpi/room_tactical_briefing_table.png",
+      "oversizedSpriteLogicalSize": [
+        64,
+        40
+      ]
     },
     "dynamicEntities": {
       "layer": "dynamic",
@@ -279,7 +300,7 @@
       "dynamic actors and clues"
     ],
     "occlusionLayer": false,
-    "oversizedProps": false
+    "oversizedProps": true
   },
   "tileAtlasFrameNames": [
     "wall_panel_plain",
@@ -303,164 +324,165 @@
     [
       3,
       5,
+      2,
+      1,
+      1,
+      0,
       5,
       5,
       5,
       5,
       5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
-      5,
+      2,
+      1,
+      1,
+      0,
       5,
       5,
       3
     ],
     [
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0,
-      0
+      4,
+      8,
+      8,
+      9,
+      8,
+      8,
+      8,
+      9,
+      4,
+      8,
+      8,
+      14,
+      8,
+      8,
+      14,
+      8,
+      8,
+      4
+    ],
+    [
+      4,
+      8,
+      9,
+      8,
+      8,
+      8,
+      13,
+      8,
+      4,
+      8,
+      14,
+      8,
+      8,
+      14,
+      13,
+      8,
+      14,
+      4
+    ],
+    [
+      4,
+      9,
+      8,
+      8,
+      8,
+      9,
+      8,
+      8,
+      4,
+      14,
+      12,
+      8,
+      14,
+      8,
+      8,
+      14,
+      8,
+      4
     ],
     [
       4,
       8,
       8,
       8,
+      9,
+      8,
+      8,
+      8,
+      8,
+      8,
       8,
       14,
       8,
-      13,
+      8,
+      14,
+      12,
+      8,
+      4
+    ],
+    [
+      4,
+      8,
+      8,
+      9,
       10,
+      8,
+      8,
+      9,
+      8,
+      8,
+      14,
+      8,
+      8,
+      14,
+      8,
+      8,
+      14,
+      4
+    ],
+    [
+      4,
+      8,
+      9,
+      8,
+      8,
+      8,
+      9,
+      8,
+      4,
+      14,
+      8,
+      8,
       11,
       8,
       8,
-      9,
-      8,
-      8,
-      8,
-      8,
-      4
-    ],
-    [
-      4,
-      8,
-      8,
-      8,
-      9,
-      13,
-      8,
-      8,
-      8,
-      8,
-      8,
-      9,
-      8,
-      8,
-      8,
-      8,
-      13,
-      4
-    ],
-    [
-      4,
-      8,
-      8,
-      13,
-      8,
-      8,
-      8,
-      8,
-      10,
-      11,
-      14,
-      8,
-      8,
-      8,
-      13,
-      8,
-      8,
-      4
-    ],
-    [
-      4,
-      13,
-      9,
-      8,
-      14,
-      8,
-      8,
-      8,
-      8,
-      9,
-      8,
-      8,
-      13,
-      8,
-      8,
-      8,
-      9,
-      4
-    ],
-    [
-      4,
-      9,
-      8,
-      8,
-      8,
-      8,
-      8,
-      8,
-      9,
-      8,
-      13,
-      8,
-      8,
-      8,
-      8,
       14,
       8,
       4
     ],
     [
       4,
-      8,
-      8,
-      8,
+      9,
       8,
       8,
       8,
       9,
-      13,
+      8,
+      8,
+      4,
+      8,
+      8,
       14,
       8,
       8,
-      8,
-      8,
-      9,
+      14,
       8,
       8,
       4
     ],
     [
+      3,
       15,
       15,
       15,
@@ -469,8 +491,6 @@
       15,
       15,
       15,
-      9,
-      9,
       15,
       15,
       15,
@@ -478,37 +498,19 @@
       15,
       15,
       15,
-      15
+      15,
+      3
     ]
   ],
   "bottomDoorGap": {
-    "artTiles": [
-      [
-        8,
-        8
-      ],
-      [
-        9,
-        8
-      ]
-    ],
-    "navRow16Cols": [
-      16,
-      19
-    ],
-    "spawnNavCell": [
-      18,
-      16
-    ],
-    "visualWallBand": "south_wall_floor_transition has floor in top 8 px and wall band in bottom 8 px; band aligns with blocked nav row 17",
-    "walkmapChanged": true,
-    "northOpeningArtCellClosed": [
-      8,
-      2
-    ],
-    "southDoorVisualOnly": true,
-    "navRow16Unchanged": true,
-    "navRow17Blocked": true
+    "southWall": "closed",
+    "playerSpawn": {
+      "x": 0.2916666666666667,
+      "y": 0.8055555555555556,
+      "col": 10,
+      "row": 14
+    },
+    "note": "Player starts inside the briefing room; rooms connect through the internal open bulkhead."
   },
   "propAtlasFrameNames": [
     "briefing_table_left",
@@ -530,48 +532,625 @@
   ],
   "walkmapSnapshot": {
     "source": "Marvel/app/src/main/assets/room/room_walkmap.json",
-    "sourceSha256BeforeIntegration": "172c8d8770bcbc7173255379064bafe5fcdee5396b0d9e3675e78ad08977d6db",
-    "sha256AfterIntegration": "ba915410a60d1dc69013702597ddad84a4aee6f8eff71ac069a13ecb82dc5e19",
-    "changed": true,
     "walkableRows": [
       "000000000000000000000000000000000000",
       "000000000000000000000000000000000000",
+      "001111000011111100110011110011111100",
+      "001111000011111100110011110011111100",
+      "000000000000111100110011111111001100",
+      "000000000000111100110011111111001100",
+      "001100000000111100111111111111111100",
+      "001100000000111100111111111111111100",
+      "001100000000111111111111011100110100",
+      "001111111111111111111111111100111100",
+      "001011000011111111111111111111001100",
+      "001111000011111111111111111111001100",
+      "000000111111001100110000111111111100",
+      "000000111111001100110000111111111100",
+      "001111111111111100111111111111111100",
+      "001111111111111100111111111111111100",
       "000000000000000000000000000000000000",
-      "000000000000000000000000000000000000",
-      "000011111111111111111111111111110000",
-      "000011111111111111111111111111110000",
-      "000011111111110000000011111111110000",
-      "000011111111110000000011111111110000",
-      "000000001101111111111111101100000000",
-      "000000001111111111111111111100000000",
-      "000011111111111111111111111111110000",
-      "000011111111111111111111111111110000",
-      "000011111111111111111111111111110000",
-      "000011101111111111111111111101110000",
-      "000011111111111111111111111111110000",
-      "000011111111111111111111111111110000",
-      "000011111111111111111111111111110000",
       "000000000000000000000000000000000000"
     ],
     "solidCells": [
       [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
         5,
-        3
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        9,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        11,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        13,
+        0
+      ],
+      [
+        14,
+        0
+      ],
+      [
+        15,
+        0
+      ],
+      [
+        16,
+        0
+      ],
+      [
+        17,
+        0
       ],
       [
         18,
-        3
+        0
+      ],
+      [
+        19,
+        0
+      ],
+      [
+        20,
+        0
+      ],
+      [
+        21,
+        0
+      ],
+      [
+        22,
+        0
+      ],
+      [
+        23,
+        0
+      ],
+      [
+        24,
+        0
+      ],
+      [
+        25,
+        0
+      ],
+      [
+        26,
+        0
+      ],
+      [
+        27,
+        0
+      ],
+      [
+        28,
+        0
+      ],
+      [
+        29,
+        0
       ],
       [
         30,
+        0
+      ],
+      [
+        31,
+        0
+      ],
+      [
+        32,
+        0
+      ],
+      [
+        33,
+        0
+      ],
+      [
+        34,
+        0
+      ],
+      [
+        35,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        18,
+        1
+      ],
+      [
+        19,
+        1
+      ],
+      [
+        20,
+        1
+      ],
+      [
+        21,
+        1
+      ],
+      [
+        22,
+        1
+      ],
+      [
+        23,
+        1
+      ],
+      [
+        24,
+        1
+      ],
+      [
+        25,
+        1
+      ],
+      [
+        26,
+        1
+      ],
+      [
+        27,
+        1
+      ],
+      [
+        28,
+        1
+      ],
+      [
+        29,
+        1
+      ],
+      [
+        30,
+        1
+      ],
+      [
+        31,
+        1
+      ],
+      [
+        32,
+        1
+      ],
+      [
+        33,
+        1
+      ],
+      [
+        34,
+        1
+      ],
+      [
+        35,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        6,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        9,
+        2
+      ],
+      [
+        16,
+        2
+      ],
+      [
+        17,
+        2
+      ],
+      [
+        20,
+        2
+      ],
+      [
+        21,
+        2
+      ],
+      [
+        26,
+        2
+      ],
+      [
+        27,
+        2
+      ],
+      [
+        34,
+        2
+      ],
+      [
+        35,
+        2
+      ],
+      [
+        0,
         3
       ],
       [
-        14,
+        1,
+        3
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        9,
+        3
+      ],
+      [
+        16,
+        3
+      ],
+      [
+        17,
+        3
+      ],
+      [
+        20,
+        3
+      ],
+      [
+        21,
+        3
+      ],
+      [
+        26,
+        3
+      ],
+      [
+        27,
+        3
+      ],
+      [
+        34,
+        3
+      ],
+      [
+        35,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        9,
+        4
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        11,
+        4
+      ],
+      [
+        16,
+        4
+      ],
+      [
+        17,
+        4
+      ],
+      [
+        20,
+        4
+      ],
+      [
+        21,
+        4
+      ],
+      [
+        30,
+        4
+      ],
+      [
+        31,
+        4
+      ],
+      [
+        34,
+        4
+      ],
+      [
+        35,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        9,
+        5
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        11,
+        5
+      ],
+      [
+        16,
+        5
+      ],
+      [
+        17,
+        5
+      ],
+      [
+        20,
+        5
+      ],
+      [
+        21,
+        5
+      ],
+      [
+        30,
+        5
+      ],
+      [
+        31,
+        5
+      ],
+      [
+        34,
+        5
+      ],
+      [
+        35,
+        5
+      ],
+      [
+        0,
         6
       ],
       [
-        15,
+        1,
+        6
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        9,
+        6
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        11,
         6
       ],
       [
@@ -583,27 +1162,51 @@
         6
       ],
       [
-        18,
+        34,
         6
       ],
       [
-        19,
+        35,
         6
       ],
       [
-        20,
-        6
-      ],
-      [
-        21,
-        6
-      ],
-      [
-        14,
+        0,
         7
       ],
       [
-        15,
+        1,
+        7
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        9,
+        7
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        11,
         7
       ],
       [
@@ -615,20 +1218,20 @@
         7
       ],
       [
-        18,
+        34,
         7
       ],
       [
-        19,
+        35,
         7
       ],
       [
-        20,
-        7
+        0,
+        8
       ],
       [
-        21,
-        7
+        1,
+        8
       ],
       [
         4,
@@ -644,6 +1247,14 @@
       ],
       [
         7,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        9,
         8
       ],
       [
@@ -651,7 +1262,11 @@
         8
       ],
       [
-        25,
+        11,
+        8
+      ],
+      [
+        24,
         8
       ],
       [
@@ -663,166 +1278,1084 @@
         8
       ],
       [
-        30,
+        32,
         8
       ],
       [
-        31,
+        34,
         8
       ],
       [
-        4,
+        35,
+        8
+      ],
+      [
+        0,
         9
       ],
       [
-        5,
+        1,
         9
+      ],
+      [
+        28,
+        9
+      ],
+      [
+        29,
+        9
+      ],
+      [
+        34,
+        9
+      ],
+      [
+        35,
+        9
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        1,
+        10
+      ],
+      [
+        3,
+        10
       ],
       [
         6,
-        9
+        10
       ],
       [
         7,
-        9
+        10
       ],
       [
-        28,
-        9
+        8,
+        10
       ],
       [
-        29,
-        9
+        9,
+        10
       ],
       [
         30,
-        9
+        10
       ],
       [
         31,
-        9
+        10
+      ],
+      [
+        34,
+        10
+      ],
+      [
+        35,
+        10
+      ],
+      [
+        0,
+        11
+      ],
+      [
+        1,
+        11
+      ],
+      [
+        6,
+        11
       ],
       [
         7,
+        11
+      ],
+      [
+        8,
+        11
+      ],
+      [
+        9,
+        11
+      ],
+      [
+        30,
+        11
+      ],
+      [
+        31,
+        11
+      ],
+      [
+        34,
+        11
+      ],
+      [
+        35,
+        11
+      ],
+      [
+        0,
+        12
+      ],
+      [
+        1,
+        12
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        3,
+        12
+      ],
+      [
+        4,
+        12
+      ],
+      [
+        5,
+        12
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        13,
+        12
+      ],
+      [
+        16,
+        12
+      ],
+      [
+        17,
+        12
+      ],
+      [
+        20,
+        12
+      ],
+      [
+        21,
+        12
+      ],
+      [
+        22,
+        12
+      ],
+      [
+        23,
+        12
+      ],
+      [
+        34,
+        12
+      ],
+      [
+        35,
+        12
+      ],
+      [
+        0,
         13
       ],
       [
-        28,
+        1,
         13
+      ],
+      [
+        2,
+        13
+      ],
+      [
+        3,
+        13
+      ],
+      [
+        4,
+        13
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        13,
+        13
+      ],
+      [
+        16,
+        13
+      ],
+      [
+        17,
+        13
+      ],
+      [
+        20,
+        13
+      ],
+      [
+        21,
+        13
+      ],
+      [
+        22,
+        13
+      ],
+      [
+        23,
+        13
+      ],
+      [
+        34,
+        13
+      ],
+      [
+        35,
+        13
+      ],
+      [
+        0,
+        14
+      ],
+      [
+        1,
+        14
+      ],
+      [
+        16,
+        14
+      ],
+      [
+        17,
+        14
+      ],
+      [
+        34,
+        14
+      ],
+      [
+        35,
+        14
+      ],
+      [
+        0,
+        15
+      ],
+      [
+        1,
+        15
+      ],
+      [
+        16,
+        15
+      ],
+      [
+        17,
+        15
+      ],
+      [
+        34,
+        15
+      ],
+      [
+        35,
+        15
+      ],
+      [
+        0,
+        16
+      ],
+      [
+        1,
+        16
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        16
+      ],
+      [
+        4,
+        16
+      ],
+      [
+        5,
+        16
+      ],
+      [
+        6,
+        16
+      ],
+      [
+        7,
+        16
+      ],
+      [
+        8,
+        16
+      ],
+      [
+        9,
+        16
+      ],
+      [
+        10,
+        16
+      ],
+      [
+        11,
+        16
+      ],
+      [
+        12,
+        16
+      ],
+      [
+        13,
+        16
+      ],
+      [
+        14,
+        16
+      ],
+      [
+        15,
+        16
+      ],
+      [
+        16,
+        16
+      ],
+      [
+        17,
+        16
+      ],
+      [
+        18,
+        16
+      ],
+      [
+        19,
+        16
+      ],
+      [
+        20,
+        16
+      ],
+      [
+        21,
+        16
+      ],
+      [
+        22,
+        16
+      ],
+      [
+        23,
+        16
+      ],
+      [
+        24,
+        16
+      ],
+      [
+        25,
+        16
+      ],
+      [
+        26,
+        16
+      ],
+      [
+        27,
+        16
+      ],
+      [
+        28,
+        16
+      ],
+      [
+        29,
+        16
+      ],
+      [
+        30,
+        16
+      ],
+      [
+        31,
+        16
+      ],
+      [
+        32,
+        16
+      ],
+      [
+        33,
+        16
+      ],
+      [
+        34,
+        16
+      ],
+      [
+        35,
+        16
+      ],
+      [
+        0,
+        17
+      ],
+      [
+        1,
+        17
+      ],
+      [
+        2,
+        17
+      ],
+      [
+        3,
+        17
+      ],
+      [
+        4,
+        17
+      ],
+      [
+        5,
+        17
+      ],
+      [
+        6,
+        17
+      ],
+      [
+        7,
+        17
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        9,
+        17
+      ],
+      [
+        10,
+        17
+      ],
+      [
+        11,
+        17
+      ],
+      [
+        12,
+        17
+      ],
+      [
+        13,
+        17
+      ],
+      [
+        14,
+        17
+      ],
+      [
+        15,
+        17
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        17,
+        17
+      ],
+      [
+        18,
+        17
+      ],
+      [
+        19,
+        17
+      ],
+      [
+        20,
+        17
+      ],
+      [
+        21,
+        17
+      ],
+      [
+        22,
+        17
+      ],
+      [
+        23,
+        17
+      ],
+      [
+        24,
+        17
+      ],
+      [
+        25,
+        17
+      ],
+      [
+        26,
+        17
+      ],
+      [
+        27,
+        17
+      ],
+      [
+        28,
+        17
+      ],
+      [
+        29,
+        17
+      ],
+      [
+        30,
+        17
+      ],
+      [
+        31,
+        17
+      ],
+      [
+        32,
+        17
+      ],
+      [
+        33,
+        17
+      ],
+      [
+        34,
+        17
+      ],
+      [
+        35,
+        17
       ]
     ],
+    "navBoundsInclusive": {
+      "minCol": 0,
+      "maxCol": 35,
+      "minRow": 0,
+      "maxRow": 17
+    },
     "spawn": {
-      "x": 0.5,
-      "y": 0.9,
-      "col": 18,
-      "row": 16
+      "x": 0.2916666666666667,
+      "y": 0.8055555555555556,
+      "col": 10,
+      "row": 14
     },
     "characters": [
       {
         "id": "iron_man",
-        "x": 0.14,
-        "y": 0.22,
-        "col": 5,
-        "row": 3,
-        "approachCol": 5,
-        "approachRow": 4,
+        "x": 0.06944444444444445,
+        "y": 0.4722222222222222,
+        "col": 2,
+        "row": 8,
+        "approachCol": 2,
+        "approachRow": 9,
         "atlasFrame": 0
       },
       {
         "id": "captain_america",
-        "x": 0.5,
-        "y": 0.18,
-        "col": 18,
-        "row": 3,
-        "approachCol": 18,
-        "approachRow": 4,
+        "x": 0.4027777777777778,
+        "y": 0.3611111111111111,
+        "col": 14,
+        "row": 6,
+        "approachCol": 14,
+        "approachRow": 7,
         "atlasFrame": 1
       },
       {
         "id": "thor",
-        "x": 0.86,
-        "y": 0.22,
-        "col": 30,
-        "row": 3,
-        "approachCol": 30,
-        "approachRow": 4,
+        "x": 0.18055555555555555,
+        "y": 0.8055555555555556,
+        "col": 6,
+        "row": 14,
+        "approachCol": 6,
+        "approachRow": 13,
         "atlasFrame": 2
       },
       {
         "id": "black_widow",
-        "x": 0.22,
-        "y": 0.73,
-        "col": 7,
-        "row": 13,
-        "approachCol": 7,
-        "approachRow": 12,
+        "x": 0.625,
+        "y": 0.3055555555555556,
+        "col": 22,
+        "row": 5,
+        "approachCol": 22,
+        "approachRow": 6,
         "atlasFrame": 3
       },
       {
         "id": "hawkeye",
-        "x": 0.78,
-        "y": 0.73,
+        "x": 0.7916666666666666,
+        "y": 0.8055555555555556,
         "col": 28,
-        "row": 13,
+        "row": 14,
         "approachCol": 28,
-        "approachRow": 12,
+        "approachRow": 13,
         "atlasFrame": 4
       }
     ],
     "clues": [
       {
         "id": "clue_access_log",
-        "title": "Registro de acesso",
-        "x": 0.3,
-        "y": 0.47,
-        "col": 10,
-        "row": 8,
-        "approachCol": 10,
+        "x": 0.09722222222222222,
+        "y": 0.5833333333333334,
+        "col": 3,
+        "row": 10,
+        "approachCol": 3,
         "approachRow": 9,
-        "atlas": "room_clue_atlas_48x16.png",
         "atlasFrame": 0,
-        "atlasX": 0,
-        "atlasY": 0
+        "title": "Registro de acesso"
       },
       {
         "id": "clue_seal_trace",
-        "title": "Vestígio de lacre",
-        "x": 0.5,
-        "y": 0.389,
-        "col": 18,
-        "row": 7,
-        "approachCol": 18,
-        "approachRow": 8,
-        "atlas": "room_clue_atlas_48x16.png",
+        "x": 0.6805555555555556,
+        "y": 0.4722222222222222,
+        "col": 24,
+        "row": 8,
+        "approachCol": 24,
+        "approachRow": 9,
         "atlasFrame": 1,
-        "atlasX": 1,
-        "atlasY": 0
+        "title": "Vestígio de lacre"
       },
       {
         "id": "clue_reagent_sample",
-        "title": "Amostra de reagente",
-        "x": 0.7,
-        "y": 0.47,
-        "col": 25,
+        "x": 0.9027777777777778,
+        "y": 0.4722222222222222,
+        "col": 32,
         "row": 8,
-        "approachCol": 25,
-        "approachRow": 9,
-        "atlas": "room_clue_atlas_48x16.png",
+        "approachCol": 31,
+        "approachRow": 8,
         "atlasFrame": 2,
-        "atlasX": 2,
-        "atlasY": 0
+        "title": "Amostra de reagente"
       }
     ]
   },
   "collisionProposal": {
     "status": "integrated",
-    "newSolidCells": [
+    "model": "8px navigation cells; walls, furniture footprints, and clue objects block movement",
+    "wallCells": [
+      [
+        0,
+        0
+      ],
+      [
+        1,
+        0
+      ],
+      [
+        2,
+        0
+      ],
+      [
+        3,
+        0
+      ],
+      [
+        4,
+        0
+      ],
+      [
+        5,
+        0
+      ],
+      [
+        6,
+        0
+      ],
+      [
+        7,
+        0
+      ],
+      [
+        8,
+        0
+      ],
+      [
+        9,
+        0
+      ],
+      [
+        10,
+        0
+      ],
+      [
+        11,
+        0
+      ],
+      [
+        12,
+        0
+      ],
+      [
+        13,
+        0
+      ],
       [
         14,
-        6
+        0
       ],
       [
         15,
+        0
+      ],
+      [
+        16,
+        0
+      ],
+      [
+        17,
+        0
+      ],
+      [
+        18,
+        0
+      ],
+      [
+        19,
+        0
+      ],
+      [
+        20,
+        0
+      ],
+      [
+        21,
+        0
+      ],
+      [
+        22,
+        0
+      ],
+      [
+        23,
+        0
+      ],
+      [
+        24,
+        0
+      ],
+      [
+        25,
+        0
+      ],
+      [
+        26,
+        0
+      ],
+      [
+        27,
+        0
+      ],
+      [
+        28,
+        0
+      ],
+      [
+        29,
+        0
+      ],
+      [
+        30,
+        0
+      ],
+      [
+        31,
+        0
+      ],
+      [
+        32,
+        0
+      ],
+      [
+        33,
+        0
+      ],
+      [
+        34,
+        0
+      ],
+      [
+        35,
+        0
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        1,
+        1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        4,
+        1
+      ],
+      [
+        5,
+        1
+      ],
+      [
+        6,
+        1
+      ],
+      [
+        7,
+        1
+      ],
+      [
+        8,
+        1
+      ],
+      [
+        9,
+        1
+      ],
+      [
+        10,
+        1
+      ],
+      [
+        11,
+        1
+      ],
+      [
+        12,
+        1
+      ],
+      [
+        13,
+        1
+      ],
+      [
+        14,
+        1
+      ],
+      [
+        15,
+        1
+      ],
+      [
+        16,
+        1
+      ],
+      [
+        17,
+        1
+      ],
+      [
+        18,
+        1
+      ],
+      [
+        19,
+        1
+      ],
+      [
+        20,
+        1
+      ],
+      [
+        21,
+        1
+      ],
+      [
+        22,
+        1
+      ],
+      [
+        23,
+        1
+      ],
+      [
+        24,
+        1
+      ],
+      [
+        25,
+        1
+      ],
+      [
+        26,
+        1
+      ],
+      [
+        27,
+        1
+      ],
+      [
+        28,
+        1
+      ],
+      [
+        29,
+        1
+      ],
+      [
+        30,
+        1
+      ],
+      [
+        31,
+        1
+      ],
+      [
+        32,
+        1
+      ],
+      [
+        33,
+        1
+      ],
+      [
+        34,
+        1
+      ],
+      [
+        35,
+        1
+      ],
+      [
+        0,
+        2
+      ],
+      [
+        1,
+        2
+      ],
+      [
+        16,
+        2
+      ],
+      [
+        17,
+        2
+      ],
+      [
+        34,
+        2
+      ],
+      [
+        35,
+        2
+      ],
+      [
+        0,
+        3
+      ],
+      [
+        1,
+        3
+      ],
+      [
+        16,
+        3
+      ],
+      [
+        17,
+        3
+      ],
+      [
+        34,
+        3
+      ],
+      [
+        35,
+        3
+      ],
+      [
+        0,
+        4
+      ],
+      [
+        1,
+        4
+      ],
+      [
+        16,
+        4
+      ],
+      [
+        17,
+        4
+      ],
+      [
+        34,
+        4
+      ],
+      [
+        35,
+        4
+      ],
+      [
+        0,
+        5
+      ],
+      [
+        1,
+        5
+      ],
+      [
+        16,
+        5
+      ],
+      [
+        17,
+        5
+      ],
+      [
+        34,
+        5
+      ],
+      [
+        35,
+        5
+      ],
+      [
+        0,
+        6
+      ],
+      [
+        1,
         6
       ],
       [
@@ -834,27 +2367,19 @@
         6
       ],
       [
-        18,
+        34,
         6
       ],
       [
-        19,
+        35,
         6
       ],
       [
-        20,
-        6
-      ],
-      [
-        21,
-        6
-      ],
-      [
-        14,
+        0,
         7
       ],
       [
-        15,
+        1,
         7
       ],
       [
@@ -866,572 +2391,1080 @@
         7
       ],
       [
-        18,
+        34,
         7
       ],
       [
-        19,
+        35,
         7
       ],
       [
-        20,
-        7
+        0,
+        8
       ],
       [
-        21,
-        7
+        1,
+        8
+      ],
+      [
+        34,
+        8
+      ],
+      [
+        35,
+        8
+      ],
+      [
+        0,
+        9
+      ],
+      [
+        1,
+        9
+      ],
+      [
+        34,
+        9
+      ],
+      [
+        35,
+        9
+      ],
+      [
+        0,
+        10
+      ],
+      [
+        1,
+        10
+      ],
+      [
+        34,
+        10
+      ],
+      [
+        35,
+        10
+      ],
+      [
+        0,
+        11
+      ],
+      [
+        1,
+        11
+      ],
+      [
+        34,
+        11
+      ],
+      [
+        35,
+        11
+      ],
+      [
+        0,
+        12
+      ],
+      [
+        1,
+        12
+      ],
+      [
+        16,
+        12
+      ],
+      [
+        17,
+        12
+      ],
+      [
+        34,
+        12
+      ],
+      [
+        35,
+        12
+      ],
+      [
+        0,
+        13
+      ],
+      [
+        1,
+        13
+      ],
+      [
+        16,
+        13
+      ],
+      [
+        17,
+        13
+      ],
+      [
+        34,
+        13
+      ],
+      [
+        35,
+        13
+      ],
+      [
+        0,
+        14
+      ],
+      [
+        1,
+        14
+      ],
+      [
+        16,
+        14
+      ],
+      [
+        17,
+        14
+      ],
+      [
+        34,
+        14
+      ],
+      [
+        35,
+        14
+      ],
+      [
+        0,
+        15
+      ],
+      [
+        1,
+        15
+      ],
+      [
+        16,
+        15
+      ],
+      [
+        17,
+        15
+      ],
+      [
+        34,
+        15
+      ],
+      [
+        35,
+        15
+      ],
+      [
+        0,
+        16
+      ],
+      [
+        1,
+        16
+      ],
+      [
+        2,
+        16
+      ],
+      [
+        3,
+        16
       ],
       [
         4,
-        8
+        16
       ],
       [
         5,
-        8
+        16
       ],
       [
         6,
-        8
+        16
       ],
       [
         7,
-        8
+        16
       ],
       [
-        28,
-        8
+        8,
+        16
       ],
       [
-        29,
-        8
+        9,
+        16
       ],
       [
-        30,
-        8
+        10,
+        16
       ],
       [
-        31,
-        8
+        11,
+        16
       ],
       [
-        4,
-        9
+        12,
+        16
       ],
       [
-        5,
-        9
+        13,
+        16
       ],
       [
-        6,
-        9
+        14,
+        16
       ],
       [
-        7,
-        9
+        15,
+        16
       ],
       [
-        28,
-        9
+        16,
+        16
       ],
       [
-        29,
-        9
+        17,
+        16
       ],
       [
-        30,
-        9
-      ],
-      [
-        31,
-        9
-      ]
-    ],
-    "walkableRowsChangesIfApproved": "applied; set furniture solids to 0, open only central approach (18,8), keep row 16 and row 17 unchanged",
-    "connectivityCheck": {
-      "checkedFromSpawn": [
         18,
         16
       ],
-      "allEightApproachesReachableWithFinalSolids": true,
-      "approaches": [
-        [
-          5,
-          4
-        ],
-        [
-          18,
-          4
-        ],
-        [
-          30,
-          4
-        ],
-        [
-          7,
-          12
-        ],
-        [
-          28,
-          12
-        ],
-        [
-          10,
-          9
-        ],
-        [
-          18,
-          8
-        ],
-        [
-          25,
-          9
-        ]
+      [
+        19,
+        16
       ],
-      "reachableNavCellCount": 328,
-      "algorithm": "4-neighbor BFS using RoomWalkMap bounds, walkableRows AND solidCells"
-    }
+      [
+        20,
+        16
+      ],
+      [
+        21,
+        16
+      ],
+      [
+        22,
+        16
+      ],
+      [
+        23,
+        16
+      ],
+      [
+        24,
+        16
+      ],
+      [
+        25,
+        16
+      ],
+      [
+        26,
+        16
+      ],
+      [
+        27,
+        16
+      ],
+      [
+        28,
+        16
+      ],
+      [
+        29,
+        16
+      ],
+      [
+        30,
+        16
+      ],
+      [
+        31,
+        16
+      ],
+      [
+        32,
+        16
+      ],
+      [
+        33,
+        16
+      ],
+      [
+        34,
+        16
+      ],
+      [
+        35,
+        16
+      ],
+      [
+        0,
+        17
+      ],
+      [
+        1,
+        17
+      ],
+      [
+        2,
+        17
+      ],
+      [
+        3,
+        17
+      ],
+      [
+        4,
+        17
+      ],
+      [
+        5,
+        17
+      ],
+      [
+        6,
+        17
+      ],
+      [
+        7,
+        17
+      ],
+      [
+        8,
+        17
+      ],
+      [
+        9,
+        17
+      ],
+      [
+        10,
+        17
+      ],
+      [
+        11,
+        17
+      ],
+      [
+        12,
+        17
+      ],
+      [
+        13,
+        17
+      ],
+      [
+        14,
+        17
+      ],
+      [
+        15,
+        17
+      ],
+      [
+        16,
+        17
+      ],
+      [
+        17,
+        17
+      ],
+      [
+        18,
+        17
+      ],
+      [
+        19,
+        17
+      ],
+      [
+        20,
+        17
+      ],
+      [
+        21,
+        17
+      ],
+      [
+        22,
+        17
+      ],
+      [
+        23,
+        17
+      ],
+      [
+        24,
+        17
+      ],
+      [
+        25,
+        17
+      ],
+      [
+        26,
+        17
+      ],
+      [
+        27,
+        17
+      ],
+      [
+        28,
+        17
+      ],
+      [
+        29,
+        17
+      ],
+      [
+        30,
+        17
+      ],
+      [
+        31,
+        17
+      ],
+      [
+        32,
+        17
+      ],
+      [
+        33,
+        17
+      ],
+      [
+        34,
+        17
+      ],
+      [
+        35,
+        17
+      ]
+    ],
+    "furnitureCells": [
+      [
+        6,
+        2
+      ],
+      [
+        7,
+        2
+      ],
+      [
+        8,
+        2
+      ],
+      [
+        9,
+        2
+      ],
+      [
+        20,
+        2
+      ],
+      [
+        21,
+        2
+      ],
+      [
+        26,
+        2
+      ],
+      [
+        27,
+        2
+      ],
+      [
+        6,
+        3
+      ],
+      [
+        7,
+        3
+      ],
+      [
+        8,
+        3
+      ],
+      [
+        9,
+        3
+      ],
+      [
+        20,
+        3
+      ],
+      [
+        21,
+        3
+      ],
+      [
+        26,
+        3
+      ],
+      [
+        27,
+        3
+      ],
+      [
+        2,
+        4
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        4,
+        4
+      ],
+      [
+        5,
+        4
+      ],
+      [
+        6,
+        4
+      ],
+      [
+        7,
+        4
+      ],
+      [
+        8,
+        4
+      ],
+      [
+        9,
+        4
+      ],
+      [
+        10,
+        4
+      ],
+      [
+        11,
+        4
+      ],
+      [
+        20,
+        4
+      ],
+      [
+        21,
+        4
+      ],
+      [
+        30,
+        4
+      ],
+      [
+        31,
+        4
+      ],
+      [
+        2,
+        5
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        4,
+        5
+      ],
+      [
+        5,
+        5
+      ],
+      [
+        6,
+        5
+      ],
+      [
+        7,
+        5
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        9,
+        5
+      ],
+      [
+        10,
+        5
+      ],
+      [
+        11,
+        5
+      ],
+      [
+        20,
+        5
+      ],
+      [
+        21,
+        5
+      ],
+      [
+        30,
+        5
+      ],
+      [
+        31,
+        5
+      ],
+      [
+        4,
+        6
+      ],
+      [
+        5,
+        6
+      ],
+      [
+        6,
+        6
+      ],
+      [
+        7,
+        6
+      ],
+      [
+        8,
+        6
+      ],
+      [
+        9,
+        6
+      ],
+      [
+        10,
+        6
+      ],
+      [
+        11,
+        6
+      ],
+      [
+        4,
+        7
+      ],
+      [
+        5,
+        7
+      ],
+      [
+        6,
+        7
+      ],
+      [
+        7,
+        7
+      ],
+      [
+        8,
+        7
+      ],
+      [
+        9,
+        7
+      ],
+      [
+        10,
+        7
+      ],
+      [
+        11,
+        7
+      ],
+      [
+        4,
+        8
+      ],
+      [
+        5,
+        8
+      ],
+      [
+        6,
+        8
+      ],
+      [
+        7,
+        8
+      ],
+      [
+        8,
+        8
+      ],
+      [
+        9,
+        8
+      ],
+      [
+        10,
+        8
+      ],
+      [
+        11,
+        8
+      ],
+      [
+        28,
+        8
+      ],
+      [
+        29,
+        8
+      ],
+      [
+        28,
+        9
+      ],
+      [
+        29,
+        9
+      ],
+      [
+        6,
+        10
+      ],
+      [
+        7,
+        10
+      ],
+      [
+        8,
+        10
+      ],
+      [
+        9,
+        10
+      ],
+      [
+        30,
+        10
+      ],
+      [
+        31,
+        10
+      ],
+      [
+        6,
+        11
+      ],
+      [
+        7,
+        11
+      ],
+      [
+        8,
+        11
+      ],
+      [
+        9,
+        11
+      ],
+      [
+        30,
+        11
+      ],
+      [
+        31,
+        11
+      ],
+      [
+        2,
+        12
+      ],
+      [
+        3,
+        12
+      ],
+      [
+        4,
+        12
+      ],
+      [
+        5,
+        12
+      ],
+      [
+        12,
+        12
+      ],
+      [
+        13,
+        12
+      ],
+      [
+        20,
+        12
+      ],
+      [
+        21,
+        12
+      ],
+      [
+        22,
+        12
+      ],
+      [
+        23,
+        12
+      ],
+      [
+        2,
+        13
+      ],
+      [
+        3,
+        13
+      ],
+      [
+        4,
+        13
+      ],
+      [
+        5,
+        13
+      ],
+      [
+        12,
+        13
+      ],
+      [
+        13,
+        13
+      ],
+      [
+        20,
+        13
+      ],
+      [
+        21,
+        13
+      ],
+      [
+        22,
+        13
+      ],
+      [
+        23,
+        13
+      ]
+    ],
+    "clueCells": [
+      [
+        24,
+        8
+      ],
+      [
+        32,
+        8
+      ],
+      [
+        3,
+        10
+      ]
+    ],
+    "connectivityCheck": {
+      "spawn": {
+        "x": 0.2916666666666667,
+        "y": 0.8055555555555556,
+        "col": 10,
+        "row": 14
+      },
+      "reachableNavCellCount": 313,
+      "allCharacterAndClueApproachCellsReachable": true,
+      "roomDoorOpen": true
+    },
+    "doorNavCells": [
+      [
+        16,
+        8
+      ],
+      [
+        16,
+        9
+      ],
+      [
+        16,
+        10
+      ],
+      [
+        16,
+        11
+      ],
+      [
+        17,
+        8
+      ],
+      [
+        17,
+        9
+      ],
+      [
+        17,
+        10
+      ],
+      [
+        17,
+        11
+      ]
+    ]
   },
   "preview": {
-    "logicalStatic": "preview/room_map_288x144.png",
-    "stage": "preview/room_preview_stage_864x432.png",
+    "logicalStatic": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+    "stage": "Marvel/app/src/main/assets/room/room_preview_stage_864x432.png",
     "stageSize": [
       864,
       432
     ],
     "scale": 3,
     "sampling": "nearest-neighbor",
-    "dynamicEntitySpritesIncluded": true,
-    "runtimeFallbackOnly": "The flattened previews are not runtime tilemap assets.",
-    "androidFallback": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
-    "stageIncludedInPatch": false
+    "dynamicEntitySpritesIncluded": false,
+    "runtimeFallbackOnly": "The flattened preview is fallback only; runtime navigation uses structured layers and collision metadata.",
+    "concept": "Marvel/app/src/main/assets/room/generated/command_room_two_rooms_concept_864x432.png"
   },
   "sha256": {
-    "raw/tile_atlas_source.png": "58cd6b302e1fba4896cc23be6caba468e3b1d8d595204c1587afc4e23df40cd2",
-    "raw/props_atlas_source.png": "e50b513b17115a2bec6e8cc8ea90b22ed6c5d5d9ec2ce111a0e6a09f1554f103",
-    "prompts.md": "d7a25d44cee93a24cadcafd09d9eeb8b3da8d2ec3fa79eb9de91a2d3e89a5e21",
+    "prompts.md": "ebe31ed56276f493e90ed77b97ab1ddb1666bd90a70b6bbf063b193f867ca857",
+    "room_walkmap.json": "35aac42d465ea67bc2287697b667702ad3cc47671546508ded55aa4a32a7fb04",
     "runtime/room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
     "runtime/room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
-    "runtime/room_tilemap_18x9.json": "77e2a351fdc08b3873e5610107f75637e53bd053fc52e8410ca87cbfb578bde1",
-    "preview/room_map_288x144.png": "a9198d17a7ef53113e0f9350e37d0e112e4242f17d3177ee679e323b2c3ce20f",
-    "preview/room_preview_stage_864x432.png": "679beaffa10a044139304bd8df3d9dd756fcf701f03999c798e6eeafb03ece7d"
+    "runtime/room_map_288x144.png": "8abb2985fa043a644267264d77bb070d3f1e9f4d51cd4499f832898aa48f1db5",
+    "runtime/room_walkmap_36x18.png": "2ae59293b37b4858f0e342ed7aba79c95d47eca60fd76c0f93becf97f62ae130",
+    "runtime/room_tactical_briefing_table.png": "8df4684bec16118e434f8cc20526ecf77690c1d4f0401c39b9ba955cab1ec3ca",
+    "generated/command_room_two_rooms_source.png": "beaecc03eaa28d12a59a44240af6025445002c5fc5d8827ac4aaee903fa062d9",
+    "generated/tactical_briefing_table_source.png": "d865be79a5d37b119fc72499f3c7d0458f2660ee43dd352df9add9d246bae411",
+    "preview/room_preview_stage_864x432.png": "874a7946310cc7ed4b8e2d9cbd92b86325ff8d8e0d37f2dfa3b2cab6bc32ea3c"
   },
   "integration": {
-    "status": "integrated in isolated patch; no shared-tree edits",
-    "baseHead": "4e464cd54c522739bfde689d0534bd1cec785acf",
-    "rendererContract": "single 18x9 tilemap-base, props layer, then existing dynamic entities; nearest-neighbor; no Java/XML renderer change",
-    "androidFiles": {
-      "tileAtlas": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
-      "propsAtlas": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png",
-      "fallback": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
-      "walkmapPng": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_36x18.png",
-      "walkmapJson": "Marvel/app/src/main/assets/room/room_walkmap.json",
-      "prompts": "Marvel/app/src/main/assets/room/prompts.md",
-      "manifest": "Marvel/app/src/main/assets/room/room_asset_manifest.json"
-    },
-    "doors": {
-      "northOpeningArtCell": [
-        8,
-        2
-      ],
-      "northWallArtRows": [
-        0,
-        1
-      ],
-      "northTileFrame": 10,
-      "northTileFrameName": "floor_circular_motif",
-      "southOpeningArtTiles": [
-        [
-          8,
-          8
-        ],
-        [
-          9,
-          8
-        ]
-      ],
-      "southOpeningNavCols": [
-        16,
-        19
-      ],
-      "southVisualWallBand": "tile frame 15 draws floor in art-tile top 8px and wall in bottom 8px",
-      "navRow16": "walkable",
-      "navRow17": "blocked",
-      "spawnNavCell": [
-        18,
-        16
-      ],
-      "singleVisualEntrance": "south, centered on spawn"
-    },
-    "navigation": {
-      "newFurnitureSolidCellCount": 32,
-      "removedOldSolidCell": [
-        18,
-        8
-      ],
-      "centralClueAnchor": [
-        18,
-        7
-      ],
-      "centralClueNormalized": [
-        0.5,
-        0.389
-      ],
-      "centralClueApproach": [
-        18,
-        8
-      ],
-      "centralApproachWalkableBit": true,
-      "preservedSideClueAnchors": [
-        [
-          10,
-          8
-        ],
-        [
-          25,
-          8
-        ]
-      ],
-      "preservedSideClueApproaches": [
-        [
-          10,
-          9
-        ],
-        [
-          25,
-          9
-        ]
-      ],
-      "allEightApproachesReachableFromSpawn": true,
-      "reachableNavCellCount": 328,
-      "walkableRowsChanged": true,
-      "boundsChanged": false
-    },
-    "assetPolicy": {
-      "copiedFinalOutputsOnly": true,
-      "rawInputsBundled": false,
-      "referenceImagesBundled": false,
-      "stagePreviewBundled": false,
-      "stagePreviewReason": "QA composite only; runtime fallback is the 288x144 logical map"
-    },
-    "sourceValidation": {
-      "atlasSize": [
-        64,
-        64
-      ],
-      "atlasGrid": [
-        4,
-        4
-      ],
-      "atlasFrameSize": [
-        16,
-        16
-      ],
-      "propsAll16x16": true,
-      "fallbackSize": [
-        288,
-        144
-      ],
-      "stagePreviewSizeNearestScale": [
-        864,
-        432,
-        3
-      ],
-      "sourceFallbackMatchesAtlasTilemapProps": true
-    },
-    "walkmapSnapshot": {
-      "source": "Marvel/app/src/main/assets/room/room_walkmap.json",
-      "sourceSha256BeforeIntegration": "172c8d8770bcbc7173255379064bafe5fcdee5396b0d9e3675e78ad08977d6db",
-      "sha256AfterIntegration": "ba915410a60d1dc69013702597ddad84a4aee6f8eff71ac069a13ecb82dc5e19",
-      "changed": true,
-      "walkableRows": [
-        "000000000000000000000000000000000000",
-        "000000000000000000000000000000000000",
-        "000000000000000000000000000000000000",
-        "000000000000000000000000000000000000",
-        "000011111111111111111111111111110000",
-        "000011111111111111111111111111110000",
-        "000011111111110000000011111111110000",
-        "000011111111110000000011111111110000",
-        "000000001101111111111111101100000000",
-        "000000001111111111111111111100000000",
-        "000011111111111111111111111111110000",
-        "000011111111111111111111111111110000",
-        "000011111111111111111111111111110000",
-        "000011101111111111111111111101110000",
-        "000011111111111111111111111111110000",
-        "000011111111111111111111111111110000",
-        "000011111111111111111111111111110000",
-        "000000000000000000000000000000000000"
-      ],
-      "solidCells": [
-        [
-          5,
-          3
-        ],
-        [
-          18,
-          3
-        ],
-        [
-          30,
-          3
-        ],
-        [
-          14,
-          6
-        ],
-        [
-          15,
-          6
-        ],
-        [
-          16,
-          6
-        ],
-        [
-          17,
-          6
-        ],
-        [
-          18,
-          6
-        ],
-        [
-          19,
-          6
-        ],
-        [
-          20,
-          6
-        ],
-        [
-          21,
-          6
-        ],
-        [
-          14,
-          7
-        ],
-        [
-          15,
-          7
-        ],
-        [
-          16,
-          7
-        ],
-        [
-          17,
-          7
-        ],
-        [
-          18,
-          7
-        ],
-        [
-          19,
-          7
-        ],
-        [
-          20,
-          7
-        ],
-        [
-          21,
-          7
-        ],
-        [
-          4,
-          8
-        ],
-        [
-          5,
-          8
-        ],
-        [
-          6,
-          8
-        ],
-        [
-          7,
-          8
-        ],
-        [
-          10,
-          8
-        ],
-        [
-          25,
-          8
-        ],
-        [
-          28,
-          8
-        ],
-        [
-          29,
-          8
-        ],
-        [
-          30,
-          8
-        ],
-        [
-          31,
-          8
-        ],
-        [
-          4,
-          9
-        ],
-        [
-          5,
-          9
-        ],
-        [
-          6,
-          9
-        ],
-        [
-          7,
-          9
-        ],
-        [
-          28,
-          9
-        ],
-        [
-          29,
-          9
-        ],
-        [
-          30,
-          9
-        ],
-        [
-          31,
-          9
-        ],
-        [
-          7,
-          13
-        ],
-        [
-          28,
-          13
-        ]
-      ],
-      "spawn": {
-        "x": 0.5,
-        "y": 0.9,
-        "col": 18,
-        "row": 16
-      },
-      "characters": [
-        {
-          "id": "iron_man",
-          "x": 0.14,
-          "y": 0.22,
-          "col": 5,
-          "row": 3,
-          "approachCol": 5,
-          "approachRow": 4,
-          "atlasFrame": 0
-        },
-        {
-          "id": "captain_america",
-          "x": 0.5,
-          "y": 0.18,
-          "col": 18,
-          "row": 3,
-          "approachCol": 18,
-          "approachRow": 4,
-          "atlasFrame": 1
-        },
-        {
-          "id": "thor",
-          "x": 0.86,
-          "y": 0.22,
-          "col": 30,
-          "row": 3,
-          "approachCol": 30,
-          "approachRow": 4,
-          "atlasFrame": 2
-        },
-        {
-          "id": "black_widow",
-          "x": 0.22,
-          "y": 0.73,
-          "col": 7,
-          "row": 13,
-          "approachCol": 7,
-          "approachRow": 12,
-          "atlasFrame": 3
-        },
-        {
-          "id": "hawkeye",
-          "x": 0.78,
-          "y": 0.73,
-          "col": 28,
-          "row": 13,
-          "approachCol": 28,
-          "approachRow": 12,
-          "atlasFrame": 4
-        }
-      ],
-      "clues": [
-        {
-          "id": "clue_access_log",
-          "title": "Registro de acesso",
-          "x": 0.3,
-          "y": 0.47,
-          "col": 10,
-          "row": 8,
-          "approachCol": 10,
-          "approachRow": 9,
-          "atlas": "room_clue_atlas_48x16.png",
-          "atlasFrame": 0,
-          "atlasX": 0,
-          "atlasY": 0
-        },
-        {
-          "id": "clue_seal_trace",
-          "title": "Vestígio de lacre",
-          "x": 0.5,
-          "y": 0.389,
-          "col": 18,
-          "row": 7,
-          "approachCol": 18,
-          "approachRow": 8,
-          "atlas": "room_clue_atlas_48x16.png",
-          "atlasFrame": 1,
-          "atlasX": 1,
-          "atlasY": 0
-        },
-        {
-          "id": "clue_reagent_sample",
-          "title": "Amostra de reagente",
-          "x": 0.7,
-          "y": 0.47,
-          "col": 25,
-          "row": 8,
-          "approachCol": 25,
-          "approachRow": 9,
-          "atlas": "room_clue_atlas_48x16.png",
-          "atlasFrame": 2,
-          "atlasX": 2,
-          "atlasY": 0
-        }
-      ]
-    }
+    "status": "integrated in working tree",
+    "baseRevision": "b1abd6e",
+    "rendererContract": "18x9 modular base, 16px props atlas, optional 64x40 standalone briefing table, dynamic actors/clues; nearest-neighbor",
+    "collisionContract": "36x18 navigation grid at 8px; walls, furniture, and clue objects marked solid; one 2-tile-high opening joins both rooms."
   },
   "integrationSha256": {
-    "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
-    "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
-    "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png": "a9198d17a7ef53113e0f9350e37d0e112e4242f17d3177ee679e323b2c3ce20f",
-    "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_36x18.png": "f953be649d1b612dff4ed64a08efb72c762bf013d6986ba61c1a25aa5dafb053",
-    "Marvel/app/src/main/assets/room/room_walkmap.json": "ba915410a60d1dc69013702597ddad84a4aee6f8eff71ac069a13ecb82dc5e19",
-    "Marvel/app/src/main/assets/room/prompts.md": "d7a25d44cee93a24cadcafd09d9eeb8b3da8d2ec3fa79eb9de91a2d3e89a5e21"
+    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
+    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
+    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_map_288x144.png": "8abb2985fa043a644267264d77bb070d3f1e9f4d51cd4499f832898aa48f1db5",
+    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_walkmap_36x18.png": "2ae59293b37b4858f0e342ed7aba79c95d47eca60fd76c0f93becf97f62ae130",
+    "Marvel\\app\\src\\main\\res\\drawable-nodpi\\room_tactical_briefing_table.png": "8df4684bec16118e434f8cc20526ecf77690c1d4f0401c39b9ba955cab1ec3ca",
+    "Marvel\\app\\src\\main\\assets\\room\\room_walkmap.json": "35aac42d465ea67bc2287697b667702ad3cc47671546508ded55aa4a32a7fb04",
+    "Marvel\\app\\src\\main\\assets\\room\\prompts.md": "ebe31ed56276f493e90ed77b97ab1ddb1666bd90a70b6bbf063b193f867ca857"
   },
-  "manifestSha256Note": "The manifest is not self-hashed; its SHA-256 is reported by the integration handoff."
+  "manifestSha256Note": "Manifest is not self-hashed; listed hashes cover runtime assets, source prompts, and generated inputs.",
+  "oversizedProps": true,
+  "tileAtlasUsedFrames": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15
+  ],
+  "rooms": [
+    {
+      "id": "briefing",
+      "name": "Sala de briefing",
+      "tiles": {
+        "left": 0,
+        "top": 0,
+        "right": 8,
+        "bottom": 8
+      },
+      "walkableInterior": [
+        1,
+        1,
+        7,
+        7
+      ]
+    },
+    {
+      "id": "lab_armory",
+      "name": "Laboratório e arsenal",
+      "tiles": {
+        "left": 9,
+        "top": 0,
+        "right": 17,
+        "bottom": 8
+      },
+      "walkableInterior": [
+        9,
+        1,
+        16,
+        7
+      ]
+    }
+  ],
+  "roomConnections": [
+    {
+      "id": "briefing_to_lab_bulkhead",
+      "tiles": [
+        [
+          8,
+          4
+        ],
+        [
+          8,
+          5
+        ]
+      ],
+      "navCells": [
+        [
+          16,
+          8
+        ],
+        [
+          16,
+          9
+        ],
+        [
+          16,
+          10
+        ],
+        [
+          16,
+          11
+        ],
+        [
+          17,
+          8
+        ],
+        [
+          17,
+          9
+        ],
+        [
+          17,
+          10
+        ],
+        [
+          17,
+          11
+        ]
+      ],
+      "type": "open_passage"
+    }
+  ]
 }

@@ -1,11 +1,22 @@
-# Room environment — enclosed HQ v2
+# Base Avengers Room — dois cômodos conectados
 
-Todas as imagens abaixo foram geradas do zero com ImageGen. Nenhuma referência visual ou pixel de assets antigos foi usada como entrada.
+O ambiente runtime usa um tilemap top-down modular 18x9, grade lógica de 16 px e navegação em células de 8 px. Ele contém dois espaços fechados e conectados por uma passagem: sala de briefing à esquerda e laboratório/arsenal à direita. Paredes externas e divisória são bloqueadas. Móveis e pistas têm células sólidas próprias em `room_walkmap.json`.
 
-## tiles_atlas
+## Referências consultadas
 
-Create a brand-new 2D game pixel-art TILE ATLAS, not a room illustration. One square image, transparent-looking near-black background, with an exact clean 4 columns x 4 rows grid of 16 isolated square tiles, equal cell sizes, no labels, no gutters, no text, no characters, no logos. Style: crisp restrained pixel art, hard pixel clusters, nearest-neighbor friendly, designed for a 16x16 logical grid. Palette only: #0D1720, #243543, #384B57, #52666A, #C4D5C8, #44CFBD, #F2B84B, #E4675D. This atlas supports a warm, habitable superhero command-room briefing suite, visibly an enclosed room, not a corridor. Top two rows of atlas should be wall frame variants: dark steel wall panel, inset console-wall panel with tiny cyan display, framed panoramic window with abstract city skyline at night, corner wall joint, vertical wall segment, horizontal wall segment, closed bulkhead, wall sconce; varied but tileable and readable when each cell is reduced to 16x16. Bottom two rows should be floor variants: dark matte blue-gray floor tiles, several seam arrangements, floorboard-like deck panel, central circular briefing-room floor medallion segment, subdued warm floor lamp accents. Keep motifs sparse; no furniture or large objects in floor tiles. 4x4 grid is precise: every cell self-contained, front-facing tile texture, no object crosses cell boundaries, orthographic top-down, low detail, limited colors, no gradients, no antialiasing. Make the visual read as cozy command-room interior through material and warm cyan/amber illumination.
+- `REFERENCIAS/07-referencia-assets-modulares-base-heroica.png`: painéis, paredes e consoles.
+- `REFERENCIAS/08-referencia-composicao-sala-base-heroica.png`: proporção e leitura de cômodo fechado.
+- `REFERENCIAS/09-referencia-mobiliario-base-heroica.png`: móveis e distribuição do interior.
+- `assets/room/generated/command_room_two_rooms_source.png`: conceito original de dois cômodos conectado; guia visual, não é o mapa runtime achatado.
 
-## props_atlas
+## Sprite standalone
 
-Create an ORIGINAL pixel-art PROP ATLAS for a top-down 2D game command room. Exact 4 columns x 4 rows with 16 isolated square furniture/fixture sprites, equal cell sizes. Each sprite stays fully within its own cell and will be reduced to 16x16 logical pixels, so use extremely simple silhouettes and only a few large color clusters; no tiny text. Transparent background is ideal; if not, use a perfectly flat pure magenta #FF00FF background for later transparency removal. Orthographic top-down / slight top-down view matching a room viewed from above; no perspective room scene. Palette restricted to #0D1720 #243543 #384B57 #52666A #C4D5C8 #44CFBD #F2B84B #E4675D. Pixel art with crisp square pixels, no gradients, no antialiasing, no logos. Compose these 16 cells row-major: 1 briefing table left half, 2 briefing table right half with a cyan hologram projection zone, 3 command chair top view, 4 chair alternate, 5 low bench segment, 6 bench end, 7 wall console with glowing cyan screen, 8 wall monitor showing three simple skyline blocks, 9 equipment locker, 10 glass gear cabinet, 11 small round stool, 12 holo projector pedestal, 13 side cabinet, 14 wall light sconce, 15 short comms panel, 16 open equipment rack. Each must read clearly as a separate object when only 16 pixels square, thick outline and silhouette, centered with margin. These props belong in a compact cozy superhero command-room briefing chamber with a conference table and useful wall stations; do not make a corridor. No characters, no clue objects, no text, no extra border, no drop shadows outside each cell.
+A mesa tática holográfica é `res/drawable-nodpi/room_tactical_briefing_table.png`, 64x40 px lógicos, transparente. É renderizada pelo layer de props e bloqueia as células nav cobertas pelo footprint. Os demais móveis usam `room_props_16.png`.
+
+## Contratos
+
+- Base: `room_walkmap.json#tilemap`, atlas `room_tiles_16.png`, 18 colunas x 9 linhas.
+- Navegação: `walkableRows` e `solidCells`, 36x18 células de 8 px. Paredes, móveis e pistas bloqueiam o caminho; todos os oito pontos de aproximação precisam continuar acessíveis desde o spawn.
+- Props: `room_walkmap.json#props`; posições em tiles lógicos. O renderer aceita props de atlas 16x16 e a mesa standalone 64x40.
+- `room_map_288x144.png` é o fallback composto da base e props; o app prefere os layers para manter movimento e colisões.
+- Prévia de validação: `room_preview_stage_864x432.png`, ampliada 3x por nearest-neighbor.

@@ -60,6 +60,7 @@ public final class RoomCanvasView extends View {
     private Bitmap roomMap;
     private Bitmap roomTiles;
     private Bitmap roomProps;
+    private Bitmap briefingTable;
     private Bitmap clueAtlas;
     private Bitmap playerSheet;
     private Bitmap survivorAtlas;
@@ -91,6 +92,7 @@ public final class RoomCanvasView extends View {
         roomMap = loadDrawableBitmap("room_map_288x144");
         roomTiles = loadDrawableBitmap("room_tiles_16");
         roomProps = loadDrawableBitmap("room_props_16");
+        briefingTable = loadDrawableBitmap("room_tactical_briefing_table");
         clueAtlas = loadDrawableBitmap("room_clue_atlas_48x16");
         playerSheet = loadDrawableBitmap("player_sheet_64x96");
         survivorAtlas = loadDrawableBitmap("survivor_idle_atlas_80x24");
@@ -380,20 +382,26 @@ public final class RoomCanvasView extends View {
     }
 
     private void drawProps(Canvas canvas) {
-        if (walkMap == null || roomProps == null) return;
+        if (walkMap == null) return;
         Rect source = new Rect();
-        RectF destination = new RectF();
         for (RoomWalkMap.PropPlacement prop : walkMap.props()) {
             if (!"props".equals(prop.layer)) continue;
+            RectF bounds = new RectF(prop.column * 16f, prop.row * 16f,
+                    prop.column * 16f + prop.width, prop.row * 16f + prop.height);
+            if ("room_tactical_briefing_table.png".equals(prop.atlas)) {
+                if (briefingTable != null) {
+                    canvas.drawBitmap(briefingTable, null, bounds, bitmapPaint);
+                }
+                continue;
+            }
+            if (roomProps == null) continue;
             int sourceLeft = prop.atlasX * 16;
             int sourceTop = prop.atlasY * 16;
             if (sourceLeft < 0 || sourceTop < 0
                     || sourceLeft + 16 > roomProps.getWidth()
                     || sourceTop + 16 > roomProps.getHeight()) continue;
             source.set(sourceLeft, sourceTop, sourceLeft + 16, sourceTop + 16);
-            destination.set(prop.column * 16f, prop.row * 16f,
-                    (prop.column + 1) * 16f, (prop.row + 1) * 16f);
-            canvas.drawBitmap(roomProps, source, destination, bitmapPaint);
+            canvas.drawBitmap(roomProps, source, bounds, bitmapPaint);
         }
     }
 

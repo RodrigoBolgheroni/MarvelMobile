@@ -427,12 +427,25 @@ final class RoomWalkMap {
                 int atlasY = item.getInt("atlasY");
                 int column = item.getInt("col");
                 int row = item.getInt("row");
+                int width = item.optInt("width", 16);
+                int height = item.optInt("height", 16);
                 String layer = item.getString("layer");
-                if (!"room_props_16.png".equals(atlas) || frame < 0
-                        || atlasX < 0 || atlasY < 0 || column < 0 || column >= 18
-                        || row < 0 || row >= 9) return Collections.emptyList();
+                boolean atlasProp = "room_props_16.png".equals(atlas)
+                        && frame >= 0 && atlasX >= 0 && atlasX < 4
+                        && atlasY >= 0 && atlasY < 4
+                        && width == 16 && height == 16;
+                boolean standaloneProp = "room_tactical_briefing_table.png".equals(atlas)
+                        && width > 0 && height > 0
+                        && width <= RoomViewport.LOGICAL_WIDTH
+                        && height <= RoomViewport.LOGICAL_HEIGHT;
+                if ((!atlasProp && !standaloneProp) || column < 0 || column >= 18
+                        || row < 0 || row >= 9
+                        || column * 16 + width > RoomViewport.LOGICAL_WIDTH
+                        || row * 16 + height > RoomViewport.LOGICAL_HEIGHT) {
+                    return Collections.emptyList();
+                }
                 result.add(new PropPlacement(item.getString("id"), frame,
-                        atlasX, atlasY, column, row, layer));
+                        atlasX, atlasY, column, row, width, height, atlas, layer));
             }
         } catch (Exception ignored) {
             return Collections.emptyList();
@@ -476,16 +489,22 @@ final class RoomWalkMap {
         final int atlasY;
         final int column;
         final int row;
+        final int width;
+        final int height;
+        final String atlas;
         final String layer;
 
         PropPlacement(String id, int atlasFrame, int atlasX, int atlasY,
-                      int column, int row, String layer) {
+                      int column, int row, int width, int height, String atlas, String layer) {
             this.id = id;
             this.atlasFrame = atlasFrame;
             this.atlasX = atlasX;
             this.atlasY = atlasY;
             this.column = column;
             this.row = row;
+            this.width = width;
+            this.height = height;
+            this.atlas = atlas;
             this.layer = layer;
         }
     }
