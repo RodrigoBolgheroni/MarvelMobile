@@ -1,4 +1,4 @@
-"""Build the slightly smaller two-room map and matching walk grid.
+"""Build the two-room map with smaller furniture and matching walk grid.
 
 Requires Pillow. This is deterministic processing of the existing project art;
 all collision and entity coordinates are checked against the exported map.
@@ -15,25 +15,15 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[2]
 RES = ROOT / "Marvel/app/src/main/res/drawable-nodpi"
 ASSETS = ROOT / "Marvel/app/src/main/assets/room"
+SMALL_FURNITURE_RAW = ROOT / "REFERENCIAS/room_two_rooms_small_furniture_raw.png"
 WIDTH, HEIGHT, CELL = 544, 272, 8
 COLUMNS, ROWS = WIDTH // CELL, HEIGHT // CELL
-SOURCE_WIDTH, SOURCE_HEIGHT = 576, 288
 
 
 def compose_map():
-    original = Image.open(RES / "room_map_288x144.png").convert("RGB")
-    assert original.size == (288, 144)
-    room = original.copy()
-
-    # Open the original center bulkhead, reusing floor pixels from each side.
-    for y in range(64, 89):
-        for x in range(132, 157):
-            floor_x = 125 + ((x - 132) % 7) if x < 144 else 158 + ((x - 144) % 7)
-            room.putpixel((x, y), original.getpixel((floor_x, y)))
-
-    # Previous rooms were 288x288. Both are now 272x272 (17/18 of that size).
-    # The same scale is applied horizontally and vertically to avoid stretching.
-    runtime = room.resize((WIDTH, HEIGHT), Image.Resampling.NEAREST)
+    raw = Image.open(SMALL_FURNITURE_RAW).convert("RGB")
+    assert raw.width == 2 * raw.height, "The edited room must remain exactly 2:1"
+    runtime = raw.resize((WIDTH, HEIGHT), Image.Resampling.NEAREST)
     runtime.save(RES / "room_map_544x272.png")
     runtime.resize((WIDTH * 3, HEIGHT * 3), Image.Resampling.NEAREST).save(
         ASSETS / "room_preview_stage_1632x816.png"
@@ -41,39 +31,31 @@ def compose_map():
 
 
 def build_navigation():
-    # Author collision at the earlier 576x288 scale, then sample it at each
-    # 8px target-cell center after the uniform 17/18 size reduction.
-    old = [[False] * 72 for _ in range(36)]
+    walk = [[False] * COLUMNS for _ in range(ROWS)]
 
     def set_rect(left, top, right, bottom, value):
         for row in range(top, bottom + 1):
             for col in range(left, right + 1):
-                old[row][col] = value
+                walk[row][col] = value
 
-    set_rect(5, 10, 34, 29, True)
-    set_rect(39, 10, 70, 29, True)
-    set_rect(35, 16, 38, 21, True)
-    # Briefing: sofa, holo-table and six seats.
-    set_rect(7, 15, 10, 24, False)
-    set_rect(13, 15, 29, 22, False)
-    for left, right in ((15, 17), (20, 22), (25, 27)):
+    # Interior and open central passage. Everything else is a solid wall.
+    set_rect(5, 9, 33, 28, True)
+    set_rect(37, 9, 64, 28, True)
+    set_rect(34, 15, 36, 20, True)
+    # Briefing: smaller sofa, holo-table and six chairs.
+    set_rect(5, 14, 6, 22, False)
+    set_rect(13, 15, 25, 19, False)
+    for left, right in ((15, 16), (19, 20), (23, 24)):
         set_rect(left, 12, right, 14, False)
-        set_rect(left, 23, right, 25, False)
-    # Laboratory: wall consoles, reactor, workbench and server banks.
+        set_rect(left, 20, right, 22, False)
+    # Laboratory: cabinets, upper desk, reactor, wall console and lower devices.
     for bounds in (
-        (40, 10, 48, 15), (54, 10, 69, 15),
-        (50, 17, 57, 22), (40, 25, 52, 29),
-        (65, 17, 70, 23), (62, 25, 69, 29),
+        (38, 9, 45, 10), (51, 9, 60, 11),
+        (47, 15, 51, 19), (60, 15, 64, 20),
+        (39, 24, 47, 28), (57, 23, 59, 28),
+        (62, 23, 64, 28),
     ):
         set_rect(*bounds, False)
-
-    walk = []
-    for row in range(ROWS):
-        source_row = min(35, int((row + 0.5) * 36 / ROWS))
-        walk.append([
-            old[source_row][min(71, int((col + 0.5) * 72 / COLUMNS))]
-            for col in range(COLUMNS)
-        ])
 
     def walkable(x, y):
         return walk[y // CELL][x // CELL]
@@ -83,7 +65,7 @@ def build_navigation():
         ("iron_man", 85, 200),
         ("captain_america", 231, 194),
         ("thor", 340, 167),
-        ("black_widow", 453, 196),
+        ("black_widow", 440, 115),
         ("hawkeye", 424, 209),
     ]
     clues = [
@@ -163,6 +145,9 @@ def build_navigation():
     assert len(reached) == sum(sum(row) for row in walk), "Floor is disconnected"
     assert all((item["approachCol"], item["approachRow"]) in reached
                for item in entities), "An interaction is unreachable"
+    assert all(walk[17][col] for col in range(34, 37)), "Passage is blocked"
+    assert all(not walk[10][col] for col in range(34, 37)), "Wall is passable"
+    assert not walk[17][19] and not walk[17][49], "Furniture collision is missing"
     assert any(col < 34 for col, _ in reached)
     assert any(col >= 37 for col, _ in reached)
     print(f"Map {WIDTH}x{HEIGHT}; {len(reached)} connected walk cells; 8 reachable approaches")
@@ -171,15 +156,16 @@ def build_navigation():
 def write_manifest():
     files = {
         "originalTwoRooms": RES / "room_map_288x144.png",
+        "editedFurnitureRaw": SMALL_FURNITURE_RAW,
         "runtimeMap": RES / "room_map_544x272.png",
         "walkMask": RES / "room_walkmap_68x34.png",
         "navigation": ASSETS / "room_walkmap.json",
         "preview": ASSETS / "room_preview_stage_1632x816.png",
     }
     manifest = {
-        "schemaVersion": 5,
-        "version": "original-two-rooms-slightly-smaller-v1",
-        "artSource": "Both rooms come from the original room_map_288x144.png. The center passage reuses neighboring floor pixels.",
+        "schemaVersion": 6,
+        "version": "original-two-rooms-smaller-furniture-v1",
+        "artSource": "The two-room art was edited with image_gen from room_map_544x272.png to shrink furniture while preserving the room footprint.",
         "world": {
             "logicalWidth": WIDTH, "logicalHeight": HEIGHT,
             "roomWidth": 272, "roomHeight": 272,

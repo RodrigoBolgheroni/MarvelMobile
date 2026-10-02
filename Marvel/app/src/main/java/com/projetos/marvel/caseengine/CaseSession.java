@@ -23,7 +23,7 @@ public final class CaseSession {
             "Disciplinado e ponderado, guiado por um forte senso de dever."),
         new CharacterDefinition("thor", "Thor", 340f / 544f, 167f / 272f,
             "Direto e cordial; demonstra orgulho e interpreta as palavras literalmente."),
-        new CharacterDefinition("black_widow", "Viúva Negra", 453f / 544f, 196f / 272f,
+        new CharacterDefinition("black_widow", "Viúva Negra", 440f / 544f, 115f / 272f,
             "Reservada e precisa, atenta a detalhes que outros deixam passar."),
         new CharacterDefinition("hawkeye", "Gavião Arqueiro", 424f / 544f, 209f / 272f,
             "Observador e pragmático; usa humor seco para aliviar a tensão.")

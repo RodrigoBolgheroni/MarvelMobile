@@ -1,7 +1,7 @@
 {
-  "schemaVersion": 5,
-  "version": "original-two-rooms-slightly-smaller-v1",
-  "artSource": "Both rooms come from the original room_map_288x144.png. The center passage reuses neighboring floor pixels.",
+  "schemaVersion": 6,
+  "version": "original-two-rooms-smaller-furniture-v1",
+  "artSource": "The two-room art was edited with image_gen from room_map_544x272.png to shrink furniture while preserving the room footprint.",
   "world": {
     "logicalWidth": 544,
     "logicalHeight": 272,
@@ -16,6 +16,7 @@
   "runtime": "RoomCanvasView draws the map and dynamic entities; RoomWalkMap reads room_walkmap.json.",
   "assets": {
     "originalTwoRooms": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+    "editedFurnitureRaw": "REFERENCIAS/room_two_rooms_small_furniture_raw.png",
     "runtimeMap": "Marvel/app/src/main/res/drawable-nodpi/room_map_544x272.png",
     "walkMask": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_68x34.png",
     "navigation": "Marvel/app/src/main/assets/room/room_walkmap.json",
@@ -23,9 +24,10 @@
   },
   "sha256": {
     "originalTwoRooms": "4c0cf2c7a033609dab3218cafbba6d9cdce8292ac016fc701e5ab9408a94d335",
-    "runtimeMap": "5210ce49d13a2088008b4cf59032cda1d28e682a9d41b8c5da1d9ea7c1c8964e",
-    "walkMask": "71d3357792b5509dae9da985be095186fe597803a5f75a85b79cde59e7a9f030",
-    "navigation": "cc25022ce341b6b1209d8db28940d1fafc29ef4d322725ae8cec8d50a2895014",
-    "preview": "f53559adc5e6b12864a67a617c86163906a11a21f3b7bdb3d141b77027c4167e"
+    "editedFurnitureRaw": "d8d73d0651e165d03b409fd3336ee42eb5df2e1e11ac381888524ade2efb2d88",
+    "runtimeMap": "c9d087a6274542b7e2bd703a531495139e69e72560214c89927506c61da132e7",
+    "walkMask": "8cb01a0148781a6f7e4950fadfdafc4b37f209f451d46348f874fc249ed56aa6",
+    "navigation": "bf1924504194f9545b9212a4a8ec8ecc503557b1a370c576585fdc66c02fbb74",
+    "preview": "5e10a38dd27d6f9fc0b57ff20caac6ab0940195190c66cb6226c47c1dfe6c37e"
   }
 }
