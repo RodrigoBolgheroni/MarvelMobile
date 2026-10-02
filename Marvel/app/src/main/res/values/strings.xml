@@ -42,6 +42,8 @@
     <string name="room_badge_seal_trace">SELO</string>
     <string name="room_badge_reagent_sample">REAG</string>
     <string name="room_no_path">Não há caminho livre até esse ponto.</string>
+    <string name="room_move_closer_character">Aproxime-se do personagem para conversar.</string>
+    <string name="room_move_closer_clue">Aproxime-se da pista para examinar.</string>
     <string name="case_notebook_description">Abrir caderno do caso</string>
     <string name="hotbar_loupe_description">Abrir acusa&#231;&#227;o e escolher suspeito</string>
     <string name="hotbar_clue_description">Abrir detalhes da pista: %1$s</string>

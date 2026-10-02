@@ -734,7 +734,9 @@ public final class RoomCanvasView extends View {
             float footY = anchor.y;
             float width = Math.max(targetSize, 16f * scale);
             float height = Math.max(targetSize, 24f * scale);
-            float centerY = footY;
+            // The sprite is drawn from footY - 23 to footY + 1 logical pixels.
+            // Centering the hitbox on the feet made taps on its head hit the floor.
+            float centerY = footY - 11f * scale;
             RectF bounds = new RectF(anchorX - width / 2f, centerY - height / 2f,
                     anchorX + width / 2f, centerY + height / 2f);
             if (!bounds.contains(screenX, screenY)) continue;

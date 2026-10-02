@@ -248,7 +248,7 @@ public final class RoomFlowController {
             return;
         }
         if (!isNear(character.getX(), character.getY())) {
-            walkToApproach(character.getId());
+            showRoomFeedback(R.string.room_move_closer_character);
             return;
         }
         try {
@@ -262,7 +262,7 @@ public final class RoomFlowController {
 
     private void handleClueTap(ClueView clue) {
         if (!isNear(clue.getX(), clue.getY())) {
-            walkToApproach(clue.getId());
+            showRoomFeedback(R.string.room_move_closer_clue);
             return;
         }
         try {
@@ -333,18 +333,6 @@ public final class RoomFlowController {
         RoomViewState state = session.getRoomViewState();
         return RoomViewport.withinInteractionRange(
                 state.getPlayer().getX(), state.getPlayer().getY(), x, y);
-    }
-
-    private void walkToApproach(String targetId) {
-        RoomWalkMap.Cell approach = walkMap.approachFor(targetId);
-        if (approach == null) {
-            showRoomFeedback(R.string.room_no_path);
-            return;
-        }
-        RoomViewState state = session.getRoomViewState();
-        List<PointF> path = walkMap.pathToCell(
-                state.getPlayer().getX(), state.getPlayer().getY(), approach);
-        animateWalk(path);
     }
 
     private void walkToNormalized(float x, float y) {
