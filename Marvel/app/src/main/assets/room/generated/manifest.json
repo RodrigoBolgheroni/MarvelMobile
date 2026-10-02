@@ -1,0 +1,29 @@
+{
+  "name": "command-room-visual-concept",
+  "artStyle": "original top-down pixel art, dark steel with cyan and amber accents",
+  "references": [
+    "REFERENCIAS/07-referencia-assets-modulares-base-heroica.png",
+    "REFERENCIAS/08-referencia-composicao-sala-base-heroica.png",
+    "REFERENCIAS/09-referencia-mobiliario-base-heroica.png"
+  ],
+  "scene": {
+    "source": "command_room_concept_source.png",
+    "sourceDimensions": [1774, 887],
+    "preview": "command_room_concept_preview_288x144.png",
+    "previewDimensions": [288, 144],
+    "scaledPreview": "command_room_concept_preview_864x432.png",
+    "status": "visual concept only; furniture is baked into the preview, so do not use it as the layered runtime map"
+  },
+  "sprite": {
+    "name": "tactical_briefing_table",
+    "source": "tactical_briefing_table_source.png",
+    "trimmed": "tactical_briefing_table_trimmed.png",
+    "export": "tactical_briefing_table_80x48.png",
+    "exportDimensions": [80, 48],
+    "alpha": true,
+    "intendedLogicalSize": [80, 48],
+    "anchor": "bottom-center",
+    "status": "standalone prop asset; runtime integration not performed"
+  },
+  "generation": "OpenAI image_gen; prompts saved alongside the outputs"
+}
