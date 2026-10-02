@@ -17,15 +17,15 @@ public final class CaseSession {
     private static final String UNEXAMINED_DESCRIPTION = "Ainda não examinada.";
 
     private static final CharacterDefinition[] ROSTER = {
-        new CharacterDefinition("iron_man", "Homem de Ferro", 0.0787037f, 0.5833333f,
+        new CharacterDefinition("iron_man", "Homem de Ferro", 90f / 864f, 212f / 288f,
             "Confiante e sarcástico; costuma explicar situações como se fossem um cálculo."),
-        new CharacterDefinition("captain_america", "Capitão América", 0.25462964f, 0.6944444f,
+        new CharacterDefinition("captain_america", "Capitão América", 245f / 864f, 205f / 288f,
             "Disciplinado e ponderado, guiado por um forte senso de dever."),
-        new CharacterDefinition("thor", "Thor", 0.4212963f, 0.5833333f,
+        new CharacterDefinition("thor", "Thor", 360f / 864f, 177f / 288f,
             "Direto e cordial; demonstra orgulho e interpreta as palavras literalmente."),
-        new CharacterDefinition("black_widow", "Viúva Negra", 0.5972222f, 0.6944444f,
+        new CharacterDefinition("black_widow", "Viúva Negra", 480f / 864f, 207f / 288f,
             "Reservada e precisa, atenta a detalhes que outros deixam passar."),
-        new CharacterDefinition("hawkeye", "Gavião Arqueiro", 0.837963f, 0.5833333f,
+        new CharacterDefinition("hawkeye", "Gavião Arqueiro", 660f / 864f, 205f / 288f,
             "Observador e pragmático; usa humor seco para aliviar a tensão.")
     };
 
@@ -204,8 +204,8 @@ public final class CaseSession {
         private final Map<String, int[]> signatures;
         private final String culpritId;
         private final Set<String> examinedClueIds = new HashSet<>();
-        private float playerX = 0.097222224f;
-        private float playerY = 0.8055556f;
+        private float playerX = 70f / 864f;
+        private float playerY = 220f / 288f;
         private AccusationResult accusationResult;
 
         private CaseFile(List<CharacterData> characters, String victimId, List<String> suspectIds,
@@ -249,7 +249,11 @@ public final class CaseSession {
 
             List<ClueData> clues = new ArrayList<>();
             String[] clueIds = {"clue_access_log", "clue_seal_trace", "clue_reagent_sample"};
-            float[][] cluePositions = {{0.18055555f, 0.8055556f}, {0.5138889f, 0.4722222f}, {0.875f, 0.75f}};
+            float[][] cluePositions = {
+                {180f / 864f, 219f / 288f},
+                {510f / 864f, 188f / 288f},
+                {785f / 864f, 203f / 288f}
+            };
             int[] culpritSignature = signatures.get(culpritId);
             String[][] chosenLabels = new String[3][];
             for (int index = 0; index < 3; index++) {

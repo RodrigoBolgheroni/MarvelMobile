@@ -1,21 +1,9 @@
-# Avengers Room — três cômodos conectados
+# Arte e navegação do mapa de três salas
 
-O ambiente usa pixel art top-down em escala nativa. O mapa contém três cômodos grandes de 288x144 px lógicos — briefing, laboratório e arsenal/diagnóstico — conectados por duas passagens. A câmera acompanha o jogador com movimento contínuo; no centro de cada cômodo ela mostra o ambiente inteiro, e durante a travessia deixa a porta vizinha visível. A proporção é preservada em paisagem e retrato.
+As duas salas da esquerda preservam o mapa detalhado original em `res/drawable-nodpi/room_map_288x144.png`. A terceira, Arquivo de Evidências, foi gerada por `image_gen` com o mapa original como referência. A imagem bruta e o prompt exato estão em `REFERENCIAS/room_archives_generated.png` e `REFERENCIAS/room_archives_generated.prompt.txt`.
 
-## Referências consultadas
+`Marvel/tools/build_three_room_map.py` compõe as três salas, abre as duas passagens, amplia a arte inteira em 2x por nearest-neighbor e gera `room_map_864x288.png`. Nenhuma sala é esticada em um único eixo. O script também gera `room_walkmap.json`, a máscara de colisão `room_walkmap_108x36.png`, a prévia e os hashes do manifesto.
 
-- `REFERENCIAS/07-referencia-assets-modulares-base-heroica.png`: painéis, paredes e consoles.
-- `REFERENCIAS/08-referencia-composicao-sala-base-heroica.png`: proporção e leitura de cômodo fechado.
-- `REFERENCIAS/09-referencia-mobiliario-base-heroica.png`: móveis e distribuição do interior.
-- `assets/room/generated/command_room_two_rooms_source.png`: conceito original como guia visual; não é o mapa runtime.
+Cada cômodo ocupa 288x288 pixels lógicos. A câmera mostra uma janela de 288x144 pixels e acompanha o jogador na horizontal e na vertical; no retrato, essa janela gira mantendo a proporção. Paredes e móveis são bloqueados por células de 8 pixels. As duas portas ficam abertas visualmente e na malha de caminhada, com percurso de ida e volta entre as três salas. O script valida que os cinco personagens e as três pistas podem ser alcançados a partir do ponto inicial.
 
-## Contrato de renderização
-
-- A base runtime é `res/drawable-nodpi/room_map_864x144.png`, composta com tiles e móveis na escala original de 16 px.
-- O mapa global tem 864x144 px lógicos; cada sala mede 288x144 px.
-- A navegação usa células de 8 px, em grade global de 108x18.
-- A câmera mostra uma sala por vez. As duas portas internas precisam estar abertas tanto na imagem quanto em `wallCells`/`walkableRows`, permitindo caminhar nos dois sentidos.
-- Personagens, pistas e móvel collision usam coordenadas globais normalizadas. Todos os pontos de aproximação precisam ser alcançáveis desde o spawn.
-- Em orientação retrato, a sala é girada; o renderer usa escala uniforme e nearest-neighbor para preservar sprites e tiles sem deformação.
-- `room_walkmap.json` é a fonte de verdade para tilemap, personagens, pistas, cômodos, móveis e colisões.
-- Prévia: `room_preview_stage_2592x432.png`, ampliada 3x por nearest-neighbor do mapa runtime.
+Os personagens e as pistas são desenhados dinamicamente sobre a arte. Seus pontos de aproximação ficam em `room_walkmap.json`; as posições do caso ficam em `CaseSession.java`.

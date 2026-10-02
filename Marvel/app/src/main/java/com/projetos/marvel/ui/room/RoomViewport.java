@@ -5,22 +5,21 @@ import android.graphics.RectF;
 
 import com.projetos.marvel.caseengine.RoomInteractionRange;
 
-/** Shared logical-room transforms and interaction metric for rendering and touch. */
+/** World-to-screen mapping for a three-room map with a two-axis following camera. */
 final class RoomViewport {
     static final float LOGICAL_WIDTH = RoomInteractionRange.LOGICAL_WIDTH;
     static final float LOGICAL_HEIGHT = RoomInteractionRange.LOGICAL_HEIGHT;
     static final float ROOM_WIDTH = 288f;
-    static final float ROOM_HEIGHT = LOGICAL_HEIGHT;
+    static final float ROOM_HEIGHT = 144f;
     static final int ROOM_COUNT = 3;
 
     private RoomViewport() { }
 
-    /** Full-stage transform keeps the room edge-to-edge in either orientation. */
     static RectF mapRect(float stageWidth, float stageHeight) {
         return mapRect(stageWidth, stageHeight, false);
     }
 
-    /** Fits one room inside the canvas while preserving the native pixel-art aspect ratio. */
+    /** Keeps the viewport's 2:1 pixels square in either screen orientation. */
     static RectF mapRect(float stageWidth, float stageHeight, boolean rotateForPortrait) {
         if (stageWidth <= 0f || stageHeight <= 0f) return new RectF();
         float scale = Math.min(stageWidth / displayWidth(rotateForPortrait),
@@ -47,9 +46,14 @@ final class RoomViewport {
 
     static float cameraLeft(float normalizedX) {
         float playerX = clamp(normalizedX) * LOGICAL_WIDTH;
-        float left = Math.max(0f, Math.min(LOGICAL_WIDTH - ROOM_WIDTH,
-                playerX - ROOM_WIDTH / 2f));
-        return Math.round(left);
+        return Math.round(Math.max(0f, Math.min(LOGICAL_WIDTH - ROOM_WIDTH,
+                playerX - ROOM_WIDTH / 2f)));
+    }
+
+    static float cameraTop(float normalizedY) {
+        float playerY = clamp(normalizedY) * LOGICAL_HEIGHT;
+        return Math.round(Math.max(0f, Math.min(LOGICAL_HEIGHT - ROOM_HEIGHT,
+                playerY - ROOM_HEIGHT / 2f)));
     }
 
     static float scale(RectF rect, boolean rotateForPortrait) {
@@ -66,60 +70,37 @@ final class RoomViewport {
         return height <= 0f ? 0f : rect.height() / height;
     }
 
-    /** World-normalized anchor mapped into display-plane logical pixels. */
     static PointF displayPoint(float normalizedX, float normalizedY,
-                               boolean rotateForPortrait, float cameraLeft) {
+                               boolean rotateForPortrait, float cameraLeft, float cameraTop) {
         float localX = normalizedX * LOGICAL_WIDTH - cameraLeft;
-        float localY = normalizedY * LOGICAL_HEIGHT;
-        if (rotateForPortrait) {
-            return new PointF(ROOM_HEIGHT - localY, localX);
-        }
+        float localY = normalizedY * LOGICAL_HEIGHT - cameraTop;
+        if (rotateForPortrait) return new PointF(ROOM_HEIGHT - localY, localX);
         return new PointF(localX, localY);
     }
 
-    /** Converts a world-normalized anchor into physical screen pixels. */
     static PointF screenPoint(RectF rect, float normalizedX, float normalizedY,
-                              boolean rotateForPortrait, float cameraLeft) {
-        PointF displayPoint = displayPoint(normalizedX, normalizedY,
-                rotateForPortrait, cameraLeft);
-        return new PointF(
-                rect.left + displayPoint.x * scaleX(rect, rotateForPortrait),
-                rect.top + displayPoint.y * scaleY(rect, rotateForPortrait));
+                              boolean rotateForPortrait, float cameraLeft, float cameraTop) {
+        PointF point = displayPoint(normalizedX, normalizedY,
+                rotateForPortrait, cameraLeft, cameraTop);
+        return new PointF(rect.left + point.x * scaleX(rect, rotateForPortrait),
+                rect.top + point.y * scaleY(rect, rotateForPortrait));
     }
 
-    /** Inverse screen mapping used before floor taps enter the unchanged logical walkmap. */
     static PointF normalizedPoint(RectF rect, float screenX, float screenY,
-                                  boolean rotateForPortrait, float cameraLeft) {
+                                  boolean rotateForPortrait, float cameraLeft, float cameraTop) {
         if (rect.width() <= 0f || rect.height() <= 0f) return new PointF();
         float displayX = clamp((screenX - rect.left) / rect.width());
         float displayY = clamp((screenY - rect.top) / rect.height());
         if (rotateForPortrait) {
-            return new PointF((cameraLeft + displayY * ROOM_WIDTH)
-                    / LOGICAL_WIDTH, 1f - displayX);
+            return new PointF((cameraLeft + displayY * ROOM_WIDTH) / LOGICAL_WIDTH,
+                    (cameraTop + (1f - displayX) * ROOM_HEIGHT) / LOGICAL_HEIGHT);
         }
-        return new PointF((cameraLeft + displayX * ROOM_WIDTH)
-                / LOGICAL_WIDTH, displayY);
+        return new PointF((cameraLeft + displayX * ROOM_WIDTH) / LOGICAL_WIDTH,
+                (cameraTop + displayY * ROOM_HEIGHT) / LOGICAL_HEIGHT);
     }
 
-    /** Logical coordinate that determines front-to-back order in the displayed orientation. */
     static float screenDepth(float normalizedX, float normalizedY, boolean rotateForPortrait) {
         return rotateForPortrait ? normalizedX : normalizedY;
-    }
-
-    static float screenX(RectF rect, float normalizedX) {
-        return rect.left + rect.width() * normalizedX;
-    }
-
-    static float screenY(RectF rect, float normalizedY) {
-        return rect.top + rect.height() * normalizedY;
-    }
-
-    static float normalizedX(RectF rect, float screenX) {
-        return rect.width() <= 0f ? 0f : clamp((screenX - rect.left) / rect.width());
-    }
-
-    static float normalizedY(RectF rect, float screenY) {
-        return rect.height() <= 0f ? 0f : clamp((screenY - rect.top) / rect.height());
     }
 
     static float worldDistanceSquared(float x1, float y1, float x2, float y2) {
@@ -132,7 +113,5 @@ final class RoomViewport {
 
     static float interactionRadiusSquared() { return RoomInteractionRange.radiusSquared(); }
 
-    private static float clamp(float value) {
-        return Math.max(0f, Math.min(1f, value));
-    }
+    private static float clamp(float value) { return Math.max(0f, Math.min(1f, value)); }
 }

@@ -1,286 +1,35 @@
 {
-  "schemaVersion": 3,
-  "version": "room-environment-three-native-scale-rooms-v1",
-  "origin": {
-    "art": "Composição original feita com tiles, props e mesa do projeto; referências visuais seguem em REFERENCIAS/.",
-    "appIntegration": "Três cômodos conectados em um mapa global 864x144. A câmera acompanha o jogador com rolagem contínua e preserva a escala dos pixels; personagens e pistas são independentes."
-  },
+  "schemaVersion": 4,
+  "version": "original-two-rooms-plus-archives-v1",
+  "artSource": "The first two rooms are from room_map_288x144.png; the third is image-generated from that reference. Door openings reuse neighboring floor pixels.",
   "world": {
     "logicalWidth": 864,
-    "logicalHeight": 144,
+    "logicalHeight": 288,
     "roomWidth": 288,
-    "roomHeight": 144,
-    "roomCount": 3,
-    "artTileSize": 16,
-    "artColumns": 54,
-    "artRows": 9,
-    "navCellSize": 8,
+    "roomHeight": 288,
+    "cameraWidth": 288,
+    "cameraHeight": 144,
     "navColumns": 108,
-    "navRows": 18,
-    "orientations": [
-      "landscape",
-      "portrait"
-    ],
-    "aspectRatioPreserved": true,
-    "camera": "player-following horizontal scroll, clamped at outer edges"
+    "navRows": 36,
+    "navCellSize": 8
   },
-  "rooms": [
-    {
-      "id": "briefing",
-      "name": "Sala de briefing",
-      "tiles": {
-        "left": 0,
-        "top": 0,
-        "right": 17,
-        "bottom": 8
-      },
-      "walkableInterior": [
-        1,
-        1,
-        16,
-        7
-      ]
-    },
-    {
-      "id": "lab",
-      "name": "LaboratÃ³rio",
-      "tiles": {
-        "left": 18,
-        "top": 0,
-        "right": 35,
-        "bottom": 8
-      },
-      "walkableInterior": [
-        19,
-        1,
-        34,
-        7
-      ]
-    },
-    {
-      "id": "armory",
-      "name": "Arsenal e diagnÃ³stico",
-      "tiles": {
-        "left": 36,
-        "top": 0,
-        "right": 53,
-        "bottom": 8
-      },
-      "walkableInterior": [
-        37,
-        1,
-        52,
-        7
-      ]
-    }
-  ],
-  "connections": [
-    {
-      "id": "briefing_to_lab_bulkhead",
-      "tiles": [
-        [
-          17,
-          4
-        ],
-        [
-          17,
-          5
-        ],
-        [
-          18,
-          4
-        ],
-        [
-          18,
-          5
-        ]
-      ],
-      "navCells": [
-        [
-          34,
-          8
-        ],
-        [
-          34,
-          9
-        ],
-        [
-          34,
-          10
-        ],
-        [
-          34,
-          11
-        ],
-        [
-          35,
-          8
-        ],
-        [
-          35,
-          9
-        ],
-        [
-          35,
-          10
-        ],
-        [
-          35,
-          11
-        ],
-        [
-          36,
-          8
-        ],
-        [
-          36,
-          9
-        ],
-        [
-          36,
-          10
-        ],
-        [
-          36,
-          11
-        ],
-        [
-          37,
-          8
-        ],
-        [
-          37,
-          9
-        ],
-        [
-          37,
-          10
-        ],
-        [
-          37,
-          11
-        ]
-      ],
-      "type": "open_passage"
-    },
-    {
-      "id": "lab_to_armory_bulkhead",
-      "tiles": [
-        [
-          35,
-          4
-        ],
-        [
-          35,
-          5
-        ],
-        [
-          36,
-          4
-        ],
-        [
-          36,
-          5
-        ]
-      ],
-      "navCells": [
-        [
-          70,
-          8
-        ],
-        [
-          70,
-          9
-        ],
-        [
-          70,
-          10
-        ],
-        [
-          70,
-          11
-        ],
-        [
-          71,
-          8
-        ],
-        [
-          71,
-          9
-        ],
-        [
-          71,
-          10
-        ],
-        [
-          71,
-          11
-        ],
-        [
-          72,
-          8
-        ],
-        [
-          72,
-          9
-        ],
-        [
-          72,
-          10
-        ],
-        [
-          72,
-          11
-        ],
-        [
-          73,
-          8
-        ],
-        [
-          73,
-          9
-        ],
-        [
-          73,
-          10
-        ],
-        [
-          73,
-          11
-        ]
-      ],
-      "type": "open_passage"
-    }
-  ],
-  "collision": {
-    "source": "room_walkmap.json",
-    "wallFurnitureAndClueCellsBlock": true,
-    "reachableCellsFromSpawn": 1257,
-    "allCharacterAndClueApproachesReachable": true,
-    "doorsBidirectional": true
-  },
-  "runtimeAssets": {
-    "map": "Marvel/app/src/main/res/drawable-nodpi/room_map_864x144.png",
-    "walkMaskFallback": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_108x18.png",
-    "tileAtlas": "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png",
-    "propAtlas": "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png",
-    "metadata": "Marvel/app/src/main/assets/room/room_walkmap.json"
-  },
-  "preview": {
-    "file": "Marvel/app/src/main/assets/room/room_preview_stage_2592x432.png",
-    "scale": 3,
-    "sampling": "nearest-neighbor",
-    "dynamicEntitiesIncluded": false
+  "runtime": "RoomCanvasView draws the baked map and dynamic characters/clues; RoomWalkMap reads room_walkmap.json.",
+  "assets": {
+    "originalTwoRooms": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
+    "generatedThirdRoom": "REFERENCIAS/room_archives_generated.png",
+    "thirdRoomNative": "Marvel/app/src/main/res/drawable-nodpi/room_archives_144x144.png",
+    "runtimeMap": "Marvel/app/src/main/res/drawable-nodpi/room_map_864x288.png",
+    "walkMask": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_108x36.png",
+    "navigation": "Marvel/app/src/main/assets/room/room_walkmap.json",
+    "preview": "Marvel/app/src/main/assets/room/room_preview_stage_2592x864.png"
   },
   "sha256": {
-    "prompts.md": "32136e70f494989df28c794a82e50abea62561d4f3f11e68b1235d52bc501c60",
-    "room_walkmap.json": "991590394677ea92a56e061acc0f032c770eef34613a5aaa551e023b76b2a664",
-    "Marvel/app/src/main/res/drawable-nodpi/room_tiles_16.png": "278884ff430a494255691647ec7a42333ab32a8a654e64433311a2e448c2c64b",
-    "Marvel/app/src/main/res/drawable-nodpi/room_props_16.png": "a5c34562766ed316f48a2a86f504fe1ba77e350c329906f55d856ee16a1fc822",
-    "Marvel/app/src/main/res/drawable-nodpi/room_tactical_briefing_table.png": "8df4684bec16118e434f8cc20526ecf77690c1d4f0401c39b9ba955cab1ec3ca",
-    "Marvel/app/src/main/res/drawable-nodpi/room_map_864x144.png": "9e636280fe3392ede21dd4e0ae26354537b0b9c589e2c7fac1abb5ab586a1515",
-    "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_108x18.png": "550b79b4f90ba87a3e0b39534c401dd9af286aef775ef7a3c15e706f6638baf6",
-    "room_preview_stage_2592x432.png": "139a7008cf327f26c4c33cc6cfcdacdee6787f6e5128ada7b7d2d3213f81a462"
-  },
-  "manifestSha256Note": "Manifest is not self-hashed."
+    "originalTwoRooms": "4c0cf2c7a033609dab3218cafbba6d9cdce8292ac016fc701e5ab9408a94d335",
+    "generatedThirdRoom": "19bbf1dea1d0773a74895d430753b7e9a2f9b22aca68f7bd329a192eaf08bfd3",
+    "thirdRoomNative": "6072ee5a32afac2c9a4cff188d9ad34a494bc1be11fcce33090741863c914a69",
+    "runtimeMap": "8c887700164701e9724742fc38437819c4838c3cf4078ab35e42659a4efb9dcd",
+    "walkMask": "3eb4aec5304e3e4081801a2f144eeb9cd821f7a165a3ae1fb0812d5365cac18e",
+    "navigation": "b08fafc47cc65a4fe08d636f78192b0b891ed1648c2b766e522765fda4f5a91c",
+    "preview": "5338da21d8bdf1d51c5f77e2c43de434f42269f9d1e3be8bc89f8c86419e3b41"
+  }
 }

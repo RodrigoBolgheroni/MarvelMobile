@@ -3,7 +3,7 @@ package com.projetos.marvel.caseengine;
 /** Shared logical room dimensions and interaction range for rendering and case actions. */
 public final class RoomInteractionRange {
     public static final float LOGICAL_WIDTH = 864f;
-    public static final float LOGICAL_HEIGHT = 144f;
+    public static final float LOGICAL_HEIGHT = 288f;
     private static final float RADIUS = 24f;
     private static final float RADIUS_SQUARED = RADIUS * RADIUS;
 

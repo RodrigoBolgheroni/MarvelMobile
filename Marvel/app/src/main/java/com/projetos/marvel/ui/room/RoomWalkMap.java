@@ -23,16 +23,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
-/** 4-connected navigation over the 108x18, 8px-per-cell three-room floor grid. */
+/** 4-connected navigation over the 108x36, 8px-per-cell three-room floor grid. */
 final class RoomWalkMap {
     static final int COLUMNS = 108;
-    static final int ROWS = 18;
+    static final int ROWS = 36;
     static final float CELL_SIZE = 8f;
 
     private static final int DEFAULT_MIN_COLUMN = 2;
     private static final int DEFAULT_MAX_COLUMN = COLUMNS - 3;
     private static final int DEFAULT_MIN_ROW = 2;
-    private static final int DEFAULT_MAX_ROW = 15;
+    private static final int DEFAULT_MAX_ROW = 33;
     private static final int[] DC = {0, -1, 1, 0};
     private static final int[] DR = {-1, 0, 0, 1};
 
@@ -262,7 +262,7 @@ final class RoomWalkMap {
     }
 
     private static Bitmap loadMask(Context context) {
-        int id = context.getResources().getIdentifier("room_walkmap_108x18", "drawable",
+        int id = context.getResources().getIdentifier("room_walkmap_108x36", "drawable",
                 context.getPackageName());
         if (id == 0) return null;
         Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), id);
@@ -326,7 +326,7 @@ final class RoomWalkMap {
             if (root.getInt("navCellSize") != 8
                     || root.getInt("navColumns") != COLUMNS
                     || root.getInt("navRows") != ROWS
-                    || !"4-neighbor; spawn connects to all eight character and clue approach cells across three rooms"
+                    || !"4-neighbor; three rooms, two open passages, eight reachable approaches"
                     .equals(root.getString("connectivity"))) {
                 return null;
             }
