@@ -23,7 +23,7 @@ import java.util.List;
  * that character's prior chat turns, and the new user message.
  */
 public final class FirebaseInterviewSender implements InterviewSender {
-    private static final String MODEL_NAME = "gemini-3.8-flash";
+    private static final String MODEL_NAME = "gemini-3.5-flash-lite";
     private static final String RETRYABLE_FAILURE =
             "Falha ao consultar o Gemini. Verifique a conexao e tente novamente.";
 
