@@ -1,35 +1,31 @@
 {
-  "schemaVersion": 4,
-  "version": "original-two-rooms-plus-archives-v1",
-  "artSource": "The first two rooms are from room_map_288x144.png; the third is image-generated from that reference. Door openings reuse neighboring floor pixels.",
+  "schemaVersion": 5,
+  "version": "original-two-rooms-slightly-smaller-v1",
+  "artSource": "Both rooms come from the original room_map_288x144.png. The center passage reuses neighboring floor pixels.",
   "world": {
-    "logicalWidth": 864,
-    "logicalHeight": 288,
-    "roomWidth": 288,
-    "roomHeight": 288,
+    "logicalWidth": 544,
+    "logicalHeight": 272,
+    "roomWidth": 272,
+    "roomHeight": 272,
     "cameraWidth": 288,
     "cameraHeight": 144,
-    "navColumns": 108,
-    "navRows": 36,
+    "navColumns": 68,
+    "navRows": 34,
     "navCellSize": 8
   },
-  "runtime": "RoomCanvasView draws the baked map and dynamic characters/clues; RoomWalkMap reads room_walkmap.json.",
+  "runtime": "RoomCanvasView draws the map and dynamic entities; RoomWalkMap reads room_walkmap.json.",
   "assets": {
     "originalTwoRooms": "Marvel/app/src/main/res/drawable-nodpi/room_map_288x144.png",
-    "generatedThirdRoom": "REFERENCIAS/room_archives_generated.png",
-    "thirdRoomNative": "Marvel/app/src/main/res/drawable-nodpi/room_archives_144x144.png",
-    "runtimeMap": "Marvel/app/src/main/res/drawable-nodpi/room_map_864x288.png",
-    "walkMask": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_108x36.png",
+    "runtimeMap": "Marvel/app/src/main/res/drawable-nodpi/room_map_544x272.png",
+    "walkMask": "Marvel/app/src/main/res/drawable-nodpi/room_walkmap_68x34.png",
     "navigation": "Marvel/app/src/main/assets/room/room_walkmap.json",
-    "preview": "Marvel/app/src/main/assets/room/room_preview_stage_2592x864.png"
+    "preview": "Marvel/app/src/main/assets/room/room_preview_stage_1632x816.png"
   },
   "sha256": {
     "originalTwoRooms": "4c0cf2c7a033609dab3218cafbba6d9cdce8292ac016fc701e5ab9408a94d335",
-    "generatedThirdRoom": "19bbf1dea1d0773a74895d430753b7e9a2f9b22aca68f7bd329a192eaf08bfd3",
-    "thirdRoomNative": "6072ee5a32afac2c9a4cff188d9ad34a494bc1be11fcce33090741863c914a69",
-    "runtimeMap": "8c887700164701e9724742fc38437819c4838c3cf4078ab35e42659a4efb9dcd",
-    "walkMask": "3eb4aec5304e3e4081801a2f144eeb9cd821f7a165a3ae1fb0812d5365cac18e",
-    "navigation": "b08fafc47cc65a4fe08d636f78192b0b891ed1648c2b766e522765fda4f5a91c",
-    "preview": "5338da21d8bdf1d51c5f77e2c43de434f42269f9d1e3be8bc89f8c86419e3b41"
+    "runtimeMap": "5210ce49d13a2088008b4cf59032cda1d28e682a9d41b8c5da1d9ea7c1c8964e",
+    "walkMask": "71d3357792b5509dae9da985be095186fe597803a5f75a85b79cde59e7a9f030",
+    "navigation": "cc25022ce341b6b1209d8db28940d1fafc29ef4d322725ae8cec8d50a2895014",
+    "preview": "f53559adc5e6b12864a67a617c86163906a11a21f3b7bdb3d141b77027c4167e"
   }
 }

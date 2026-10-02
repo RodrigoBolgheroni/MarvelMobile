@@ -5,13 +5,13 @@ import android.graphics.RectF;
 
 import com.projetos.marvel.caseengine.RoomInteractionRange;
 
-/** World-to-screen mapping for a three-room map with a two-axis following camera. */
+/** World-to-screen mapping for two connected rooms and a two-axis following camera. */
 final class RoomViewport {
     static final float LOGICAL_WIDTH = RoomInteractionRange.LOGICAL_WIDTH;
     static final float LOGICAL_HEIGHT = RoomInteractionRange.LOGICAL_HEIGHT;
     static final float ROOM_WIDTH = 288f;
     static final float ROOM_HEIGHT = 144f;
-    static final int ROOM_COUNT = 3;
+    static final int ROOM_COUNT = 2;
 
     private RoomViewport() { }
 

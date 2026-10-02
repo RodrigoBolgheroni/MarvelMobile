@@ -13,7 +13,7 @@ Este documento registra o plano. A implementação e as contas de API ainda não
 | Entrega principal | Vídeo de uma partida completa e protótipo Android jogável |
 | Prazo | Cinco dias de trabalho |
 | Plataforma | Android, Java, interfaces em XML, orientação horizontal e vertical |
-| Sala | Três cômodos 2D conectados; a câmera mostra um cômodo ampliado por vez; paredes e móveis bloqueiam a caminhada |
+| Sala | Dois cômodos 2D conectados, ligeiramente menores; a câmera acompanha a exploração; paredes e móveis bloqueiam a caminhada |
 | Elenco inicial | Homem de Ferro, Capitão América, Thor, Viúva Negra e Gavião Arqueiro |
 | Variação | Os cinco personagens permanecem; vítima e assassino mudam a cada partida. No MVP, o mesmo modelo de pistas pode ser reutilizado |
 | Conversas | Gemini ao vivo é obrigatório na demonstração |

@@ -89,7 +89,7 @@ public final class RoomCanvasView extends View {
         textPaint.setTypeface(Typeface.create("monospace", Typeface.BOLD));
         textPaint.setTextAlign(Paint.Align.CENTER);
         textPaint.setTextSize(12f * scaledDensity);
-        roomMap = loadDrawableBitmap("room_map_864x288");
+        roomMap = loadDrawableBitmap("room_map_544x272");
         roomTiles = loadDrawableBitmap("room_tiles_16");
         roomProps = loadDrawableBitmap("room_props_16");
         briefingTable = loadDrawableBitmap("room_tactical_briefing_table");
