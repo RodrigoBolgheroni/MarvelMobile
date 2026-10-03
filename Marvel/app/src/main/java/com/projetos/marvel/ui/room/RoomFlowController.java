@@ -20,6 +20,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -63,6 +64,7 @@ public final class RoomFlowController {
     private final Map<String, List<InterviewSender.ChatTurn>> histories = new HashMap<>();
     private final Map<String, InterviewDossier> knownDossiers = new HashMap<>();
     private final Map<String, PendingInterview> pending = new HashMap<>();
+    private final Map<Integer, Bitmap> clueSlotBitmaps = new HashMap<>();
     private final Set<String> inFlight = new HashSet<>();
     private RoomCanvasView canvas;
     private RoomWalkMap walkMap;
@@ -84,11 +86,12 @@ public final class RoomFlowController {
     private String selectedSuspectId;
     private int hotbarClueScrollX;
     private boolean retainedAccusationDialog;
-    private TextView activeTranscript;
+    private LinearLayout activeTranscript;
     private ScrollView activeTranscriptScroll;
     private TextView activeInterviewStatus;
     private Button activeRetry;
     private Button activeSend;
+    private Bitmap clueAtlas;
 
     public RoomFlowController(Activity activity, View root) {
         this.activity = activity;
@@ -291,9 +294,11 @@ public final class RoomFlowController {
         for (ClueView clue : state.getClues()) {
             if (!clue.isExamined()) continue;
             examinedCount++;
-            Button slot = (Button) LayoutInflater.from(activity).inflate(
+            ImageButton slot = (ImageButton) LayoutInflater.from(activity).inflate(
                     R.layout.view_hotbar_clue_slot, clueSlotContainer, false);
-            slot.setText(clue.getTitle());
+            slot.setScaleType(ImageView.ScaleType.FIT_CENTER);
+            BitmapDrawable clueDrawable = clueDrawableForHotbar(clue);
+            if (clueDrawable != null) slot.setImageDrawable(clueDrawable);
             slot.setContentDescription(activity.getString(
                     R.string.hotbar_clue_description, clue.getTitle()));
             String key = clueHotbarKey(clue);
@@ -327,6 +332,33 @@ public final class RoomFlowController {
 
     private String clueHotbarKey(ClueView clue) {
         return "clue:" + clue.getId();
+    }
+
+    private BitmapDrawable clueDrawableForHotbar(ClueView clue) {
+        int fallbackFrame;
+        switch (clue.getId()) {
+            case "clue_access_log": fallbackFrame = 0; break;
+            case "clue_seal_trace": fallbackFrame = 1; break;
+            case "clue_reagent_sample": fallbackFrame = 2; break;
+            default: return null;
+        }
+        int frame = walkMap == null ? fallbackFrame
+                : walkMap.clueFrameFor(clue.getId(), fallbackFrame);
+        if (frame < 0 || frame >= 3) return null;
+        Bitmap icon = clueSlotBitmaps.get(frame);
+        if (icon == null) {
+            if (clueAtlas == null) {
+                clueAtlas = BitmapFactory.decodeResource(
+                        activity.getResources(), R.drawable.room_clue_atlas_48x16);
+            }
+            if (clueAtlas == null || clueAtlas.getWidth() < (frame + 1) * 16
+                    || clueAtlas.getHeight() < 16) return null;
+            icon = Bitmap.createBitmap(clueAtlas, frame * 16, 0, 16, 16);
+            clueSlotBitmaps.put(frame, icon);
+        }
+        BitmapDrawable drawable = new BitmapDrawable(activity.getResources(), icon);
+        drawable.setFilterBitmap(false);
+        return drawable;
     }
 
     private boolean isNear(float x, float y) {
@@ -450,7 +482,7 @@ public final class RoomFlowController {
         View panel = LayoutInflater.from(activity).inflate(R.layout.dialog_interview, null, false);
         TextView heading = panel.findViewById(R.id.interview_name);
         TextView personality = panel.findViewById(R.id.interview_personality);
-        TextView transcript = panel.findViewById(R.id.interview_transcript);
+        LinearLayout transcript = panel.findViewById(R.id.interview_transcript);
         ScrollView transcriptScroll = panel.findViewById(R.id.interview_transcript_scroll);
         TextView requestStatus = panel.findViewById(R.id.interview_status);
         ImageView portrait = panel.findViewById(R.id.interview_portrait);
@@ -533,7 +565,9 @@ public final class RoomFlowController {
         int height = Math.max(dp(220), Math.min(availableHeight - dp(16), dp(680)));
         if (window != null) {
             WindowCompat.setDecorFitsSystemWindows(window, true);
-            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+            window.setBackgroundDrawableResource(R.drawable.interview_dialog_frame);
+            window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE
+                    | WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         }
         activeDialog = dialog;
         dialog.show();
@@ -635,14 +669,51 @@ public final class RoomFlowController {
                 && activeInterviewStatus != null && activeRetry != null && activeSend != null;
     }
 
-    private void renderTranscript(String id, TextView target, ScrollView scroll) {
-        StringBuilder result = new StringBuilder();
-        for (InterviewSender.ChatTurn turn : historyFor(id)) {
-            result.append(getString(turn.isFromPlayer()
-                    ? R.string.chat_you : R.string.chat_character))
-                    .append(": ").append(turn.getText()).append("\n\n");
+    private void renderTranscript(String id, LinearLayout target, ScrollView scroll) {
+        TextView emptyState = target.findViewById(R.id.interview_transcript_empty);
+        for (int childIndex = target.getChildCount() - 1; childIndex >= 0; childIndex--) {
+            View child = target.getChildAt(childIndex);
+            if (child != emptyState) target.removeViewAt(childIndex);
         }
-        target.setText(result.length() == 0 ? getString(R.string.chat_empty) : result.toString());
+        List<InterviewSender.ChatTurn> turns = historyFor(id);
+        emptyState.setVisibility(turns.isEmpty() ? View.VISIBLE : View.GONE);
+        for (int index = 0; index < turns.size(); index++) {
+            InterviewSender.ChatTurn turn = turns.get(index);
+            boolean fromPlayer = turn.isFromPlayer();
+            View row = LayoutInflater.from(activity).inflate(
+                    R.layout.view_interview_turn, target, false);
+            LinearLayout bubble = row.findViewById(R.id.interview_turn_bubble);
+            View marker = row.findViewById(R.id.interview_turn_marker);
+            TextView speaker = row.findViewById(R.id.interview_turn_speaker);
+            TextView message = row.findViewById(R.id.interview_turn_message);
+
+            speaker.setText(getString(fromPlayer ? R.string.chat_you : R.string.chat_character));
+            speaker.setTextColor(fromPlayer ? 0xFFF2B84B : MINT);
+            message.setText(turn.getText());
+            int alignment = fromPlayer ? Gravity.END : Gravity.START;
+            speaker.setGravity(alignment);
+            message.setGravity(alignment);
+            bubble.setBackgroundResource(fromPlayer
+                    ? R.drawable.interview_bubble_player
+                    : R.drawable.interview_bubble_character);
+
+            FrameLayout.LayoutParams bubbleParams =
+                    (FrameLayout.LayoutParams) bubble.getLayoutParams();
+            bubbleParams.gravity = Gravity.TOP | (fromPlayer ? Gravity.END : Gravity.START);
+            bubbleParams.leftMargin = dp(fromPlayer ? 28 : 12);
+            bubbleParams.rightMargin = dp(fromPlayer ? 12 : 28);
+            bubble.setLayoutParams(bubbleParams);
+
+            FrameLayout.LayoutParams markerParams =
+                    (FrameLayout.LayoutParams) marker.getLayoutParams();
+            markerParams.gravity = Gravity.TOP | (fromPlayer ? Gravity.END : Gravity.START);
+            markerParams.leftMargin = dp(fromPlayer ? 0 : 2);
+            markerParams.rightMargin = dp(fromPlayer ? 2 : 0);
+            marker.setLayoutParams(markerParams);
+            marker.setSelected(index == turns.size() - 1);
+            marker.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+            target.addView(row);
+        }
         scroll.post(() -> scroll.fullScroll(View.FOCUS_DOWN));
     }
 
