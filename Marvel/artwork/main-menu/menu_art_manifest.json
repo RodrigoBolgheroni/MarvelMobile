@@ -1,0 +1,114 @@
+{
+  "schemaVersion": 1,
+  "package": "avengers-room-main-menu-art-v1",
+  "status": "isolated-art-delivery-not-integrated",
+  "createdLocalDate": "2026-10-05",
+  "targetIntegrationDirectory": "Marvel/app/src/main/res/drawable-nodpi/",
+  "worldDirection": "pixel-art command headquarters title screen; source artwork contains no controls or text",
+  "palette": [
+    "#0D1720",
+    "#243543",
+    "#384B57",
+    "#52666A",
+    "#C4D5C8",
+    "#44CFBD",
+    "#F2B84B",
+    "#E4675D"
+  ],
+  "generation": {
+    "tool": "OpenAI built-in ImageGen",
+    "sourceArtIsOriginal": true,
+    "localOrExternalImageInputs": [],
+    "noImportedPixels": true,
+    "prompts": [
+      "prompts/menu_backdrop_landscape.prompt.txt",
+      "prompts/menu_backdrop_portrait.prompt.txt"
+    ],
+    "processingScript": "process_backdrops.py",
+    "processing": "center crop to target aspect ratio; deterministic Lanczos reduction to logical pixel grid; fixed eight-color palette snap with dithering disabled; flatten XML safe zones to #0D1720 after a short pixel-grid fade; nearest-neighbor 4x upscale",
+    "containsCharactersOrOfficialLogos": false
+  },
+  "assets": [
+    {
+      "id": "menu_backdrop_landscape",
+      "path": "runtime/menu_backdrop_landscape_1024x576.png",
+      "format": "PNG",
+      "dimensionsPx": [
+        1024,
+        576
+      ],
+      "logicalGridPx": [
+        256,
+        144
+      ],
+      "upscale": "nearest-neighbor 4x",
+      "colorMode": "RGB opaque",
+      "paletteColorsUsed": 8,
+      "sha256": "05034ce91f0313f796eee1d540b44fd6f8419461e2303b271745973e443195e8",
+      "source": "sources/menu_backdrop_landscape_imagegen_original.png",
+      "sourceSha256": "f70ce341f71401b464842575f76ea6cea3a5015f87c87a63c43b6040a166fb50",
+      "prompt": "prompts/menu_backdrop_landscape.prompt.txt",
+      "safeZone": "rightmost 108/256 logical pixels (42.2 percent) flat #0D1720; 16-pixel logical fade immediately before; XML title and actions"
+    },
+    {
+      "id": "menu_backdrop_portrait",
+      "path": "runtime/menu_backdrop_portrait_576x1024.png",
+      "format": "PNG",
+      "dimensionsPx": [
+        576,
+        1024
+      ],
+      "logicalGridPx": [
+        144,
+        256
+      ],
+      "upscale": "nearest-neighbor 4x",
+      "colorMode": "RGB opaque",
+      "paletteColorsUsed": 7,
+      "sha256": "7b3ff38248dd5b435edb565a2e835fcc8fcf08e0b1e0c4936452b4a9d209d863",
+      "source": "sources/menu_backdrop_portrait_imagegen_original.png",
+      "sourceSha256": "b9762ab714b6eef3c9590af0c2e216e54022999dea987161c25b9998e54d6677",
+      "prompt": "prompts/menu_backdrop_portrait.prompt.txt",
+      "safeZone": "bottom 115/256 logical pixels (44.9 percent) flat #0D1720; 13-pixel logical fade immediately before; XML title and stacked actions"
+    }
+  ],
+  "cropQa": {
+    "method": "CENTER_CROP previews from the final background plates",
+    "landscapePreview": "preview/menu_backdrop_landscape_centercrop_20x9.png",
+    "landscapeAspect": "20:9",
+    "portraitPreview": "preview/menu_backdrop_portrait_centercrop_9x20.png",
+    "portraitAspect": "9:20",
+    "result": "briefing table and window remain visible; XML safe zones remain low-contrast and unobstructed"
+  },
+  "integrationContract": {
+    "orientationVariants": {
+      "landscape": "menu_backdrop_landscape_1024x576.png",
+      "portrait": "menu_backdrop_portrait_576x1024.png"
+    },
+    "suggestedViewIds": [
+      "menu_root",
+      "menu_background",
+      "menu_title",
+      "menu_start",
+      "menu_how_to_play",
+      "menu_credits"
+    ],
+    "labels": {
+      "title": "AVENGERS ROOM",
+      "start": "Iniciar Investigação",
+      "howToPlay": "Como Jogar",
+      "credits": "Créditos"
+    },
+    "settings": "omit unless a real setting is implemented",
+    "caseLifecycle": "Only Iniciar Investigação creates a CaseSession; orientation changes must not create another case; back/restart must not mix sessions.",
+    "controlsAreXml": true,
+    "artworkContainsTextOrControls": false
+  },
+  "originAndLicense": {
+    "statement": "Original AI-generated output. No third-party assets or reference images were supplied as image inputs or imported. No SPDX license is asserted. Between user and OpenAI, output ownership is assigned to the user to the extent permitted by law; user remains responsible for applicable law and use. Output may not be unique. This does not grant rights to Marvel characters or marks.",
+    "termsUrl": "https://openai.com/policies/terms-of-use/",
+    "termsReviewedDate": "2026-10-05",
+    "projectContext": "Non-commercial prototype, as described in PLANO.md."
+  },
+  "documentation": "concept_and_integration.md"
+}

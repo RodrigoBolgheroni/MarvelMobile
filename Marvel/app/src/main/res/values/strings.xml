@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Marvel</string>
+    <string name="menu_title">AVENGERS ROOM</string>
+    <string name="menu_tag">ARQUIVO DE INVESTIGA&#199;&#195;O</string>
+    <string name="menu_start">Iniciar Investiga&#231;&#227;o</string>
+    <string name="menu_resume">Retomar Investiga&#231;&#227;o</string>
+    <string name="menu_how_to_play_title">Como Jogar</string>
+    <string name="menu_how_to_play_body">Toque no ch&#227;o para explorar. Aproxime-se dos sobreviventes para conversar e dos objetos para examinar pistas. Anote pistas e depoimentos no caderno; depois, acuse um dos quatro sobreviventes. A v&#237;tima n&#227;o participa das conversas.</string>
+    <string name="menu_credits_title">Cr&#233;ditos</string>
+    <string name="menu_credits_body">Avengers Room. Prot&#243;tipo n&#227;o comercial para competi&#231;&#227;o. Equipe: l&#243;gica do jogo, interface Android, arte 2D, integra&#231;&#227;o de IA, narrativa e QA. Conversas: Gemini via Firebase AI Logic. Projeto n&#227;o oficial; personagens e marcas Marvel pertencem a seus titulares.</string>
     <string name="room_title">SALA DE INVESTIGAÇÃO</string>
     <string name="evidence_board">PISTAS DA SALA</string>
     <string name="case_notebook">Caderno do caso</string>

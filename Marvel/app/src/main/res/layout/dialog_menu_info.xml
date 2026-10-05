@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu_info_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/menu_info_frame"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <TextView
+        android:id="@+id/menu_info_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:fontFamily="monospace"
+        android:gravity="center_vertical"
+        android:textColor="#C4D5C8"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#44CFBD" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="ifContentScrolls">
+
+        <TextView
+            android:id="@+id/menu_info_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans"
+            android:lineSpacingExtra="4dp"
+            android:padding="8dp"
+            android:textColor="#C4D5C8"
+            android:textSize="16sp" />
+    </ScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/menu_info_close"
+        android:layout_width="match_parent"
+        android:layout_height="52dp"
+        android:background="@drawable/menu_primary_selector"
+        android:backgroundTint="@null"
+        app:backgroundTint="@null"
+        android:stateListAnimator="@null"
+        android:contentDescription="@string/close"
+        android:fontFamily="monospace"
+        android:minHeight="48dp"
+        android:text="@string/close"
+        android:textAllCaps="false"
+        android:textColor="#C4D5C8"
+        android:textSize="14sp"
+        android:textStyle="bold" />
+</LinearLayout>

@@ -1,0 +1,18 @@
+{
+  "algorithm": "SHA-256",
+  "files": {
+    "concept_and_integration.md": "f3932fa4b091d03ac7922a9b81ad014b641b9de55f8d127fbfcdf35614c62ffc",
+    "menu_art_manifest.json": "e46b8f2f33e846772ec659b1bdd269c84f3ebefda5abc3a7c1c7a6c209f80b3c",
+    "preview/menu_backdrop_landscape_centercrop_20x9.png": "fa5950b9a917f661e98b38c2ef01e8c143bf248c66885eac0c3842896d0d90af",
+    "preview/menu_backdrop_portrait_centercrop_9x20.png": "7e1f584177ae9d9559bc08741b4c04be2d637c4514fa1c5898dc1e6024c726fc",
+    "process_backdrops.py": "039d496c74dd74c40614447b44835aeb0593210ad02c0f3aac0ef78ef0c3ee49",
+    "prompts/menu_backdrop_landscape.prompt.txt": "31190c90adda299341a1622a359973fa9c4826526870d9fbc2dd5c6a72354f32",
+    "prompts/menu_backdrop_portrait.prompt.txt": "ee7501bc72acb0b5d014ad242566ff3b95f07a54715f812e62e8a549d1eee389",
+    "runtime/menu_backdrop_landscape_1024x576.png": "05034ce91f0313f796eee1d540b44fd6f8419461e2303b271745973e443195e8",
+    "runtime/menu_backdrop_portrait_576x1024.png": "7b3ff38248dd5b435edb565a2e835fcc8fcf08e0b1e0c4936452b4a9d209d863",
+    "sources/menu_backdrop_landscape_imagegen_original.png": "f70ce341f71401b464842575f76ea6cea3a5015f87c87a63c43b6040a166fb50",
+    "sources/menu_backdrop_portrait_imagegen_original.png": "b9762ab714b6eef3c9590af0c2e216e54022999dea987161c25b9998e54d6677",
+    "structural_checks.json": "95b2ecf37b719df950ff780c40ab1d3320cd23269b603ae66ecfe679569b0e29",
+    "validate_menu_art.py": "f326cf72562cc51537cc240918cb4e18c8d4495be2cd7a3b33de748211efadbb"
+  }
+}

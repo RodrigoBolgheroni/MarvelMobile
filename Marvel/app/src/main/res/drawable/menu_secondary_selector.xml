@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <layer-list>
+            <item><shape android:shape="rectangle"><solid android:color="#F2B84B" /></shape></item>
+            <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="4dp"><shape android:shape="rectangle"><solid android:color="#263B44" /></shape></item>
+            <item android:left="8dp" android:top="16dp" android:bottom="16dp" android:width="3dp" android:gravity="left"><shape android:shape="rectangle"><solid android:color="#F2B84B" /></shape></item>
+        </layer-list>
+    </item>
+    <item android:state_focused="true">
+        <layer-list>
+            <item><shape android:shape="rectangle"><solid android:color="#F2B84B" /></shape></item>
+            <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="4dp"><shape android:shape="rectangle"><solid android:color="#263B44" /></shape></item>
+            <item android:left="8dp" android:top="16dp" android:bottom="16dp" android:width="3dp" android:gravity="left"><shape android:shape="rectangle"><solid android:color="#F2B84B" /></shape></item>
+        </layer-list>
+    </item>
+    <item>
+        <layer-list>
+            <item><shape android:shape="rectangle"><solid android:color="#52666A" /></shape></item>
+            <item android:left="2dp" android:top="2dp" android:right="2dp" android:bottom="4dp"><shape android:shape="rectangle"><solid android:color="#1B303B" /></shape></item>
+            <item android:left="8dp" android:top="16dp" android:bottom="16dp" android:width="3dp" android:gravity="left"><shape android:shape="rectangle"><solid android:color="#44CFBD" /></shape></item>
+        </layer-list>
+    </item>
+</selector>

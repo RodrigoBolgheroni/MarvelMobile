@@ -1,0 +1,79 @@
+{
+  "assetPackage": "main_menu_v1",
+  "checks": {
+    "landscape": {
+      "exists": true,
+      "dimensionsPx": [
+        1024,
+        576
+      ],
+      "logicalGridPx": [
+        256,
+        144
+      ],
+      "opaqueRgbPng": true,
+      "paletteColors": 8,
+      "nearestNeighbor4xBlocks": true,
+      "quietZone": {
+        "axis": "x",
+        "startLogicalPixel": 148,
+        "cleanFraction": 0.4219,
+        "flatColor": "#0D1720"
+      },
+      "centerCropPreview": {
+        "path": "preview/menu_backdrop_landscape_centercrop_20x9.png",
+        "dimensionsPx": [
+          1024,
+          461
+        ],
+        "aspect": "20:9",
+        "quietZonePreserved": true
+      }
+    },
+    "portrait": {
+      "exists": true,
+      "dimensionsPx": [
+        576,
+        1024
+      ],
+      "logicalGridPx": [
+        144,
+        256
+      ],
+      "opaqueRgbPng": true,
+      "paletteColors": 7,
+      "nearestNeighbor4xBlocks": true,
+      "quietZone": {
+        "axis": "y",
+        "startLogicalPixel": 141,
+        "cleanFraction": 0.4492,
+        "flatColor": "#0D1720"
+      },
+      "centerCropPreview": {
+        "path": "preview/menu_backdrop_portrait_centercrop_9x20.png",
+        "dimensionsPx": [
+          461,
+          1024
+        ],
+        "aspect": "9:20",
+        "quietZonePreserved": true
+      }
+    },
+    "promptsSaved": true,
+    "sourceImagesPresent": true,
+    "sourceAndOutputHashesRecorded": true,
+    "manualVisualInspection": {
+      "landscape": "Window/abstract skyline and holographic briefing table remain within the left-central focal scene; rightmost 42.2% is flat and low contrast; no visible title, logo, character or controls.",
+      "portrait": "Window/abstract skyline and table remain centered above the lower text zone; bottom 44.9% is flat and low contrast; no visible title, logo, character or controls.",
+      "cropQa": "20:9 and 9:20 CENTER_CROP previews preserve the focal room scene and XML safe zones."
+    },
+    "sharedRepoModified": false,
+    "stagedInterviewFilesTouched": false
+  },
+  "validationMethod": "validate_menu_art.py (Pillow structural checks and SHA-256); manual visual inspection of full plates and CENTER_CROP previews",
+  "limitations": [
+    "No Android menu layout exists in this isolated art package; XML view IDs are integration suggestions.",
+    "No device screenshot or app build was produced by the art unit.",
+    "Image text/logo exclusion is verified by visual inspection, not OCR."
+  ]
+}
