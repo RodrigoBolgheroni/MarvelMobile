@@ -19,8 +19,8 @@
 
         <ImageView
             android:id="@+id/interview_portrait"
-            android:layout_width="48dp"
-            android:layout_height="72dp"
+            android:layout_width="64dp"
+            android:layout_height="96dp"
             android:background="@drawable/interview_portrait_frame"
             android:contentDescription="@string/interview_portrait_description"
             android:padding="1dp"
@@ -34,6 +34,15 @@
             android:orientation="vertical">
 
             <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="@string/interview_scene_tag"
+                android:textColor="#44CFBD"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
                 android:id="@+id/interview_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +50,7 @@
                 android:fontFamily="monospace"
                 android:maxLines="2"
                 android:textColor="#C4D5C8"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -49,8 +58,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="monospace"
                 android:text="@string/interview_personality_tag"
-                android:textColor="#44CFBD"
-                android:textSize="12sp"
+                android:textColor="#F2B84B"
+                android:textSize="10sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -60,28 +69,50 @@
                 android:ellipsize="end"
                 android:maxLines="2"
                 android:textColor="#C4D5C8"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
         </LinearLayout>
+
+        <ImageButton
+            android:id="@+id/interview_notebook"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/hotbar_notebook_selector"
+            android:contentDescription="@string/case_notebook_description"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:nextFocusForward="@id/interview_close"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_hotbar_notebook" />
 
         <Button
             android:id="@+id/interview_close"
             android:layout_width="48dp"
             android:layout_height="48dp"
+            android:layout_marginStart="4dp"
             android:background="@drawable/interview_close_selector"
             android:contentDescription="@string/close"
             android:focusable="true"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:nextFocusForward="@id/interview_input"
-            android:text="×"
+            android:text="&#215;"
             android:textColor="#0D1720"
             android:textSize="24sp" />
     </LinearLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#44CFBD" />
+
     <TextView
+        android:id="@+id/interview_transcript_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fontFamily="monospace"
+        android:paddingTop="6dp"
         android:paddingBottom="4dp"
         android:text="@string/interview_transcript_title"
         android:textColor="#44CFBD"
@@ -119,19 +150,43 @@
         </LinearLayout>
     </ScrollView>
 
-    <TextView
-        android:id="@+id/interview_status"
+    <LinearLayout
+        android:id="@+id/interview_status_panel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:accessibilityLiveRegion="polite"
-        android:minHeight="24dp"
-        android:paddingTop="3dp"
-        android:textColor="#F2B84B"
-        android:textSize="12sp" />
+        android:layout_marginTop="6dp"
+        android:background="@drawable/interview_status_frame"
+        android:gravity="center_vertical"
+        android:minHeight="32dp"
+        android:orientation="horizontal"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:visibility="gone">
+
+        <View
+            android:id="@+id/interview_status_marker"
+            android:layout_width="8dp"
+            android:layout_height="8dp"
+            android:background="@drawable/interview_status_marker_selector"
+            android:importantForAccessibility="no" />
+
+        <TextView
+            android:id="@+id/interview_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:accessibilityLiveRegion="polite"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:textColor="#F2B84B"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
+        android:layout_marginTop="6dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -156,14 +211,14 @@
 
         <Button
             android:id="@+id/interview_send"
-            android:layout_width="64dp"
+            android:layout_width="84dp"
             android:layout_height="48dp"
             android:layout_marginStart="6dp"
             android:background="@drawable/interview_send_selector"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:nextFocusForward="@id/interview_retry"
-            android:text="@string/send_message"
+            android:text="@string/interview_ask"
             android:textAllCaps="false"
             android:textColor="#0D1720"
             android:textSize="12sp" />

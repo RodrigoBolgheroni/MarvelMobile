@@ -88,7 +88,9 @@ public final class RoomFlowController {
     private boolean retainedAccusationDialog;
     private LinearLayout activeTranscript;
     private ScrollView activeTranscriptScroll;
+    private LinearLayout activeInterviewStatusPanel;
     private TextView activeInterviewStatus;
+    private View activeInterviewStatusMarker;
     private Button activeRetry;
     private Button activeSend;
     private Bitmap clueAtlas;
@@ -206,7 +208,9 @@ public final class RoomFlowController {
     private void clearActiveInterviewViews() {
         activeTranscript = null;
         activeTranscriptScroll = null;
+        activeInterviewStatusPanel = null;
         activeInterviewStatus = null;
+        activeInterviewStatusMarker = null;
         activeRetry = null;
         activeSend = null;
     }
@@ -484,12 +488,15 @@ public final class RoomFlowController {
         TextView personality = panel.findViewById(R.id.interview_personality);
         LinearLayout transcript = panel.findViewById(R.id.interview_transcript);
         ScrollView transcriptScroll = panel.findViewById(R.id.interview_transcript_scroll);
+        LinearLayout statusPanel = panel.findViewById(R.id.interview_status_panel);
         TextView requestStatus = panel.findViewById(R.id.interview_status);
+        View statusMarker = panel.findViewById(R.id.interview_status_marker);
         ImageView portrait = panel.findViewById(R.id.interview_portrait);
         EditText input = panel.findViewById(R.id.interview_input);
         Button send = panel.findViewById(R.id.interview_send);
         Button retry = panel.findViewById(R.id.interview_retry);
         Button close = panel.findViewById(R.id.interview_close);
+        ImageButton notebook = panel.findViewById(R.id.interview_notebook);
 
         heading.setText(dossier.getCharacterName());
         personality.setText(dossier.getPersonality());
@@ -500,19 +507,26 @@ public final class RoomFlowController {
         activeInterviewId = id;
         activeTranscript = transcript;
         activeTranscriptScroll = transcriptScroll;
+        activeInterviewStatusPanel = statusPanel;
         activeInterviewStatus = requestStatus;
+        activeInterviewStatusMarker = statusMarker;
         activeRetry = retry;
         activeSend = send;
         renderTranscript(id, transcript, transcriptScroll);
 
         PendingInterview request = pending.get(id);
-        retry.setVisibility(request == null ? View.GONE : View.VISIBLE);
+        retry.setVisibility(View.GONE);
+        statusPanel.setVisibility(View.GONE);
         if (request != null && inFlight.contains(id)) {
-            requestStatus.setText(R.string.sending_interview);
+            requestStatus.setText(activity.getString(
+                    R.string.interview_thinking, dossier.getCharacterName()));
+            showInterviewStatus(true);
             retry.setEnabled(false);
             send.setEnabled(false);
         } else if (request != null) {
             requestStatus.setText(R.string.interview_pending_retry);
+            showInterviewStatus(false);
+            retry.setVisibility(View.VISIBLE);
             retry.setEnabled(true);
         }
 
@@ -520,11 +534,14 @@ public final class RoomFlowController {
             String message = input.getText().toString().trim();
             if (message.isEmpty()) return;
             if (inFlight.contains(id)) {
-                requestStatus.setText(R.string.sending_interview);
+                requestStatus.setText(activity.getString(
+                        R.string.interview_thinking, dossier.getCharacterName()));
+                showInterviewStatus(true);
                 return;
             }
             if (pending.containsKey(id)) {
                 requestStatus.setText(R.string.retry_before_sending);
+                showInterviewStatus(false);
                 retry.setVisibility(View.VISIBLE);
                 return;
             }
@@ -534,7 +551,6 @@ public final class RoomFlowController {
             pending.put(id, new PendingInterview(dossier, oldHistory, message));
             input.setText("");
             renderTranscript(id, transcript, transcriptScroll);
-            retry.setVisibility(View.VISIBLE);
             sendPending(id);
         });
         input.setOnEditorActionListener((view, actionId, event) -> {
@@ -547,6 +563,10 @@ public final class RoomFlowController {
         });
         retry.setOnClickListener(v -> sendPending(id));
         close.setOnClickListener(v -> dialog.dismiss());
+        notebook.setOnClickListener(v -> {
+            dialog.dismiss();
+            showNotebook();
+        });
         dialog.setContentView(panel);
         dialog.setOnDismissListener(ignored -> {
             if (activeDialog == dialog) activeDialog = null;
@@ -603,6 +623,7 @@ public final class RoomFlowController {
         if (interviewSender == null) {
             if (isActiveInterview(id)) {
                 activeInterviewStatus.setText(R.string.interview_service_unavailable);
+                showInterviewStatus(false);
                 activeRetry.setEnabled(true);
                 activeRetry.setVisibility(View.VISIBLE);
             }
@@ -610,9 +631,11 @@ public final class RoomFlowController {
         }
         inFlight.add(id);
         if (isActiveInterview(id)) {
-            activeInterviewStatus.setText(R.string.sending_interview);
+            activeInterviewStatus.setText(activity.getString(
+                    R.string.interview_thinking, request.dossier.getCharacterName()));
+            showInterviewStatus(true);
             activeRetry.setEnabled(false);
-            activeRetry.setVisibility(View.VISIBLE);
+            activeRetry.setVisibility(View.GONE);
             activeSend.setEnabled(false);
         }
         try {
@@ -629,6 +652,7 @@ public final class RoomFlowController {
                                 if (isActiveInterview(id)) {
                                     renderTranscript(id, activeTranscript, activeTranscriptScroll);
                                     activeInterviewStatus.setText(R.string.interview_received);
+                                    showInterviewStatus(true);
                                     activeRetry.setVisibility(View.GONE);
                                     activeSend.setEnabled(true);
                                 }
@@ -642,6 +666,7 @@ public final class RoomFlowController {
                                 if (isActiveInterview(id)) {
                                     activeInterviewStatus.setText(activity.getString(
                                             R.string.interview_failed_preserved, message));
+                                    showInterviewStatus(false);
                                     activeRetry.setEnabled(true);
                                     activeRetry.setVisibility(View.VISIBLE);
                                     activeSend.setEnabled(true);
@@ -657,6 +682,7 @@ public final class RoomFlowController {
                         ? getString(R.string.unknown_error) : exception.getMessage();
                 activeInterviewStatus.setText(activity.getString(
                         R.string.interview_failed_preserved, message));
+                showInterviewStatus(false);
                 activeRetry.setEnabled(true);
                 activeRetry.setVisibility(View.VISIBLE);
                 activeSend.setEnabled(true);
@@ -666,7 +692,15 @@ public final class RoomFlowController {
 
     private boolean isActiveInterview(String id) {
         return id.equals(activeInterviewId) && activeTranscript != null
-                && activeInterviewStatus != null && activeRetry != null && activeSend != null;
+                && activeInterviewStatusPanel != null && activeInterviewStatus != null
+                && activeInterviewStatusMarker != null && activeRetry != null && activeSend != null;
+    }
+
+    private void showInterviewStatus(boolean thinking) {
+        if (activeInterviewStatusPanel == null || activeInterviewStatusMarker == null) return;
+        activeInterviewStatusPanel.setSelected(thinking);
+        activeInterviewStatusMarker.setSelected(thinking);
+        activeInterviewStatusPanel.setVisibility(View.VISIBLE);
     }
 
     private void renderTranscript(String id, LinearLayout target, ScrollView scroll) {
@@ -687,28 +721,31 @@ public final class RoomFlowController {
             TextView speaker = row.findViewById(R.id.interview_turn_speaker);
             TextView message = row.findViewById(R.id.interview_turn_message);
 
-            speaker.setText(getString(fromPlayer ? R.string.chat_you : R.string.chat_character));
+            InterviewDossier dossier = knownDossiers.get(id);
+            String characterName = dossier == null
+                    ? getString(R.string.chat_character) : dossier.getCharacterName();
+            speaker.setText(fromPlayer
+                    ? getString(R.string.interview_player_question) : characterName);
             speaker.setTextColor(fromPlayer ? 0xFFF2B84B : MINT);
             message.setText(turn.getText());
-            int alignment = fromPlayer ? Gravity.END : Gravity.START;
-            speaker.setGravity(alignment);
-            message.setGravity(alignment);
+            speaker.setGravity(Gravity.START);
+            message.setGravity(Gravity.START);
             bubble.setBackgroundResource(fromPlayer
                     ? R.drawable.interview_bubble_player
                     : R.drawable.interview_bubble_character);
 
             FrameLayout.LayoutParams bubbleParams =
                     (FrameLayout.LayoutParams) bubble.getLayoutParams();
-            bubbleParams.gravity = Gravity.TOP | (fromPlayer ? Gravity.END : Gravity.START);
-            bubbleParams.leftMargin = dp(fromPlayer ? 28 : 12);
-            bubbleParams.rightMargin = dp(fromPlayer ? 12 : 28);
+            bubbleParams.gravity = Gravity.TOP | Gravity.START;
+            bubbleParams.leftMargin = dp(14);
+            bubbleParams.rightMargin = dp(4);
             bubble.setLayoutParams(bubbleParams);
 
             FrameLayout.LayoutParams markerParams =
                     (FrameLayout.LayoutParams) marker.getLayoutParams();
-            markerParams.gravity = Gravity.TOP | (fromPlayer ? Gravity.END : Gravity.START);
-            markerParams.leftMargin = dp(fromPlayer ? 0 : 2);
-            markerParams.rightMargin = dp(fromPlayer ? 2 : 0);
+            markerParams.gravity = Gravity.TOP | Gravity.START;
+            markerParams.leftMargin = dp(2);
+            markerParams.rightMargin = 0;
             marker.setLayoutParams(markerParams);
             marker.setSelected(index == turns.size() - 1);
             marker.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);

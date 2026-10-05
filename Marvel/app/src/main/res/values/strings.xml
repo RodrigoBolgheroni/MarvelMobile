@@ -18,17 +18,18 @@
     <string name="verdict_incorrect">Acusação incorreta</string>
     <string name="chat_input_hint">Escreva uma pergunta</string>
     <string name="send_message">Enviar</string>
+    <string name="interview_ask">Perguntar</string>
     <string name="retry">Tentar novamente</string>
     <string name="interview_pending_retry">Há uma resposta pendente. Tente novamente para continuar.</string>
     <string name="retry_before_sending">Tente novamente a mensagem pendente antes de enviar outra.</string>
     <string name="interview_service_unavailable">Serviço de entrevista não conectado. A mensagem e o histórico foram preservados.</string>
-    <string name="sending_interview">Enviando pergunta…</string>
+    <string name="interview_thinking">%1$s reflete por um instante&#8230;</string>
     <string name="interview_received">Resposta recebida.</string>
     <string name="interview_failed_preserved">Falha na entrevista: %1$s. Mensagem e histórico preservados.</string>
     <string name="unknown_error">erro desconhecido</string>
     <string name="chat_you">Você</string>
     <string name="chat_character">Resposta</string>
-    <string name="chat_empty">Nenhuma mensagem nesta entrevista.</string>
+    <string name="chat_empty">A pessoa &#224; sua frente aguarda sua pergunta.</string>
     <string name="room_player_marker">VOCÊ</string>
     <string name="room_victim_badge">VÍTIMA</string>
     <string name="room_action_interview">TOQUE: FALAR</string>
@@ -48,6 +49,8 @@
     <string name="hotbar_loupe_description">Abrir acusa&#231;&#227;o e escolher suspeito</string>
     <string name="hotbar_clue_description">Abrir detalhes da pista: %1$s</string>
     <string name="interview_personality_tag">PERFIL</string>
-    <string name="interview_transcript_title">TRANSCRIÇÃO</string>
+    <string name="interview_transcript_title">DEPOIMENTOS</string>
+    <string name="interview_scene_tag">ENTREVISTA PRESENCIAL</string>
+    <string name="interview_player_question">VOC&#202; PERGUNTA</string>
     <string name="interview_portrait_description">Retrato de %1$s</string>
 </resources>
