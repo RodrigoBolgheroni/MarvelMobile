@@ -75,9 +75,20 @@ public class ComicVineDeviceTest {
                     R.id.roster_character_name)).getText().toString());
             assertTrue(((TextView) row.findViewById(R.id.roster_character_identity))
                     .getText().length() > 3);
-            assertEquals(View.VISIBLE, row.findViewById(R.id.roster_character_source)
-                    .getVisibility());
         }
+        Dialog rosterDialog = (Dialog) field(activity, "rosterDialog");
+        TextView credit = rosterDialog.findViewById(R.id.roster_credit);
+        assertEquals(activity.getString(R.string.comic_vine_credit),
+                credit.getText().toString());
+        assertTrue("Credit is plain text", !credit.isClickable());
+        instrumentation.runOnMainSync(() -> roster.get().getChildAt(0)
+                .findViewById(R.id.roster_character_open).performClick());
+        Dialog profileDialog = (Dialog) field(activity, "profileDialog");
+        assertNotNull(profileDialog);
+        TextView profileCredit = profileDialog.findViewById(R.id.profile_detail_credit);
+        assertEquals(activity.getString(R.string.comic_vine_credit),
+                profileCredit.getText().toString());
+        assertTrue("Profile credit is plain text", !profileCredit.isClickable());
 
         @SuppressWarnings("unchecked")
         Map<String, CharacterProfile> profiles =

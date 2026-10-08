@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/profile_detail_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,12 +27,15 @@
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="@drawable/interview_close_selector"
+            android:backgroundTint="@null"
             android:contentDescription="@string/comic_vine_close_profile"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:text="&#215;"
             android:textColor="#0D1720"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            android:stateListAnimator="@null"
+            app:backgroundTint="@null" />
     </LinearLayout>
     <View
         android:layout_width="match_parent"
@@ -117,18 +121,13 @@
             android:textSize="14sp" />
     </ScrollView>
     <TextView
-        android:id="@+id/profile_detail_source"
+        android:id="@+id/profile_detail_credit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/profile_link_selector"
-        android:clickable="true"
-        android:focusable="true"
-        android:gravity="center_vertical"
-        android:minHeight="48dp"
-        android:text="@string/comic_vine_open_source"
-        android:textColor="#44CFBD"
-        android:textSize="13sp"
-        android:visibility="gone" />
+        android:paddingTop="6dp"
+        android:text="@string/comic_vine_credit"
+        android:textColor="#8EA7A5"
+        android:textSize="11sp" />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -140,12 +139,15 @@
             android:layout_width="112dp"
             android:layout_height="48dp"
             android:background="@drawable/profile_button_selector"
+            android:backgroundTint="@null"
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:text="@string/comic_vine_retry"
             android:textAllCaps="false"
-            android:textColor="#0D1720"
-            android:textSize="11sp"
-            android:visibility="gone" />
+            android:textColor="@color/profile_button_text"
+            android:textSize="13sp"
+            android:stateListAnimator="@null"
+            android:visibility="gone"
+            app:backgroundTint="@null" />
     </LinearLayout>
 </LinearLayout>

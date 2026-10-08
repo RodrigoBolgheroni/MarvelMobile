@@ -1,14 +1,11 @@
 package com.projetos.marvel;
 
 import android.app.Dialog;
-import android.content.ActivityNotFoundException;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
@@ -350,7 +346,6 @@ public class MainActivity extends AppCompatActivity {
                     ? getString(PROFILE_ROLE_RESOURCES[index]) : profile.getRealName();
             TextView name = row.findViewById(R.id.roster_character_name);
             TextView identity = row.findViewById(R.id.roster_character_identity);
-            TextView source = row.findViewById(R.id.roster_character_source);
             Button open = row.findViewById(R.id.roster_character_open);
             ImageView portrait = row.findViewById(R.id.roster_character_portrait);
             name.setText(displayName);
@@ -359,14 +354,6 @@ public class MainActivity extends AppCompatActivity {
             portrait.setContentDescription(getString(
                     R.string.interview_portrait_description, displayName));
             bindProfilePortrait(portrait, id);
-            if (profile != null) {
-                source.setVisibility(View.VISIBLE);
-                source.setContentDescription(getString(R.string.comic_vine_open_source));
-                source.setOnClickListener(view -> openComicVineSource(profile.getSourceUrl()));
-            } else {
-                source.setVisibility(View.GONE);
-                source.setOnClickListener(null);
-            }
             open.setOnClickListener(view -> showProfile(id));
             entries.addView(row);
         }
@@ -426,7 +413,6 @@ public class MainActivity extends AppCompatActivity {
         bindProfilePortrait(portrait, id);
         TextView status = content.findViewById(R.id.profile_detail_status);
         TextView summary = content.findViewById(R.id.profile_detail_summary);
-        TextView source = content.findViewById(R.id.profile_detail_source);
         Button retry = content.findViewById(R.id.profile_detail_retry);
         if (profilesLoading) {
             status.setText(R.string.comic_vine_roster_loading);
@@ -442,10 +428,6 @@ public class MainActivity extends AppCompatActivity {
                     : R.string.comic_vine_profile_loaded_live);
             summary.setText(profile.getSummary());
         }
-        boolean hasSource = profile != null && isComicVineSource(profile.getSourceUrl());
-        source.setVisibility(hasSource ? View.VISIBLE : View.GONE);
-        source.setOnClickListener(hasSource
-                ? view -> openComicVineSource(profile.getSourceUrl()) : null);
         boolean canRetry = !profilesLoading && profileOrigin != Origin.LIVE;
         retry.setVisibility(canRetry ? View.VISIBLE : View.GONE);
         retry.setEnabled(canRetry);
@@ -495,27 +477,6 @@ public class MainActivity extends AppCompatActivity {
             if (PROFILE_IDS[index].equals(characterId)) return index;
         }
         return -1;
-    }
-
-    private boolean isComicVineSource(String sourceUrl) {
-        if (sourceUrl == null) return false;
-        Uri uri = Uri.parse(sourceUrl);
-        String host = uri.getHost();
-        return "https".equalsIgnoreCase(uri.getScheme()) && host != null
-                && ("comicvine.gamespot.com".equalsIgnoreCase(host)
-                || host.toLowerCase(java.util.Locale.ROOT).endsWith(".comicvine.gamespot.com"));
-    }
-
-    private void openComicVineSource(String sourceUrl) {
-        if (!isComicVineSource(sourceUrl)) {
-            Toast.makeText(this, R.string.comic_vine_source_unavailable, Toast.LENGTH_SHORT).show();
-            return;
-        }
-        try {
-            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(sourceUrl)));
-        } catch (ActivityNotFoundException | SecurityException exception) {
-            Toast.makeText(this, R.string.comic_vine_source_unavailable, Toast.LENGTH_SHORT).show();
-        }
     }
 
     private void configurePixelBackdrop(ImageView image) {

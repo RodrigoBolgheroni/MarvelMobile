@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/roster_character_card"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -39,31 +40,21 @@
             android:maxLines="1"
             android:textColor="#F2B84B"
             android:textSize="12sp" />
-        <TextView
-            android:id="@+id/roster_character_source"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/profile_link_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:minHeight="48dp"
-            android:text="@string/comic_vine_open_source"
-            android:textColor="#44CFBD"
-            android:textSize="12sp"
-            android:visibility="gone" />
     </LinearLayout>
     <Button
         android:id="@+id/roster_character_open"
-        android:layout_width="92dp"
+        android:layout_width="80dp"
         android:layout_height="48dp"
         android:layout_marginStart="6dp"
         android:background="@drawable/profile_button_selector"
+        android:backgroundTint="@null"
         android:contentDescription="@string/comic_vine_open_profile"
         android:minWidth="48dp"
         android:minHeight="48dp"
-        android:text="@string/comic_vine_profile_short"
+        android:text="@string/comic_vine_profile_action"
         android:textAllCaps="false"
-        android:textColor="#0D1720"
-        android:textSize="10sp" />
+        android:textColor="@color/profile_button_text"
+        android:textSize="12sp"
+        android:stateListAnimator="@null"
+        app:backgroundTint="@null" />
 </LinearLayout>

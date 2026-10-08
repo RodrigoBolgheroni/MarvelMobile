@@ -81,14 +81,14 @@
     <string name="comic_vine_retry">Tentar novamente</string>
     <string name="comic_vine_open_profile">Abrir perfil de %1$s</string>
     <string name="comic_vine_profile_short">BIO</string>
-    <string name="comic_vine_open_source">Ver fonte: Comic Vine</string>
+    <string name="comic_vine_profile_action">Ver BIO</string>
+    <string name="comic_vine_credit">Fonte dos perfis online: Comic Vine</string>
     <string name="comic_vine_identity_label">IDENTIDADE</string>
     <string name="comic_vine_summary_label">BIOGRAFIA P&#218;BLICA</string>
     <string name="comic_vine_loading_profile">Carregando a biografia p&#250;blica&#8230;</string>
     <string name="comic_vine_profile_unavailable">Biografia da Comic Vine indispon&#237;vel. Nome e retrato locais permanecem acess&#237;veis.</string>
     <string name="comic_vine_profile_loaded_live">Fonte: Comic Vine &#183; atualiza&#231;&#227;o ao vivo</string>
     <string name="comic_vine_profile_loaded_cache">Fonte: Comic Vine &#183; cache local</string>
-    <string name="comic_vine_source_unavailable">Link da fonte indispon&#237;vel.</string>
     <string name="comic_vine_close_profile">Fechar perfil</string>
     <string name="comic_vine_character_iron_man">Homem de Ferro</string>
     <string name="comic_vine_character_captain_america">Capit&#227;o Am&#233;rica</string>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/interview_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -99,11 +100,12 @@
             android:nextFocusForward="@id/interview_profile"
             android:text="@string/comic_vine_profile_short"
             android:textAllCaps="false"
-            android:textColor="#0D1720"
-            android:textSize="8sp"
+            android:textColor="@color/profile_button_text"
+            android:textSize="11sp"
             android:paddingStart="0dp"
             android:paddingEnd="0dp"
-            android:stateListAnimator="@null" />
+            android:stateListAnimator="@null"
+            app:backgroundTint="@null" />
 
         <Button
             android:id="@+id/interview_close"
