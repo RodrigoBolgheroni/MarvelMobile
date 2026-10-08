@@ -1,10 +1,26 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     id("com.google.gms.google-services")
 }
 
+val localProperties = Properties()
+rootProject.file("local.properties").takeIf { it.isFile }?.inputStream()?.use {
+    localProperties.load(it)
+}
+val comicVineApiKey = localProperties.getProperty("COMIC_VINE_API_KEY", "").trim()
+val escapedComicVineApiKey = comicVineApiKey
+    .replace("\\", "\\\\")
+    .replace("\"", "\\\"")
+    .replace("\n", "\\n")
+    .replace("\r", "\\r")
+
 android {
     namespace = "com.projetos.marvel"
+    buildFeatures {
+        buildConfig = true
+    }
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -17,6 +33,11 @@ android {
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
+        buildConfigField(
+            "String",
+            "COMIC_VINE_API_KEY",
+            "\"" + escapedComicVineApiKey + "\""
+        )
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }

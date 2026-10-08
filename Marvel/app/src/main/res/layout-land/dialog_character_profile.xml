@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profile_detail_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profile_panel_frame"
+    android:orientation="vertical"
+    android:padding="6dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="42dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/profile_detail_heading"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:text="@string/comic_vine_roster_heading"
+            android:textColor="#44CFBD"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/profile_detail_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/interview_close_selector"
+            android:contentDescription="@string/comic_vine_close_profile"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:text="&#215;"
+            android:textColor="#0D1720"
+            android:textSize="24sp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:background="#52666A" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+        <LinearLayout
+            android:id="@+id/profile_detail_identity_block"
+            android:layout_width="176dp"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:paddingEnd="8dp">
+            <ImageView
+                android:id="@+id/profile_detail_portrait"
+                android:layout_width="48dp"
+                android:layout_height="72dp"
+                android:background="@drawable/interview_portrait_frame"
+                android:contentDescription="@string/interview_portrait_description"
+                android:scaleType="fitCenter" />
+            <TextView
+                android:id="@+id/profile_detail_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="monospace"
+                android:textColor="#C4D5C8"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="@string/comic_vine_identity_label"
+                android:textColor="#F2B84B"
+                android:textSize="9sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/profile_detail_real_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#C4D5C8"
+                android:textSize="12sp" />
+        </LinearLayout>
+        <View
+            android:layout_width="2dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="8dp"
+            android:background="#52666A" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/profile_detail_status"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:accessibilityLiveRegion="polite"
+                android:paddingTop="3dp"
+                android:paddingBottom="3dp"
+                android:textColor="#44CFBD"
+                android:textSize="11sp" />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="monospace"
+                android:text="@string/comic_vine_summary_label"
+                android:textColor="#F2B84B"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+            <ScrollView
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:background="#0D1720"
+                android:fillViewport="true"
+                android:overScrollMode="ifContentScrolls">
+                <TextView
+                    android:id="@+id/profile_detail_summary"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lineSpacingExtra="2dp"
+                    android:padding="6dp"
+                    android:textColor="#C4D5C8"
+                    android:textSize="13sp" />
+            </ScrollView>
+        </LinearLayout>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/profile_detail_source"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@drawable/profile_link_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:minHeight="48dp"
+        android:text="@string/comic_vine_open_source"
+        android:textColor="#44CFBD"
+        android:textSize="12sp"
+        android:visibility="gone" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="3dp"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/profile_detail_retry"
+            android:layout_width="112dp"
+            android:layout_height="48dp"
+            android:background="@drawable/profile_button_selector"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:text="@string/comic_vine_retry"
+            android:textAllCaps="false"
+            android:textColor="#0D1720"
+            android:textSize="11sp"
+            android:visibility="gone" />
+    </LinearLayout>
+</LinearLayout>

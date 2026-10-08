@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/roster_character_card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="6dp"
+    android:background="@drawable/profile_card_frame"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:padding="6dp">
+    <ImageView
+        android:id="@+id/roster_character_portrait"
+        android:layout_width="48dp"
+        android:layout_height="72dp"
+        android:background="@drawable/interview_portrait_frame"
+        android:contentDescription="@string/interview_portrait_description"
+        android:importantForAccessibility="no"
+        android:scaleType="fitCenter" />
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/roster_character_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="monospace"
+            android:maxLines="2"
+            android:textColor="#C4D5C8"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+        <TextView
+            android:id="@+id/roster_character_identity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="#F2B84B"
+            android:textSize="12sp" />
+        <TextView
+            android:id="@+id/roster_character_source"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/profile_link_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:minHeight="48dp"
+            android:text="@string/comic_vine_open_source"
+            android:textColor="#44CFBD"
+            android:textSize="12sp"
+            android:visibility="gone" />
+    </LinearLayout>
+    <Button
+        android:id="@+id/roster_character_open"
+        android:layout_width="92dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="6dp"
+        android:background="@drawable/profile_button_selector"
+        android:contentDescription="@string/comic_vine_open_profile"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:text="@string/comic_vine_profile_short"
+        android:textAllCaps="false"
+        android:textColor="#0D1720"
+        android:textSize="10sp" />
+</LinearLayout>

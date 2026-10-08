@@ -28,21 +28,29 @@
             android:orientation="vertical"
             app:layout_constraintGuide_percent="0.59" />
 
-        <LinearLayout
+        <ScrollView
             android:id="@+id/menu_panel"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@drawable/menu_panel_frame"
-            android:gravity="center_vertical"
-            android:orientation="vertical"
+            android:clipToPadding="false"
+            android:fillViewport="true"
+            android:overScrollMode="ifContentScrolls"
             android:paddingStart="14dp"
             android:paddingTop="8dp"
             android:paddingEnd="14dp"
             android:paddingBottom="8dp"
+            android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@id/menu_safe_zone_start"
             app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
 
             <LinearLayout
                 android:id="@+id/menu_evidence_marks"
@@ -148,8 +156,26 @@
                 android:stateListAnimator="@null"
                 android:fontFamily="monospace"
                 android:minHeight="48dp"
-                android:nextFocusDown="@id/menu_credits"
+                android:nextFocusDown="@id/menu_roster"
                 android:text="@string/menu_how_to_play_title"
+                android:textAllCaps="false"
+                android:textColor="#C4D5C8"
+                android:textSize="12sp" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/menu_roster"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/menu_secondary_selector"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null"
+                android:stateListAnimator="@null"
+                android:fontFamily="monospace"
+                android:minHeight="48dp"
+                android:nextFocusDown="@id/menu_credits"
+                android:nextFocusUp="@id/menu_how_to_play"
+                android:text="@string/comic_vine_roster_title"
                 android:textAllCaps="false"
                 android:textColor="#C4D5C8"
                 android:textSize="12sp" />
@@ -165,11 +191,12 @@
                 android:stateListAnimator="@null"
                 android:fontFamily="monospace"
                 android:minHeight="48dp"
-                android:nextFocusUp="@id/menu_how_to_play"
+                android:nextFocusUp="@id/menu_roster"
                 android:text="@string/menu_credits_title"
                 android:textAllCaps="false"
                 android:textColor="#C4D5C8"
                 android:textSize="12sp" />
-        </LinearLayout>
+            </LinearLayout>
+        </ScrollView>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>

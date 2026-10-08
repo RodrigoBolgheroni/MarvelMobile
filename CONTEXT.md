@@ -12,6 +12,8 @@ Este contexto fixa os termos compartilhados da investigação para que o motor d
 
 **Pista**: Uma evidência observável que ajuda a reconstruir os acontecimentos e distinguir o culpado.
 
-**Fato conhecido**: Uma informação disponível para um personagem específico. Só pode ser usada na conversa com esse personagem.
+**Perfil público**: Informações biográficas sobre um personagem, independentes do caso. Podem orientar sua apresentação e sua voz, mas não determinam pistas ou o culpado.
+
+**Fato conhecido**: Uma informação sobre os acontecimentos do caso disponível para um personagem específico. Só pode ser usada na conversa com esse personagem.
 
 **Acusação**: A escolha de um suspeito pelo jogador, avaliada pelo caso e acompanhada de uma explicação do resultado.

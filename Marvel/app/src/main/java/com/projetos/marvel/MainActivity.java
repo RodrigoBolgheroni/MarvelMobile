@@ -1,9 +1,14 @@
 package com.projetos.marvel;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +16,10 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,16 +31,53 @@ import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.projetos.marvel.ai.FirebaseInterviewSender;
 import com.projetos.marvel.caseengine.AccusationResult;
+import com.projetos.marvel.comicvine.CharacterProfile;
+import com.projetos.marvel.comicvine.ComicVineProfiles;
+import com.projetos.marvel.comicvine.ComicVineProfiles.Origin;
 import com.projetos.marvel.ui.room.InterviewSender;
 import com.projetos.marvel.ui.room.RoomFlowController;
+
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
     private static final String STATE_GAMEPLAY_VISIBLE = "main.gameplay_visible";
     private static final String STATE_RESULT_VISIBLE = "main.result_visible";
+    private static final String STATE_ROSTER_VISIBLE = "main.roster_visible";
+    private static final String STATE_PROFILE_CHARACTER_ID = "main.profile_character_id";
+    private static final String[] PROFILE_IDS = {
+            "iron_man", "captain_america", "thor", "black_widow", "hawkeye"
+    };
+    private static final int[] PROFILE_NAME_RESOURCES = {
+            R.string.comic_vine_character_iron_man,
+            R.string.comic_vine_character_captain_america,
+            R.string.comic_vine_character_thor,
+            R.string.comic_vine_character_black_widow,
+            R.string.comic_vine_character_hawkeye
+    };
+    private static final int[] PROFILE_ROLE_RESOURCES = {
+            R.string.comic_vine_role_iron_man,
+            R.string.comic_vine_role_captain_america,
+            R.string.comic_vine_role_thor,
+            R.string.comic_vine_role_black_widow,
+            R.string.comic_vine_role_hawkeye
+    };
 
     private RoomFlowController roomFlowController;
     private InterviewSender interviewSender;
+    private ComicVineProfiles comicVineProfiles;
+    private Map<String, CharacterProfile> characterProfiles = Collections.emptyMap();
+    private Origin profileOrigin = Origin.NONE;
+    private String profileError;
+    private boolean profilesLoading;
     private Dialog menuInfoDialog;
+    private Dialog rosterDialog;
+    private View rosterDialogContent;
+    private Dialog profileDialog;
+    private View profileDialogContent;
+    private String profileDialogCharacterId;
+    private Bitmap[] profilePortraits;
     private boolean gameplayVisible;
     private boolean resultVisible;
     private boolean menuTransitioning;
@@ -50,6 +95,8 @@ public class MainActivity extends AppCompatActivity {
         insetsController.setAppearanceLightNavigationBars(false);
 
         interviewSender = new FirebaseInterviewSender();
+        comicVineProfiles = new ComicVineProfiles(getApplicationContext());
+        loadComicVineProfiles(false);
         Object retained = getLastCustomNonConfigurationInstance();
         if (retained instanceof RoomFlowController) {
             roomFlowController = (RoomFlowController) retained;
@@ -67,8 +114,22 @@ public class MainActivity extends AppCompatActivity {
             showMenu();
         }
 
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getBoolean(STATE_ROSTER_VISIBLE, false)) showRoster();
+            String profileId = savedInstanceState.getString(STATE_PROFILE_CHARACTER_ID);
+            if (profileId != null && profileIndex(profileId) >= 0) showProfile(profileId);
+        }
+
         getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
             @Override public void handleOnBackPressed() {
+                if (profileDialog != null && profileDialog.isShowing()) {
+                    profileDialog.dismiss();
+                    return;
+                }
+                if (rosterDialog != null && rosterDialog.isShowing()) {
+                    rosterDialog.dismiss();
+                    return;
+                }
                 if (menuInfoDialog != null && menuInfoDialog.isShowing()) {
                     menuInfoDialog.dismiss();
                     return;
@@ -110,6 +171,7 @@ public class MainActivity extends AppCompatActivity {
                         R.string.menu_how_to_play_body));
         findViewById(R.id.menu_credits).setOnClickListener(
                 view -> showMenuInfo(R.string.menu_credits_title, R.string.menu_credits_body));
+        findViewById(R.id.menu_roster).setOnClickListener(view -> showRoster());
     }
 
     private void openGameplay(boolean newGame) {
@@ -136,6 +198,8 @@ public class MainActivity extends AppCompatActivity {
             roomFlowController.attach(this, root);
             if (newGame) roomFlowController.startNewCase();
         }
+        roomFlowController.setCharacterProfiles(characterProfiles);
+        roomFlowController.setProfileListener(this::showProfile);
     }
 
     private void showResult(AccusationResult result) {
@@ -160,6 +224,298 @@ public class MainActivity extends AppCompatActivity {
         if (roomFlowController != null) roomFlowController.setResultListener(null);
         roomFlowController = null;
         showMenu();
+    }
+
+    private void loadComicVineProfiles(boolean forceRefresh) {
+        profilesLoading = true;
+        profileError = null;
+        renderRoster();
+        renderProfileDetail();
+        try {
+            comicVineProfiles.load(forceRefresh, this::onProfilesLoaded);
+        } catch (RuntimeException exception) {
+            onProfilesLoaded(Collections.emptyMap(), Origin.NONE, null);
+        }
+    }
+
+    private void onProfilesLoaded(Map<String, CharacterProfile> profiles,
+                                  Origin origin, String errorMessage) {
+        if (isFinishing() || isDestroyed()) return;
+        profilesLoading = false;
+        if ((origin == Origin.LIVE || origin == Origin.CACHE)
+                && hasCompleteProfileSet(profiles)) {
+            characterProfiles = Collections.unmodifiableMap(
+                    new LinkedHashMap<>(profiles));
+            profileOrigin = origin;
+            profileError = safeProfileError(errorMessage);
+        } else {
+            characterProfiles = Collections.emptyMap();
+            profileOrigin = Origin.NONE;
+            profileError = safeProfileError(errorMessage);
+        }
+        injectProfilesIntoInterviewSender();
+        if (roomFlowController != null) {
+            roomFlowController.setCharacterProfiles(characterProfiles);
+        }
+        renderRoster();
+        renderProfileDetail();
+    }
+
+    private boolean hasCompleteProfileSet(Map<String, CharacterProfile> profiles) {
+        if (profiles == null || profiles.size() != PROFILE_IDS.length) return false;
+        for (String id : PROFILE_IDS) {
+            if (!profiles.containsKey(id) || profiles.get(id) == null) return false;
+        }
+        return true;
+    }
+
+    private String safeProfileError(String errorMessage) {
+        if (errorMessage == null || errorMessage.trim().isEmpty()) return null;
+        String safe = errorMessage.replaceAll("(?i)https?://\\S+", "[link removido]")
+                .replaceAll("(?i)(api[_-]?key\\s*[=:]\\s*)\\S+", "$1[redigida]")
+                .replaceAll("[\\r\\n\\t]+", " ").trim();
+        return safe.length() > 160 ? safe.substring(0, 157) + "…" : safe;
+    }
+
+    private void injectProfilesIntoInterviewSender() {
+        if (interviewSender instanceof FirebaseInterviewSender) {
+            ((FirebaseInterviewSender) interviewSender).setProfiles(characterProfiles);
+        }
+    }
+
+    private void showRoster() {
+        if (rosterDialog != null && rosterDialog.isShowing()) {
+            renderRoster();
+            return;
+        }
+        Dialog dialog = new Dialog(this);
+        View content = LayoutInflater.from(this).inflate(
+                R.layout.dialog_character_roster, null, false);
+        Button close = content.findViewById(R.id.roster_close);
+        Button retry = content.findViewById(R.id.roster_retry);
+        close.setOnClickListener(view -> dialog.dismiss());
+        retry.setOnClickListener(view -> loadComicVineProfiles(true));
+        dialog.setContentView(content);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setOnDismissListener(ignored -> {
+            if (rosterDialog == dialog) {
+                rosterDialog = null;
+                rosterDialogContent = null;
+            }
+        });
+        prepareProfileDialogWindow(dialog);
+        rosterDialog = dialog;
+        rosterDialogContent = content;
+        dialog.show();
+        sizeProfileDialog(dialog);
+        renderRoster();
+    }
+
+    private void renderRoster() {
+        if (rosterDialog == null || !rosterDialog.isShowing()) return;
+        View content = rosterDialogContent;
+        if (content == null) return;
+        TextView status = content.findViewById(R.id.roster_status);
+        ProgressBar progress = content.findViewById(R.id.roster_progress);
+        Button retry = content.findViewById(R.id.roster_retry);
+        LinearLayout entries = content.findViewById(R.id.roster_profiles);
+        progress.setVisibility(profilesLoading ? View.VISIBLE : View.GONE);
+        if (profilesLoading) {
+            status.setText(R.string.comic_vine_roster_loading);
+        } else if (profileOrigin == Origin.LIVE) {
+            status.setText(R.string.comic_vine_roster_live);
+        } else if (profileOrigin == Origin.CACHE && profileError != null) {
+            status.setText(getString(R.string.comic_vine_roster_cache_error, profileError));
+        } else if (profileOrigin == Origin.CACHE) {
+            status.setText(R.string.comic_vine_roster_cache);
+        } else if (profileError != null) {
+            status.setText(getString(R.string.comic_vine_roster_none_error, profileError));
+        } else {
+            status.setText(R.string.comic_vine_roster_none);
+        }
+        retry.setVisibility(!profilesLoading && profileOrigin != Origin.LIVE
+                ? View.VISIBLE : View.GONE);
+        retry.setEnabled(!profilesLoading);
+        entries.removeAllViews();
+        for (int index = 0; index < PROFILE_IDS.length; index++) {
+            String id = PROFILE_IDS[index];
+            CharacterProfile profile = characterProfiles.get(id);
+            View row = LayoutInflater.from(this).inflate(
+                    R.layout.view_roster_character, entries, false);
+            String displayName = profile == null
+                    ? getString(PROFILE_NAME_RESOURCES[index]) : profile.getName();
+            String realName = profile == null || profile.getRealName() == null
+                    || profile.getRealName().trim().isEmpty()
+                    ? getString(PROFILE_ROLE_RESOURCES[index]) : profile.getRealName();
+            TextView name = row.findViewById(R.id.roster_character_name);
+            TextView identity = row.findViewById(R.id.roster_character_identity);
+            TextView source = row.findViewById(R.id.roster_character_source);
+            Button open = row.findViewById(R.id.roster_character_open);
+            ImageView portrait = row.findViewById(R.id.roster_character_portrait);
+            name.setText(displayName);
+            identity.setText(realName);
+            open.setContentDescription(getString(R.string.comic_vine_open_profile, displayName));
+            portrait.setContentDescription(getString(
+                    R.string.interview_portrait_description, displayName));
+            bindProfilePortrait(portrait, id);
+            if (profile != null) {
+                source.setVisibility(View.VISIBLE);
+                source.setContentDescription(getString(R.string.comic_vine_open_source));
+                source.setOnClickListener(view -> openComicVineSource(profile.getSourceUrl()));
+            } else {
+                source.setVisibility(View.GONE);
+                source.setOnClickListener(null);
+            }
+            open.setOnClickListener(view -> showProfile(id));
+            entries.addView(row);
+        }
+    }
+
+    private void showProfile(String characterId) {
+        if (profileIndex(characterId) < 0) return;
+        if (profileDialog != null && profileDialog.isShowing()
+                && characterId.equals(profileDialogCharacterId)) {
+            renderProfileDetail();
+            return;
+        }
+        if (profileDialog != null) profileDialog.dismiss();
+        Dialog dialog = new Dialog(this);
+        View content = LayoutInflater.from(this).inflate(
+                R.layout.dialog_character_profile, null, false);
+        Button close = content.findViewById(R.id.profile_detail_close);
+        Button retry = content.findViewById(R.id.profile_detail_retry);
+        close.setOnClickListener(view -> dialog.dismiss());
+        retry.setOnClickListener(view -> loadComicVineProfiles(true));
+        dialog.setContentView(content);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.setOnDismissListener(ignored -> {
+            if (profileDialog == dialog) {
+                profileDialog = null;
+                profileDialogContent = null;
+                profileDialogCharacterId = null;
+            }
+        });
+        prepareProfileDialogWindow(dialog);
+        profileDialog = dialog;
+        profileDialogContent = content;
+        profileDialogCharacterId = characterId;
+        dialog.show();
+        sizeProfileDialog(dialog);
+        renderProfileDetail();
+    }
+
+    private void renderProfileDetail() {
+        View content = profileDialogContent;
+        String id = profileDialogCharacterId;
+        if (content == null || id == null) return;
+        int index = profileIndex(id);
+        if (index < 0) return;
+        CharacterProfile profile = characterProfiles.get(id);
+        String name = profile == null
+                ? getString(PROFILE_NAME_RESOURCES[index]) : profile.getName();
+        String realName = profile == null || profile.getRealName() == null
+                || profile.getRealName().trim().isEmpty()
+                ? getString(PROFILE_ROLE_RESOURCES[index]) : profile.getRealName();
+        ((TextView) content.findViewById(R.id.profile_detail_heading)).setText(name);
+        ((TextView) content.findViewById(R.id.profile_detail_name)).setText(name);
+        ((TextView) content.findViewById(R.id.profile_detail_real_name)).setText(realName);
+        ImageView portrait = content.findViewById(R.id.profile_detail_portrait);
+        portrait.setContentDescription(getString(R.string.interview_portrait_description, name));
+        bindProfilePortrait(portrait, id);
+        TextView status = content.findViewById(R.id.profile_detail_status);
+        TextView summary = content.findViewById(R.id.profile_detail_summary);
+        TextView source = content.findViewById(R.id.profile_detail_source);
+        Button retry = content.findViewById(R.id.profile_detail_retry);
+        if (profilesLoading) {
+            status.setText(R.string.comic_vine_roster_loading);
+            summary.setText(R.string.comic_vine_loading_profile);
+        } else if (profile == null) {
+            status.setText(profileError == null
+                    ? getString(R.string.comic_vine_roster_none)
+                    : getString(R.string.comic_vine_roster_none_error, profileError));
+            summary.setText(R.string.comic_vine_profile_unavailable);
+        } else {
+            status.setText(profileOrigin == Origin.CACHE
+                    ? R.string.comic_vine_profile_loaded_cache
+                    : R.string.comic_vine_profile_loaded_live);
+            summary.setText(profile.getSummary());
+        }
+        boolean hasSource = profile != null && isComicVineSource(profile.getSourceUrl());
+        source.setVisibility(hasSource ? View.VISIBLE : View.GONE);
+        source.setOnClickListener(hasSource
+                ? view -> openComicVineSource(profile.getSourceUrl()) : null);
+        boolean canRetry = !profilesLoading && profileOrigin != Origin.LIVE;
+        retry.setVisibility(canRetry ? View.VISIBLE : View.GONE);
+        retry.setEnabled(canRetry);
+    }
+
+    private void prepareProfileDialogWindow(Dialog dialog) {
+        Window window = dialog.getWindow();
+        if (window == null) return;
+        WindowCompat.setDecorFitsSystemWindows(window, true);
+        window.setBackgroundDrawableResource(android.R.color.transparent);
+        window.addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        window.setDimAmount(0.72f);
+    }
+
+    private void sizeProfileDialog(Dialog dialog) {
+        Window window = dialog.getWindow();
+        if (window == null) return;
+        int availableWidth = getResources().getDisplayMetrics().widthPixels;
+        int availableHeight = getResources().getDisplayMetrics().heightPixels;
+        int width = Math.max(dp(240), Math.min(dp(720), availableWidth - dp(24)));
+        int height = Math.max(dp(240), Math.min(dp(720), availableHeight - dp(48)));
+        window.setLayout(width, height);
+    }
+
+    private void bindProfilePortrait(ImageView image, String characterId) {
+        int frame = profileIndex(characterId);
+        if (frame < 0) return;
+        if (profilePortraits == null) {
+            Bitmap atlas = BitmapFactory.decodeResource(
+                    getResources(), R.drawable.survivor_idle_atlas_80x24);
+            if (atlas == null || atlas.getWidth() < 80 || atlas.getHeight() < 24) return;
+            profilePortraits = new Bitmap[PROFILE_IDS.length];
+            for (int index = 0; index < PROFILE_IDS.length; index++) {
+                profilePortraits[index] = Bitmap.createBitmap(atlas, index * 16, 0, 16, 24);
+            }
+            atlas.recycle();
+        }
+        Bitmap bitmap = profilePortraits[frame];
+        BitmapDrawable drawable = new BitmapDrawable(getResources(), bitmap);
+        drawable.setFilterBitmap(false);
+        image.setImageDrawable(drawable);
+    }
+
+    private int profileIndex(String characterId) {
+        if (characterId == null) return -1;
+        for (int index = 0; index < PROFILE_IDS.length; index++) {
+            if (PROFILE_IDS[index].equals(characterId)) return index;
+        }
+        return -1;
+    }
+
+    private boolean isComicVineSource(String sourceUrl) {
+        if (sourceUrl == null) return false;
+        Uri uri = Uri.parse(sourceUrl);
+        String host = uri.getHost();
+        return "https".equalsIgnoreCase(uri.getScheme()) && host != null
+                && ("comicvine.gamespot.com".equalsIgnoreCase(host)
+                || host.toLowerCase(java.util.Locale.ROOT).endsWith(".comicvine.gamespot.com"));
+    }
+
+    private void openComicVineSource(String sourceUrl) {
+        if (!isComicVineSource(sourceUrl)) {
+            Toast.makeText(this, R.string.comic_vine_source_unavailable, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        try {
+            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(sourceUrl)));
+        } catch (ActivityNotFoundException | SecurityException exception) {
+            Toast.makeText(this, R.string.comic_vine_source_unavailable, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void configurePixelBackdrop(ImageView image) {
@@ -229,6 +585,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(STATE_GAMEPLAY_VISIBLE, gameplayVisible);
         outState.putBoolean(STATE_RESULT_VISIBLE, resultVisible);
+        outState.putBoolean(STATE_ROSTER_VISIBLE,
+                rosterDialog != null && rosterDialog.isShowing());
+        if (profileDialog != null && profileDialog.isShowing()
+                && profileDialogCharacterId != null) {
+            outState.putString(STATE_PROFILE_CHARACTER_ID, profileDialogCharacterId);
+        }
         super.onSaveInstanceState(outState);
     }
 
@@ -238,6 +600,14 @@ public class MainActivity extends AppCompatActivity {
             menuInfoDialog.dismiss();
             menuInfoDialog = null;
         }
+        if (profileDialog != null) {
+            profileDialog.dismiss();
+            profileDialog = null;
+        }
+        if (rosterDialog != null) {
+            rosterDialog.dismiss();
+            rosterDialog = null;
+        }
         super.onDestroy();
     }
 
@@ -245,6 +615,7 @@ public class MainActivity extends AppCompatActivity {
     public Object onRetainCustomNonConfigurationInstance() {
         if (isChangingConfigurations() && roomFlowController != null) {
             roomFlowController.retainForConfigurationChange();
+            roomFlowController.setProfileListener(null);
             return roomFlowController;
         }
         return super.onRetainCustomNonConfigurationInstance();
@@ -253,6 +624,7 @@ public class MainActivity extends AppCompatActivity {
     /** Injection point for the real interview service when credentials are configured. */
     public void setInterviewSender(InterviewSender sender) {
         interviewSender = sender;
+        injectProfilesIntoInterviewSender();
         if (roomFlowController != null) roomFlowController.setInterviewSender(sender);
     }
 }

@@ -39,6 +39,7 @@ import com.projetos.marvel.caseengine.CharacterView;
 import com.projetos.marvel.caseengine.ClueView;
 import com.projetos.marvel.caseengine.InterviewDossier;
 import com.projetos.marvel.caseengine.RoomViewState;
+import com.projetos.marvel.comicvine.CharacterProfile;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -53,6 +54,9 @@ public final class RoomFlowController {
     public interface ResultListener {
         void onCaseFinished(AccusationResult result);
     }
+    public interface ProfileListener {
+        void onOpenProfile(String characterId);
+    }
     private static final String HOTBAR_NOTEBOOK = "notebook";
     private static final String HOTBAR_ACCUSATION = "accusation";
     private static final int INK = 0xFF0D1720;
@@ -66,6 +70,7 @@ public final class RoomFlowController {
     private final Random random = new Random();
     private final Map<String, List<InterviewSender.ChatTurn>> histories = new HashMap<>();
     private final Map<String, InterviewDossier> knownDossiers = new HashMap<>();
+    private Map<String, CharacterProfile> characterProfiles = Collections.emptyMap();
     private final Map<String, PendingInterview> pending = new HashMap<>();
     private final Map<Integer, Bitmap> clueSlotBitmaps = new HashMap<>();
     private final Set<String> inFlight = new HashSet<>();
@@ -80,6 +85,7 @@ public final class RoomFlowController {
     private long caseGeneration;
     private boolean resultShown;
     private ResultListener resultListener;
+    private ProfileListener profileListener;
     private Dialog activeDialog;
     private AlertDialog activeAccusationChoices;
     private InterviewSender interviewSender;
@@ -96,6 +102,7 @@ public final class RoomFlowController {
     private View activeInterviewStatusMarker;
     private Button activeRetry;
     private Button activeSend;
+    private Button activeProfileButton;
     private Bitmap clueAtlas;
 
     public RoomFlowController(Activity activity, View root) {
@@ -181,6 +188,19 @@ public final class RoomFlowController {
         resultListener = listener;
     }
 
+    public void setCharacterProfiles(Map<String, CharacterProfile> profiles) {
+        characterProfiles = profiles == null || profiles.isEmpty()
+                ? Collections.emptyMap()
+                : Collections.unmodifiableMap(new HashMap<>(profiles));
+        if (activeProfileButton != null && activeInterviewId != null) {
+            activeProfileButton.setSelected(characterProfiles.containsKey(activeInterviewId));
+        }
+    }
+
+    public void setProfileListener(ProfileListener listener) {
+        profileListener = listener;
+    }
+
     public AccusationResult getAccusationResult() {
         return session == null ? null
                 : session.getRoomViewState().getAccusationResult().orElse(null);
@@ -219,6 +239,7 @@ public final class RoomFlowController {
         activeInterviewStatusMarker = null;
         activeRetry = null;
         activeSend = null;
+        activeProfileButton = null;
     }
 
     public void startNewCase() {
@@ -489,6 +510,7 @@ public final class RoomFlowController {
         Button send = panel.findViewById(R.id.interview_send);
         Button retry = panel.findViewById(R.id.interview_retry);
         Button close = panel.findViewById(R.id.interview_close);
+        Button profileButton = panel.findViewById(R.id.interview_profile);
         ImageButton notebook = panel.findViewById(R.id.interview_notebook);
 
         heading.setText(dossier.getCharacterName());
@@ -497,6 +519,13 @@ public final class RoomFlowController {
                 R.string.interview_portrait_description, dossier.getCharacterName()));
         bindPortrait(portrait, dossier.getCharacterId());
         String id = dossier.getCharacterId();
+        profileButton.setContentDescription(activity.getString(
+                R.string.comic_vine_open_profile, dossier.getCharacterName()));
+        profileButton.setSelected(characterProfiles.containsKey(id));
+        activeProfileButton = profileButton;
+        profileButton.setOnClickListener(v -> {
+            if (profileListener != null) profileListener.onOpenProfile(id);
+        });
         activeInterviewId = id;
         activeTranscript = transcript;
         activeTranscriptScroll = transcriptScroll;

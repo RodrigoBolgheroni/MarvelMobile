@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/roster_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/profile_panel_frame"
+    android:orientation="vertical"
+    android:padding="8dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/roster_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="monospace"
+            android:text="@string/comic_vine_roster_heading"
+            android:textColor="#44CFBD"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/roster_close"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/interview_close_selector"
+            android:contentDescription="@string/close"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:text="&#215;"
+            android:textColor="#0D1720"
+            android:textSize="24sp" />
+    </LinearLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="4dp"
+        android:background="#52666A" />
+    <TextView
+        android:id="@+id/roster_description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:text="@string/comic_vine_roster_note"
+        android:textColor="#C4D5C8"
+        android:textSize="11sp" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp">
+        <ProgressBar
+            android:id="@+id/roster_progress"
+            style="?android:attr/progressBarStyleSmall"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:indeterminateTint="#44CFBD"
+            android:visibility="gone" />
+        <TextView
+            android:id="@+id/roster_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1"
+            android:accessibilityLiveRegion="polite"
+            android:textColor="#C4D5C8"
+            android:textSize="12sp" />
+        <Button
+            android:id="@+id/roster_retry"
+            android:layout_width="112dp"
+            android:layout_height="48dp"
+            android:background="@drawable/profile_button_selector"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:text="@string/comic_vine_retry"
+            android:textAllCaps="false"
+            android:textColor="#0D1720"
+            android:textSize="11sp"
+            android:visibility="gone" />
+    </LinearLayout>
+    <ScrollView
+        android:id="@+id/roster_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="false"
+        android:overScrollMode="ifContentScrolls"
+        android:scrollbars="vertical">
+        <LinearLayout
+            android:id="@+id/roster_profiles"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp" />
+    </ScrollView>
+</LinearLayout>

@@ -87,6 +87,25 @@
             android:src="@drawable/ic_hotbar_notebook" />
 
         <Button
+            android:id="@+id/interview_profile"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:background="@drawable/profile_button_selector"
+            android:backgroundTint="@null"
+            android:contentDescription="@string/comic_vine_open_profile"
+            android:minWidth="48dp"
+            android:minHeight="48dp"
+            android:nextFocusForward="@id/interview_profile"
+            android:text="@string/comic_vine_profile_short"
+            android:textAllCaps="false"
+            android:textColor="#0D1720"
+            android:textSize="8sp"
+            android:paddingStart="0dp"
+            android:paddingEnd="0dp"
+            android:stateListAnimator="@null" />
+
+        <Button
             android:id="@+id/interview_close"
             android:layout_width="48dp"
             android:layout_height="48dp"
