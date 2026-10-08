@@ -22,16 +22,20 @@ import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
 
 import com.projetos.marvel.ai.FirebaseInterviewSender;
+import com.projetos.marvel.caseengine.AccusationResult;
 import com.projetos.marvel.ui.room.InterviewSender;
 import com.projetos.marvel.ui.room.RoomFlowController;
 
 public class MainActivity extends AppCompatActivity {
     private static final String STATE_GAMEPLAY_VISIBLE = "main.gameplay_visible";
+    private static final String STATE_RESULT_VISIBLE = "main.result_visible";
 
     private RoomFlowController roomFlowController;
     private InterviewSender interviewSender;
     private Dialog menuInfoDialog;
     private boolean gameplayVisible;
+    private boolean resultVisible;
+    private boolean menuTransitioning;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +54,14 @@ public class MainActivity extends AppCompatActivity {
         if (retained instanceof RoomFlowController) {
             roomFlowController = (RoomFlowController) retained;
             roomFlowController.setInterviewSender(interviewSender);
+            roomFlowController.setResultListener(this::showResult);
             boolean restoreGameplay = savedInstanceState == null
                     || savedInstanceState.getBoolean(STATE_GAMEPLAY_VISIBLE, false);
-            if (restoreGameplay) showGameplay();
+            boolean restoreResult = savedInstanceState != null
+                    && savedInstanceState.getBoolean(STATE_RESULT_VISIBLE, false);
+            if (restoreResult && roomFlowController.getAccusationResult() != null) {
+                showResult(roomFlowController.getAccusationResult());
+            } else if (restoreGameplay) showGameplay(false);
             else showMenu();
         } else {
             showMenu();
@@ -65,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
                 if (roomFlowController != null && roomFlowController.handleBack()) return;
+                if (resultVisible) {
+                    finishCaseAndShowMenu();
+                    return;
+                }
                 if (gameplayVisible && roomFlowController != null) {
                     roomFlowController.retainForConfigurationChange();
                     showMenu();
@@ -79,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void showMenu() {
         gameplayVisible = false;
+        resultVisible = false;
+        menuTransitioning = false;
         setContentView(R.layout.activity_menu);
 
         View menuContent = findViewById(R.id.menu_content);
@@ -86,13 +101,10 @@ public class MainActivity extends AppCompatActivity {
         ImageView backdrop = findViewById(R.id.menu_background);
         configurePixelBackdrop(backdrop);
 
-        Button start = findViewById(R.id.menu_start);
-        start.setText(roomFlowController == null ? R.string.menu_start : R.string.menu_resume);
-        start.setOnClickListener(view -> {
-            start.setEnabled(false);
-            View menu = findViewById(R.id.menu_root);
-            menu.animate().alpha(0f).setDuration(160).withEndAction(this::showGameplay);
-        });
+        Button continueGame = findViewById(R.id.menu_continue);
+        continueGame.setVisibility(roomFlowController == null ? View.GONE : View.VISIBLE);
+        continueGame.setOnClickListener(view -> openGameplay(false));
+        findViewById(R.id.menu_start).setOnClickListener(view -> openGameplay(true));
         findViewById(R.id.menu_how_to_play).setOnClickListener(
                 view -> showMenuInfo(R.string.menu_how_to_play_title,
                         R.string.menu_how_to_play_body));
@@ -100,8 +112,17 @@ public class MainActivity extends AppCompatActivity {
                 view -> showMenuInfo(R.string.menu_credits_title, R.string.menu_credits_body));
     }
 
-    private void showGameplay() {
+    private void openGameplay(boolean newGame) {
+        if (menuTransitioning) return;
+        menuTransitioning = true;
+        View menu = findViewById(R.id.menu_root);
+        menu.animate().alpha(0f).setDuration(160)
+                .withEndAction(() -> showGameplay(newGame));
+    }
+
+    private void showGameplay(boolean newGame) {
         gameplayVisible = true;
+        resultVisible = false;
         setContentView(R.layout.activity_main);
 
         View root = findViewById(R.id.main);
@@ -109,10 +130,36 @@ public class MainActivity extends AppCompatActivity {
         if (roomFlowController == null) {
             roomFlowController = new RoomFlowController(this, root);
             roomFlowController.setInterviewSender(interviewSender);
+            roomFlowController.setResultListener(this::showResult);
             roomFlowController.bind();
         } else {
             roomFlowController.attach(this, root);
+            if (newGame) roomFlowController.startNewCase();
         }
+    }
+
+    private void showResult(AccusationResult result) {
+        gameplayVisible = false;
+        resultVisible = true;
+        setContentView(R.layout.activity_result);
+        applySafeInsets(findViewById(R.id.result_root));
+        TextView title = findViewById(R.id.result_title);
+        title.setText(result.isCorrect() ? R.string.result_victory : R.string.result_defeat);
+        title.setTextColor(result.isCorrect() ? 0xFF44CFBD : 0xFFE4675D);
+        TextView verdict = findViewById(R.id.result_verdict);
+        verdict.setText(result.isCorrect() ? R.string.result_victory_body : R.string.result_defeat_body);
+        ((TextView) findViewById(R.id.result_accused)).setText(
+                getString(R.string.accused_label, result.getAccusedName()));
+        ((TextView) findViewById(R.id.result_culprit)).setText(
+                getString(R.string.result_culprit, result.getCulpritName()));
+        ((TextView) findViewById(R.id.result_explanation)).setText(result.getExplanation());
+        findViewById(R.id.result_menu).setOnClickListener(view -> finishCaseAndShowMenu());
+    }
+
+    private void finishCaseAndShowMenu() {
+        if (roomFlowController != null) roomFlowController.setResultListener(null);
+        roomFlowController = null;
+        showMenu();
     }
 
     private void configurePixelBackdrop(ImageView image) {
@@ -181,6 +228,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         outState.putBoolean(STATE_GAMEPLAY_VISIBLE, gameplayVisible);
+        outState.putBoolean(STATE_RESULT_VISIBLE, resultVisible);
         super.onSaveInstanceState(outState);
     }
 

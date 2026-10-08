@@ -4,6 +4,14 @@
     <string name="menu_tag">ARQUIVO DE INVESTIGA&#199;&#195;O</string>
     <string name="menu_start">Iniciar Investiga&#231;&#227;o</string>
     <string name="menu_resume">Retomar Investiga&#231;&#227;o</string>
+    <string name="menu_new_game">Novo Jogo</string>
+    <string name="menu_continue">Continuar Jogo</string>
+    <string name="result_victory">VIT&#211;RIA</string>
+    <string name="result_defeat">DERROTA</string>
+    <string name="result_victory_body">Voc&#234; resolveu o caso.</string>
+    <string name="result_defeat_body">A acusa&#231;&#227;o estava errada. O caso foi encerrado.</string>
+    <string name="result_culprit">Verdadeiro assassino: %1$s</string>
+    <string name="result_back_to_menu">Voltar ao menu</string>
     <string name="menu_how_to_play_title">Como Jogar</string>
     <string name="menu_how_to_play_body">Toque no ch&#227;o para explorar. Aproxime-se dos sobreviventes para conversar e dos objetos para examinar pistas. Anote pistas e depoimentos no caderno; depois, acuse um dos quatro sobreviventes. A v&#237;tima n&#227;o participa das conversas.</string>
     <string name="menu_credits_title">Cr&#233;ditos</string>

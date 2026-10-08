@@ -50,6 +50,9 @@ import java.util.Random;
 import java.util.Set;
 
 public final class RoomFlowController {
+    public interface ResultListener {
+        void onCaseFinished(AccusationResult result);
+    }
     private static final String HOTBAR_NOTEBOOK = "notebook";
     private static final String HOTBAR_ACCUSATION = "accusation";
     private static final int INK = 0xFF0D1720;
@@ -73,15 +76,15 @@ public final class RoomFlowController {
     private HorizontalScrollView clueScroll;
     private LinearLayout clueSlotContainer;
     private CaseSession session;
-    private int seed = -1;
+    private long seed = -1L;
     private long caseGeneration;
     private boolean resultShown;
+    private ResultListener resultListener;
     private Dialog activeDialog;
     private AlertDialog activeAccusationChoices;
     private InterviewSender interviewSender;
     private String activeInterviewId;
     private String retainedInterviewId;
-    private boolean retainedResultDialog;
     private String selectedHotbarItem;
     private String selectedSuspectId;
     private int hotbarClueScrollX;
@@ -122,10 +125,6 @@ public final class RoomFlowController {
         else if (retainedAccusationDialog) {
             retainedAccusationDialog = false;
             showAccusationChoices();
-        }
-        if (retainedResultDialog) {
-            retainedResultDialog = false;
-            session.getRoomViewState().getAccusationResult().ifPresent(this::showAccusationResult);
         }
     }
 
@@ -178,6 +177,15 @@ public final class RoomFlowController {
         interviewSender = sender;
     }
 
+    public void setResultListener(ResultListener listener) {
+        resultListener = listener;
+    }
+
+    public AccusationResult getAccusationResult() {
+        return session == null ? null
+                : session.getRoomViewState().getAccusationResult().orElse(null);
+    }
+
     public boolean handleBack() {
         if (activeDialog != null && activeDialog.isShowing()) {
             activeDialog.dismiss();
@@ -196,8 +204,6 @@ public final class RoomFlowController {
         retainedInterviewId = activeInterviewId;
         retainedAccusationDialog = activeAccusationChoices != null
                 && activeAccusationChoices.isShowing();
-        retainedResultDialog = resultShown && activeDialog != null
-                && session.getRoomViewState().getAccusationResult().isPresent();
         Dialog previousDialog = activeDialog;
         activeDialog = null;
         activeInterviewId = null;
@@ -215,11 +221,11 @@ public final class RoomFlowController {
         activeSend = null;
     }
 
-    private void startNewCase() {
+    public void startNewCase() {
         if (canvas != null) canvas.cancelMovement();
         caseGeneration++;
-        int nextSeed = random.nextInt(20);
-        if (seed >= 0 && nextSeed == seed) nextSeed = (nextSeed + 1) % 20;
+        long nextSeed = random.nextInt(20);
+        if (seed >= 0 && nextSeed == seed) nextSeed = (nextSeed + 1) % 20L;
         seed = nextSeed;
         resultShown = false;
         selectedHotbarItem = null;
@@ -244,7 +250,7 @@ public final class RoomFlowController {
         state.getAccusationResult().ifPresent(result -> {
             if (!resultShown) {
                 resultShown = true;
-                showAccusationResult(result);
+                if (resultListener != null) resultListener.onCaseFinished(result);
             }
         });
     }
@@ -466,19 +472,6 @@ public final class RoomFlowController {
         styleAlertDialog(dialog);
         activeAccusationChoices = dialog;
         activeDialog = dialog;
-    }
-
-    private void showAccusationResult(AccusationResult result) {
-        String message = result.getSummary() + "\n\n"
-                + activity.getString(R.string.accused_label, result.getAccusedName())
-                + "\n\n" + result.getExplanation();
-        AlertDialog dialog = new AlertDialog.Builder(activity)
-                .setTitle(result.isCorrect() ? R.string.verdict_correct : R.string.verdict_incorrect)
-                .setMessage(message)
-                .setPositiveButton(R.string.close, null)
-                .show();
-        styleAlertDialog(dialog);
-        track(dialog);
     }
 
     private void showInterview(InterviewDossier dossier) {

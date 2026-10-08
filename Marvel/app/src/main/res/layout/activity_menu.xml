@@ -110,14 +110,32 @@
                 android:stateListAnimator="@null"
                 android:fontFamily="monospace"
                 android:minHeight="48dp"
-                android:nextFocusDown="@id/menu_how_to_play"
+                android:nextFocusDown="@id/menu_continue"
                 android:paddingStart="8dp"
                 android:paddingEnd="8dp"
-                android:text="@string/menu_start"
+                android:text="@string/menu_new_game"
                 android:textAllCaps="false"
                 android:textColor="#C4D5C8"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/menu_continue"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/menu_secondary_selector"
+                android:backgroundTint="@null"
+                app:backgroundTint="@null"
+                android:stateListAnimator="@null"
+                android:fontFamily="monospace"
+                android:minHeight="48dp"
+                android:nextFocusDown="@id/menu_how_to_play"
+                android:text="@string/menu_continue"
+                android:textAllCaps="false"
+                android:textColor="#C4D5C8"
+                android:textSize="13sp"
+                android:visibility="gone" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/menu_how_to_play"

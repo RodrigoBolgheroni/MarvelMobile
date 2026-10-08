@@ -141,19 +141,32 @@ public final class CaseSession {
      * @throws IllegalArgumentException se suspectId não identificar um sobrevivente
      */
     public AccusationResult accuse(String suspectId) {
+        if (caseFile.accusationResult != null) {
+            throw new IllegalStateException("Este caso já foi encerrado.");
+        }
         CharacterData suspect = findCharacter(suspectId);
         if (suspect == null || suspect.definition.id.equals(caseFile.victimId)) {
             throw new IllegalArgumentException("Acusação inválida: " + suspectId);
         }
 
         String accusedName = suspect.definition.displayName;
+        String culpritName = findCharacter(caseFile.culpritId).definition.displayName;
         boolean correct = suspect.definition.id.equals(caseFile.culpritId);
         String summary = correct ? "Acusação correta" : "Acusação incorreta";
-        String explanation = correct
-            ? "As três pistas identificam unicamente " + accusedName + "."
-            : "Os sinais reunidos não correspondem ao padrão deste sobrevivente.";
+        StringBuilder explanation = new StringBuilder();
+        if (!correct) {
+            explanation.append("Os sinais reunidos não correspondem ao padrão de ")
+                .append(accusedName).append(".\n\n");
+        }
+        explanation.append("A sequência de pistas do caso:\n");
+        for (ClueData clue : caseFile.clues) {
+            explanation.append("\n• ").append(clue.description);
+        }
+        explanation.append("\n\nJuntas, elas identificam unicamente ")
+            .append(culpritName).append(".");
 
-        AccusationResult result = new AccusationResult(suspect.definition.id, accusedName, correct, summary, explanation);
+        AccusationResult result = new AccusationResult(suspect.definition.id, accusedName,
+            culpritName, correct, summary, explanation.toString());
         caseFile.accusationResult = result;
         return result;
     }
