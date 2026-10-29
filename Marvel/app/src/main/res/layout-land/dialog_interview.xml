@@ -126,7 +126,7 @@
                 android:contentDescription="@string/comic_vine_open_profile"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
-                android:nextFocusForward="@id/interview_profile"
+                android:nextFocusForward="@id/interview_close"
                 android:text="@string/comic_vine_profile_short"
                 android:textAllCaps="false"
                 android:textColor="@color/profile_button_text"
@@ -136,20 +136,20 @@
                 android:stateListAnimator="@null"
                 app:backgroundTint="@null" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/interview_close"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="4dp"
-                android:background="@drawable/interview_close_selector"
+                android:background="@drawable/hotbar_clue_selector"
                 android:contentDescription="@string/close"
                 android:focusable="true"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:nextFocusForward="@id/interview_input"
-                android:text="&#215;"
-                android:textColor="#0D1720"
-                android:textSize="24sp" />
+                android:padding="12dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_interview_close" />
         </LinearLayout>
 
         <ScrollView
@@ -242,19 +242,19 @@
                 android:textColorHint="#718AA3"
                 android:textSize="14sp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/interview_send"
-                android:layout_width="84dp"
+                android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_marginStart="6dp"
-                android:background="@drawable/interview_send_selector"
+                android:background="@drawable/hotbar_clue_selector"
+                android:contentDescription="@string/interview_ask"
                 android:minWidth="48dp"
                 android:minHeight="48dp"
                 android:nextFocusForward="@id/interview_retry"
-                android:text="@string/interview_ask"
-                android:textAllCaps="false"
-                android:textColor="#0D1720"
-                android:textSize="12sp" />
+                android:padding="11dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_interview_send" />
 
             <Button
                 android:id="@+id/interview_retry"

@@ -101,7 +101,7 @@ public final class RoomFlowController {
     private TextView activeInterviewStatus;
     private View activeInterviewStatusMarker;
     private Button activeRetry;
-    private Button activeSend;
+    private ImageButton activeSend;
     private Button activeProfileButton;
     private Bitmap clueAtlas;
 
@@ -507,9 +507,9 @@ public final class RoomFlowController {
         View statusMarker = panel.findViewById(R.id.interview_status_marker);
         ImageView portrait = panel.findViewById(R.id.interview_portrait);
         EditText input = panel.findViewById(R.id.interview_input);
-        Button send = panel.findViewById(R.id.interview_send);
+        ImageButton send = panel.findViewById(R.id.interview_send);
         Button retry = panel.findViewById(R.id.interview_retry);
-        Button close = panel.findViewById(R.id.interview_close);
+        ImageButton close = panel.findViewById(R.id.interview_close);
         Button profileButton = panel.findViewById(R.id.interview_profile);
         ImageButton notebook = panel.findViewById(R.id.interview_notebook);
 
@@ -601,10 +601,7 @@ public final class RoomFlowController {
         Window window = dialog.getWindow();
         int availableWidth = root.getWidth() > 0
                 ? root.getWidth() : activity.getResources().getDisplayMetrics().widthPixels;
-        int availableHeight = root.getHeight() > 0
-                ? root.getHeight() : activity.getResources().getDisplayMetrics().heightPixels;
         int width = Math.max(dp(240), Math.min(availableWidth - dp(24), dp(720)));
-        int height = Math.max(dp(220), Math.min(availableHeight - dp(16), dp(680)));
         if (window != null) {
             WindowCompat.setDecorFitsSystemWindows(window, true);
             window.setBackgroundDrawableResource(R.drawable.interview_dialog_frame);
@@ -614,7 +611,7 @@ public final class RoomFlowController {
         activeDialog = dialog;
         dialog.show();
         if (window != null) {
-            window.setLayout(width, height);
+            window.setLayout(width, WindowManager.LayoutParams.MATCH_PARENT);
         }
     }
 
